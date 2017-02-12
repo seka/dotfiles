@@ -1,0 +1,19 @@
+# ------------------------------
+# alias
+# ------------------------------
+# Editor
+alias vim="nvim"
+
+# Miscellaneous
+alias speedtest="wget -O /dev/null http://speed.transip.nl/100mb.bin"
+
+# Exclude MacOS specific files in ZIP archives
+alias zip="zip -x *.DS_Store -x *__MACOSX* -x *.AppleDouble*"
+
+# show my ip address
+alias ip="dig +short myip.opendns.com @resolver1.opendns.com"
+
+# utility command colors
+export LSCOLORS=gxfxcxdxbxegedabagacag
+alias ls="ls -G"
+

@@ -1,0 +1,116 @@
+# ------------------------------
+# util
+# ------------------------------
+# Extra many types of compressed packages
+# Credit: http://nparikh.org/notes/zshrc.txt
+extract() {
+    if [ -f "$1" ]; then
+    case "$1" in
+        *.tar.bz2)  tar -jxvf "$1"                        ;;
+        *.tar.gz)   tar -zxvf "$1"                        ;;
+        *.bz2)      bunzip2 "$1"                          ;;
+        *.dmg)      hdiutil mount "$1"                    ;;
+        *.gz)       gunzip "$1"                           ;;
+        *.tar)      tar -xvf "$1"                         ;;
+        *.tbz2)     tar -jxvf "$1"                        ;;
+        *.tgz)      tar -zxvf "$1"                        ;;
+        *.zip)      unzip "$1"                            ;;
+        *.ZIP)      unzip "$1"                            ;;
+        *.pax)      cat "$1" | pax -r                     ;;
+        *.pax.Z)    uncompress "$1" --stdout | pax -r     ;;
+        *.Z)        uncompress "$1"                       ;;
+        *) echo "'$1' cannot be extracted/mounted via extract()" ;;
+    esac
+    else
+        echo "'$1' is not a valid file to extract"
+    fi
+}
+
+# alias ps aux | grep hoge
+# http://qiita.com/takc923/items/fb0e35165affb03356a7
+psgrep() {
+    local PSRESULT="`ps aux`"
+    echo $PSRESULT | head -1
+    echo $PSRESULT | tail -n +2 | grep $*
+}
+
+# Get the value of an alias.
+alias-value() {
+    alias "$1" | sed "s/^$1='\(.*\)'$/\1/"
+    test $(alias "$1")
+}
+
+# ------------------------------
+# version control
+# ------------------------------
+# Outputs current branch info in prompt format
+git-prompt-info() {
+  if [[ "$(git config --get oh-my-zsh.hide-status 2>/dev/null)" == "1" ]]; then
+    return 0
+  fi
+  ref=$(git symbolic-ref HEAD 2> /dev/null) || \
+  ref=$(git rev-parse --short HEAD 2> /dev/null) || return 0
+  echo "$ZSH_THEME_GIT_PROMPT_PREFIX${ref#refs/heads/}$(parse-git-dirty)$ZSH_THEME_GIT_PROMPT_SUFFIX"
+}
+
+# Checks if working tree is dirty
+parse-git-dirty() {
+  local FLAGS='--porcelain --ignore-submodules=dirty'
+  if [[ "$(git config --get oh-my-zsh.hide-dirty)" == "1" ]]; then
+    return 0
+  fi
+  if [[ "$DISABLE_UNTRACKED_FILES_DIRTY" == "true" ]]; then
+    FLAGS+='--untracked-files=no'
+  fi
+  local STATUS=$(git status ${FLAGS} 2> /dev/null | tail -n1)
+  if [[ -n $STATUS ]]; then
+    echo "$ZSH_THEME_GIT_PROMPT_DIRTY"
+  else
+    echo "$ZSH_THEME_GIT_PROMPT_CLEAN"
+  fi
+}
+
+hg-prompt-info() {
+    if [ -d '.hg' ]; then
+        echo -n "${YS_VCS_PROMPT_PREFIX1}hg${YS_VCS_PROMPT_PREFIX2}"
+        echo -n $(hg branch 2>/dev/null)
+        if [ -n "$(hg status 2>/dev/null)" ]; then
+            echo -n "$YS_VCS_PROMPT_DIRTY"
+        else
+            echo -n "$YS_VCS_PROMPT_CLEAN"
+        fi
+        echo -n "$YS_VCS_PROMPT_SUFFIX"
+    fi
+}
+
+# ------------------------------
+# peco
+# ------------------------------
+p() {
+    peco | while read LINE; do $@ $LINE; done
+}
+
+peco-ghq() {
+    local selected_dir=$(ghq list -p | peco --prompt "REPOSITORY >" --query "$LBUFFER")
+    if [ -n "$selected_dir" ]; then
+        BUFFER="cd ${selected_dir}"
+        zle accept-line
+    fi
+    zle clear-screen
+}
+
+peco-select-history() {
+    BUFFER="$(history -nr 1 | awk '!a[$0]++' | peco --query "$LBUFFER" | sed 's/\\n/\n/')"
+    CURSOR=$#BUFFER
+    zle -R -c
+}
+
+function peco-cdr() {
+    local selected_dir=$(cdr -l | awk '{ print $2 }' | peco)
+    if [ -n "$selected_dir" ]; then
+        BUFFER="cd ${selected_dir}"
+        zle accept-line
+    fi
+    zle clear-screen
+}
+

@@ -1,0 +1,109 @@
+#!/bin/bash
+
+set -o errexit -o nounset -o pipefail
+
+# install Homebrew
+if test ! $(which brew); then
+    ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)"
+fi
+
+# Update Homebrew (Cask) & packages
+brew update
+brew upgrade
+
+# ------------------------------
+# programming languages
+# ------------------------------
+brew install pyenv
+brew install rbenv
+brew install ruby-build
+brew install readline
+brew install nodebrew
+brew install go
+brew cask install java
+
+# ------------------------------
+# tools
+# ------------------------------
+# terminal
+brew install --without-etcdir zsh
+brew install zsh-completions
+brew install zplug
+brew install gcc
+brew install cmake
+
+# util
+brew install curl
+brew install tree
+brew install wget --with-iri
+
+# ShellCheck, a static analysis tool for shell scripts
+brew install shellcheck
+
+# Install GNU util
+brew install binutils
+brew install coreutils
+brew install findutils
+brew install gnu-sed --with-default-names
+
+# Install more recent versions of some macOS tools.
+brew install homebrew/dupes/openssh
+brew install homebrew/dupes/screen
+
+# git
+brew install git
+brew install git-extras
+brew install git-lfs
+brew install hub
+brew install tig
+
+# vim
+brew install neovim/neovim/neovim
+
+# Simplistic interactive filtering tool
+brew install peco
+
+# Remote repository management made easy
+brew install ghq
+
+# A code searching tool similar to ack, with a focus on speed
+brew install ag
+
+# Autoconf is an extensible package of M4 macros that produce shell scripts
+# to automatically configure software source code packages
+brew install autoconf
+
+# Automake is a tool for automatically generating 'Makefile.in' files
+# suitable for use with Autoconf
+brew install automake
+
+# docker
+brew install docker
+brew install docker-machine
+
+# Free (libre) font editor for Windows, Mac OS X and GNU+Linux
+brew install fontforge
+
+# Highlight converts sourcecode to HTML, XHTML, RTF, LaTeX, TeX, SVG, BBCode
+# and terminal escape sequences with coloured syntax highlighting
+brew install highlight
+
+# HTTPie (pronounced aitch-tee-tee-pie) is a command line HTTP client
+brew install httpie
+
+# Ctags is a programming tool that generates an index (or tag) file of names found in
+# source and header files of various programming languages.
+brew install ctags
+
+# JSON
+brew install jq
+brew install jid
+
+# network
+brew install ngrep
+
+# ------------------------------
+# Remove outdated versions from the cellar
+# ------------------------------
+brew cleanup
+

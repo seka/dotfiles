@@ -1,0 +1,63 @@
+# ----------------------------------------
+# basic
+# ----------------------------------------
+export LANG=ja_JP.UTF-8
+export LESSCHARSET=UTF-8
+export TERM=xterm-256color
+export EDITOR="subl -w"
+
+# ----------------------------------------
+# zsh options
+# ----------------------------------------
+setopt auto_cd
+setopt auto_pushd
+setopt pushd_ignore_dups
+setopt correct
+setopt list_packed
+setopt no_beep
+setopt print_eight_bit
+setopt share_history
+setopt hist_ignore_dups
+setopt hist_save_no_dups
+setopt hist_reduce_blanks
+setopt noautoremoveslash
+
+# ----------------------------------------
+# expansions
+# ----------------------------------------
+source $HOME/.zsh-plugins
+source $HOME/.functions
+source $HOME/.aliases
+source $HOME/.inputrc
+source $HOME/.prompt
+
+# ----------------------------------------
+# paths
+# ----------------------------------------
+# Customize to your needs...
+export PATH=$PATH:/sbin
+export PATH=$PATH:/usr/local/bin
+export PATH=$PATH:/usr/local/sbin
+
+# XDG configuration
+export XDG_CONFIG_HOME=$HOME/.config
+
+# node.js
+# nodebrew
+export PATH=$HOME/.nodebrew/current/bin:$PATH
+export PATH=$PATH:/usr/local/var/nodebrew/current/bin
+
+# ruby
+export PATH=$HOME/.rbenv/bin:$PATH
+eval "$(rbenv init -)"
+
+# python
+export PYENV_ROOT=$HOME/.pyenv
+export PATH=$PYENV_ROOT/bin:$PATH
+eval "$(pyenv init -)"
+
+# go lang
+export GO15VENDOREXPERIMENT=1
+export GOPATH=$HOME/Documents/golang
+export PATH=$PATH:$GOPATH/bin
+

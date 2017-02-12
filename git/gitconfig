@@ -1,0 +1,51 @@
+[core]
+    excludesfile = ~/.gitignore_global
+    editor = vim
+    whitespace = cr-at-eol
+    filemode = false
+    trustctime = false
+    autocrlf = input
+
+[color]
+    ui = auto
+
+[grep]
+    lineNumber = true
+
+[diff]
+    renames = copies
+    tool = vimdiff
+
+[difftool]
+    prompt = false
+
+[difftool "sourcetree"]
+    cmd = opendiff \"$LOCAL\" \"$REMOTE\"
+
+[merge]
+    tool = vimdiff
+    conflictstyle = diff3
+    defaultToUpstream = true
+
+[mergetool]
+    prompt = false
+
+[merge "mergepbx"]
+    name = XCode project files merger
+    driver = /usr/local/bin/mergepbx %O %A %B
+
+[mergetool "sourcetree"]
+    cmd = /Applications/SourceTree.app/Contents/Resources/opendiff-w.sh \"$LOCAL\" \"$REMOTE\" -ancestor \"$BASE\" -merge \"$MERGED\"
+    trustExitCode = true
+
+[filter "media"]
+    required = true
+    clean = git media clean %f
+    smudge = git media smudge %f
+
+[credential]
+    helper = osxkeychain
+
+[help]
+    autocorrect = 1
+

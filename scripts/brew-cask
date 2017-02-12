@@ -1,0 +1,64 @@
+#!/bin/bash
+
+set -o errexit -o nounset -o pipefail
+
+if test ! $(which brew); then
+    exit 1
+fi
+
+brew uninstall --force brew-cask # remove old cask
+
+# ------------------------------
+# taps
+# ------------------------------
+taps=(
+  caskroom/cask
+  Homebrew/bundle
+  caskroom/versions
+)
+brew tap "${taps[@]}"
+
+# ------------------------------
+# tools
+# ------------------------------
+tools=(
+  alfred
+  appcleaner
+  betterzipql
+  cheatsheet
+  ccleaner
+  dash
+  docker
+  dropbox
+  evernote
+  filezilla
+  firefox
+  gas-mask
+  google-chrome
+  google-japanese-ime
+  iterm2
+  kindle
+  keycastr
+  opera
+  sublime-text
+  sequel-pro
+  skype
+  slack
+  skitch
+  spectacle
+  the-unarchiver
+  virtualbox
+  vagrant
+  # Quick Look Plugins (https://github.com/sindresorhus/quick-look-plugins)
+  qlcolorcode
+  qlstephen
+  qlmarkdown
+  quicklook-json
+  qlprettypatch
+  quicklook-csv
+  qlimagesize
+  webpquicklook
+  suspicious-package
+)
+brew cask install "${tools[@]}"
+
