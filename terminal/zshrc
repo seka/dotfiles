@@ -34,7 +34,6 @@ source $HOME/.prompt
 # ----------------------------------------
 # paths
 # ----------------------------------------
-# Customize to your needs...
 export PATH=$PATH:/sbin
 export PATH=$PATH:/usr/local/bin
 export PATH=$PATH:/usr/local/sbin
@@ -43,17 +42,18 @@ export PATH=$PATH:/usr/local/sbin
 export XDG_CONFIG_HOME=$HOME/.config
 
 # node.js
-# nodebrew
-export PATH=$HOME/.nodebrew/current/bin:$PATH
+export NODEBREW_ROOT=$HOME/.nodebrew
+export PATH=$PATH:$NODEBREW_ROOT/current/bin
 export PATH=$PATH:/usr/local/var/nodebrew/current/bin
 
 # ruby
-export PATH=$HOME/.rbenv/bin:$PATH
+export RENV_ROOT=$HOME/.rbenv
+export PATH=$PATH:$RENV_ROOT/bin
 eval "$(rbenv init -)"
 
 # python
 export PYENV_ROOT=$HOME/.pyenv
-export PATH=$PYENV_ROOT/bin:$PATH
+export PATH=$PATH:$PYENV_ROOT/bin
 eval "$(pyenv init -)"
 
 # go lang

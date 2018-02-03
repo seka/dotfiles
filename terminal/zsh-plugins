@@ -25,7 +25,8 @@ zstyle ':completion:*' verbose yes
 # ------------------------------
 # zplug
 # ------------------------------
-source ~/.zplug/init.zsh
+export ZPLUG_HOME=/usr/local/opt/zplug
+source $ZPLUG_HOME/init.zsh
 
 # fish shell like syntax highlighting for zsh
 zplug "zsh-users/zsh-syntax-highlighting", defer:3

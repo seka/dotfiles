@@ -26,6 +26,14 @@ extract() {
     fi
 }
 
+zle-line-init() {
+    printf '%s' "${terminfo[smkx]}"
+}
+
+zle-line-finish() {
+    printf '%s' "${terminfo[rmkx]}"
+}
+
 # alias ps aux | grep hoge
 # http://qiita.com/takc923/items/fb0e35165affb03356a7
 psgrep() {

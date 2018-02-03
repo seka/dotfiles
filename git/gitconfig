@@ -1,6 +1,6 @@
 [core]
     excludesfile = ~/.gitignore_global
-    editor = vim
+    editor = nvim
     whitespace = cr-at-eol
     filemode = false
     trustctime = false
@@ -49,3 +49,6 @@
 [help]
     autocorrect = 1
 
+[user]
+	name = seka
+	email = s.seka134704@gmail.com

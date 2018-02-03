@@ -1,7 +1,5 @@
 #!/bin/bash
 
-set -o errexit -o nounset -o pipefail
-
 if test ! $(which brew); then
     exit 1
 fi
@@ -24,7 +22,6 @@ brew tap "${taps[@]}"
 tools=(
   alfred
   appcleaner
-  betterzipql
   cheatsheet
   ccleaner
   dash
