@@ -10,8 +10,3 @@ fi
 echo "/usr/local/bin/zsh" | sudo tee -a /etc/shells
 chsh -s /usr/local/bin/zsh
 
-# install zplug
-if [ ! -d "~/.zplug" ]; then
-	source ~/.zplug/init.zsh
-fi
-
