@@ -6,7 +6,7 @@ autoload -Uz cdr
 autoload -Uz add-zsh-hook
 autoload -Uz colors && colors
 autoload -Uz compinit && compinit
-autoload -Uz predict-on && predict-on
+#autoload -Uz predict-on && predict-on
 
 # ------------------------------
 # hook
