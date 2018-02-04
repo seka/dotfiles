@@ -1,6 +1,6 @@
 fonts/*.ttf
 fonts/*.otf
-editors/vim/swap/
-editors/vim/backups/
-editors/vim/repos/
-editors/vim/plugins/
+editors/vim/swap/*
+editors/vim/backups/*
+editors/vim/repos/*
+editors/vim/plugins/*
