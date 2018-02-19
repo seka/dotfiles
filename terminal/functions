@@ -27,17 +27,17 @@ extract() {
 }
 
 zle-line-init() {
-    printf '%s' "${terminfo[smkx]}"
+    printf "%s" "${terminfo[smkx]}"
 }
 
 zle-line-finish() {
-    printf '%s' "${terminfo[rmkx]}"
+    printf "%s" "${terminfo[rmkx]}"
 }
 
 # alias ps aux | grep hoge
 # http://qiita.com/takc923/items/fb0e35165affb03356a7
 psgrep() {
-    local PSRESULT="`ps aux`"
+    local PSRESULT="$(ps aux)"
     echo $PSRESULT | head -1
     echo $PSRESULT | tail -n +2 | grep $*
 }
@@ -91,6 +91,16 @@ hg-prompt-info() {
     fi
 }
 
+remove-unnecessary-branches()
+{
+    git branch --merged | grep -vE "^\*|master$|develop$" | xargs -I % git branch -d %
+}
+
+remove-orig-files()
+{
+    find . -name "*.orig" -type f | xargs rm
+}
+
 # ------------------------------
 # peco
 # ------------------------------
@@ -110,7 +120,7 @@ peco-ghq() {
 peco-select-history() {
     BUFFER="$(history -nr 1 | awk '!a[$0]++' | peco --query "$LBUFFER" | sed 's/\\n/\n/')"
     CURSOR=$#BUFFER
-    zle -R -c
+    zle clear-screen
 }
 
 function peco-cdr() {

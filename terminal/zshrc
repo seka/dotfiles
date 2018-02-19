@@ -5,6 +5,9 @@ export LANG=ja_JP.UTF-8
 export LESSCHARSET=UTF-8
 export TERM=xterm-256color
 export EDITOR="subl -w"
+export HISTFILE=${HOME}/.zsh_history
+export HISTSIZE=1000
+export SAVEHIST=100000
 
 # ----------------------------------------
 # zsh options
@@ -42,8 +45,8 @@ export PATH=$PATH:/usr/local/sbin
 export XDG_CONFIG_HOME=$HOME/.config
 
 # node.js
-export NODEBREW_ROOT=$HOME/.nodebrew
-export PATH=$PATH:$NODEBREW_ROOT/current/bin
+export NODEBREW_PATH=$HOME/.nodebrew/current/bin:$PATH
+export PATH=$PATH:$NODEBREW_PATH/current/bin
 export PATH=$PATH:/usr/local/var/nodebrew/current/bin
 
 # ruby
@@ -60,4 +63,11 @@ eval "$(pyenv init -)"
 export GO15VENDOREXPERIMENT=1
 export GOPATH=$HOME/Documents/golang
 export PATH=$PATH:$GOPATH/bin
+
+# java8
+export JAVA_HOME=$(/usr/libexec/java_home -v 1.8)
+
+# android
+export ANDROID_SDK_ROOT="/usr/local/share/android-sdk"
+export ANDROID_HOME="/usr/local/share/android-sdk"
 
