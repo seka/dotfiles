@@ -21,6 +21,8 @@ brew tap "${taps[@]}"
 # ------------------------------
 tools=(
   alfred
+  android-sdk
+  android-studio
   appcleaner
   cheatsheet
   ccleaner
@@ -36,6 +38,7 @@ tools=(
   iterm2
   kindle
   keycastr
+  licecap
   opera
   sublime-text
   sequel-pro
