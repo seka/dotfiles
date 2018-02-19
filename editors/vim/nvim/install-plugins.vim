@@ -47,6 +47,7 @@ if dein#load_state(pluginBaseDir)
   call dein#add('Yggdroot/indentLine')
   call dein#add('terryma/vim-multiple-cursors')
   call dein#add('yggdroot/indentline')
+  call dein#add('editorconfig/editorconfig-vim')
 
   " JSON
   call dein#add('elzr/vim-json')
