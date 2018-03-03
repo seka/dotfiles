@@ -39,6 +39,7 @@ source $HOME/.keybinds
 # paths
 # ----------------------------------------
 export PATH=$PATH:/sbin
+export PATH=$PATH:/usr/bin
 export PATH=$PATH:/usr/local/bin
 export PATH=$PATH:/usr/local/sbin
 
