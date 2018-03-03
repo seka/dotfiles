@@ -33,6 +33,7 @@ source $HOME/.functions
 source $HOME/.aliases
 source $HOME/.inputrc
 source $HOME/.prompt
+source $HOME/.keybinds
 
 # ----------------------------------------
 # paths
