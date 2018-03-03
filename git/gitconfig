@@ -14,28 +14,30 @@
 
 [diff]
     renames = copies
-    tool = vimdiff
+    tool = nvim
 
 [difftool]
-    prompt = false
+    prompt = true
 
 [difftool "sourcetree"]
     cmd = opendiff \"$LOCAL\" \"$REMOTE\"
+    path =
 
 [merge]
-    tool = vimdiff
+    tool = nvim
     conflictstyle = diff3
     defaultToUpstream = true
 
 [mergetool]
     prompt = false
+    path = nvim
 
 [merge "mergepbx"]
     name = XCode project files merger
     driver = /usr/local/bin/mergepbx %O %A %B
 
 [mergetool "sourcetree"]
-    cmd = /Applications/SourceTree.app/Contents/Resources/opendiff-w.sh \"$LOCAL\" \"$REMOTE\" -ancestor \"$BASE\" -merge \"$MERGED\"
+    cmd = /Applications/Sourcetree.app/Contents/Resources/opendiff-w.sh \"$LOCAL\" \"$REMOTE\" -ancestor \"$BASE\" -merge \"$MERGED\"
     trustExitCode = true
 
 [filter "media"]
@@ -49,6 +51,3 @@
 [help]
     autocorrect = 1
 
-[user]
-	name = seka
-	email = s.seka134704@gmail.com
