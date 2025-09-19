@@ -12,7 +12,7 @@ DOTFILES_ROOT=$(cd $(dirname $0);pwd)
 # ------------------------------
 bash scripts/setup-brew
 bash scripts/setup-login-shell
-bash scripts/osx-defaults
+bash scripts/macos-defaults
 bash scripts/setup-pip
 
 # ------------------------------
