@@ -2,5 +2,14 @@
 
 set -o errexit -o nounset -o pipefail
 
-# install by pip3
-pip3 install pynvim
+# check if pipx is installed
+if ! command -v pipx &> /dev/null; then
+    echo "pipx not found. Installing pipx via Homebrew..."
+    brew install pipx
+fi
+
+# install pynvim using pipx
+pipx install pynvim
+
+# ensure pipx PATH is configured
+pipx ensurepath
