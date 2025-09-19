@@ -31,6 +31,9 @@ brew "libxml2", link: true
 # clang
 brew "gcc"
 
+# python
+brew "pipx"
+
 # ------------------------------
 # shell and terminal tools
 # ------------------------------
