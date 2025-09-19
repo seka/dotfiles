@@ -102,14 +102,14 @@ remove-orig-files()
 }
 
 # ------------------------------
-# peco
+# fzf
 # ------------------------------
 p() {
-    peco | while read LINE; do $@ $LINE; done
+    fzf | while read LINE; do $@ $LINE; done
 }
 
-peco-ghq() {
-    local selected_dir=$(ghq list -p | peco --prompt "REPOSITORY >" --query "$LBUFFER")
+fzf-ghq() {
+    local selected_dir=$(ghq list -p | fzf --prompt "REPOSITORY > " --query "$LBUFFER")
     if [ -n "$selected_dir" ]; then
         BUFFER="cd ${selected_dir}"
         zle accept-line
@@ -117,14 +117,14 @@ peco-ghq() {
     zle clear-screen
 }
 
-peco-select-history() {
-    BUFFER="$(history -nr 1 | awk '!a[$0]++' | peco --query "$LBUFFER" | sed 's/\\n/\n/')"
+fzf-select-history() {
+    BUFFER="$(history -nr 1 | awk '!a[$0]++' | fzf --query "$LBUFFER" | sed 's/\\n/\n/')"
     CURSOR=$#BUFFER
     zle clear-screen
 }
 
-function peco-cdr() {
-    local selected_dir=$(cdr -l | awk '{ print $2 }' | peco)
+fzf-cdr() {
+    local selected_dir=$(cdr -l | awk '{ print $2 }' | fzf)
     if [ -n "$selected_dir" ]; then
         BUFFER="cd ${selected_dir}"
         zle accept-line
@@ -132,3 +132,51 @@ function peco-cdr() {
     zle clear-screen
 }
 
+fzf-git-branches() {
+    local selected_branch=$(git branch -a | fzf --prompt "GIT BRANCH > " --query "$LBUFFER")
+    if [ -n "$selected_branch" ]; then
+        BUFFER="git checkout ${selected_branch}"
+        zle accept-line
+    fi
+    zle clear-screen
+}
+
+# ------------------------------
+# 1Password CLI
+# ------------------------------
+load-1password-secrets() {
+    if ! command -v op >/dev/null 2>&1; then
+        echo "1Password CLI (op) is not installed"
+        return 1
+    fi
+
+    if ! op account list >/dev/null 2>&1; then
+        echo "1Password CLI is not authenticated. Run 'op signin' first."
+        return 1
+    fi
+
+    echo "Loading secrets from 1Password..."
+
+    # 各トークンを個別に読み込み（エラーがあっても他に影響しない）
+    if op item get "github-yarn-token" >/dev/null 2>&1; then
+        export PATIENT_WEB_YARN_GITHUB_TOKEN=$(op read "op://Private/github-yarn-token/password" 2>/dev/null)
+        echo "✓ PATIENT_WEB_YARN_GITHUB_TOKEN loaded"
+    else
+        echo "⚠ github-yarn-token not found in 1Password"
+    fi
+}
+
+check-1password-auth() {
+    if command -v op >/dev/null 2>&1; then
+        if op account list >/dev/null 2>&1; then
+            echo "✓ 1Password CLI is authenticated"
+            return 0
+        else
+            echo "⚠ 1Password CLI is not authenticated"
+            return 1
+        fi
+    else
+        echo "⚠ 1Password CLI is not installed"
+        return 1
+    fi
+}
