@@ -142,21 +142,6 @@ defaults write com.apple.terminal SecureKeyboardEntry -bool true
 # Disable guest account
 sudo defaults write /Library/Preferences/com.apple.loginwindow GuestEnabled -bool false
 
-# Developer Settings
-# Enable developer options for Safari
-defaults write com.apple.Safari IncludeDevelopMenu -bool true
-defaults write com.apple.Safari WebKitDeveloperExtrasEnabledPreferenceKey -bool true
-defaults write com.apple.Safari com.apple.Safari.ContentPageGroupIdentifier.WebKit2DeveloperExtrasEnabled -bool true
-
-# Enable debug menu in Mac App Store
-defaults write com.apple.appstore ShowDebugMenu -bool true
-
-# Enable debug menu in Address Book
-defaults write com.apple.addressbook ABShowDebugMenu -bool true
-
-# Enable debug menu in iCal (Calendar)
-defaults write com.apple.iCal IncludeDebugMenu -bool true
-
 # Show build version in login window
 sudo defaults write /Library/Preferences/com.apple.loginwindow AdminHostInfo HostName
 
