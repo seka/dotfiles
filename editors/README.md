@@ -177,3 +177,98 @@ editors/
 " ddc.vimの状態確認
 :echo ddc#get_current_sources()
 ```
+
+## VS Code
+
+### セットアップ
+
+#### 1. 依存関係
+
+- **VS Code** 1.70+
+- **Node.js** (一部拡張機能用)
+- **Git**
+
+#### 2. 初期化
+
+```bash
+# VS Code設定をシンボリックリンクでセットアップ
+cd editors/vscode
+bash setup.sh
+```
+
+### ディレクトリ構成
+
+```
+editors/
+└── vscode/
+    ├── settings.json       # VS Code設定ファイル
+    ├── keybindings.json   # キーバインド設定
+    ├── extensions.txt     # インストール拡張機能リスト
+    └── setup.sh          # セットアップスクリプト
+```
+
+### 拡張機能
+
+#### エディタ機能拡張
+
+- **esbenp.prettier-vscode**: コードフォーマッター
+- **dbaeumer.vscode-eslint**: JavaScript/TypeScript リンター
+- **christian-kohler.path-intellisense**: パス補完
+
+#### 開発支援
+
+- **github.copilot**: AI コード補完
+- **github.copilot-chat**: AI チャット
+- **eamodio.gitlens**: Git 履歴表示・比較
+
+#### 言語サポート
+
+- **shopify.ruby-lsp**: Ruby 言語サーバー
+- **shopify.ruby-extensions-pack**: Ruby 開発パック
+- **sorbet.sorbet-vscode-extension**: Sorbet 型チェッカー
+- **mathiasfrohlich.kotlin**: Kotlin サポート
+- **vscjava.vscode-gradle**: Gradle サポート
+
+#### テーマ・UI
+
+- **github.github-vscode-theme**: GitHub テーマ
+- **pkief.material-icon-theme**: マテリアルアイコン
+- **vscodevim.vim**: Vim キーバインド
+
+#### インフラ・ツール
+
+- **ms-azuretools.vscode-docker**: Docker サポート
+- **ms-vscode-remote.remote-containers**: Dev Containers
+- **ms-vscode.makefile-tools**: Makefile サポート
+- **bradlc.vscode-tailwindcss**: Tailwind CSS サポート
+
+#### データ・設定ファイル
+
+- **redhat.vscode-yaml**: YAML サポート
+- **stylelint.vscode-stylelint**: CSS リンター
+
+#### プロジェクト管理
+
+- **alefragnani.project-manager**: プロジェクト管理
+- **yoavbls.pretty-ts-errors**: TypeScript エラー整形
+
+#### キーバインド (keybindings.json)
+
+| キー | 機能 | 詳細 |
+|------|------|------|
+| `Shift+Enter` | ターミナル行継続 | ターミナルで `\` + 改行を送信 |
+
+### トラブルシューティング
+
+#### Copilotが動作しない
+
+1. GitHub アカウントでログイン: `Cmd+Shift+P` → `GitHub Copilot: Sign In`
+2. 拡張機能を再有効化: 拡張機能タブで Copilot を無効化→有効化
+
+#### Ruby LSPが動作しない
+
+```bash
+# Gemの確認とインストール
+gem install ruby-lsp sorbet-runtime
+# VS Code再起動
+```
