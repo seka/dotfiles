@@ -1,0 +1,50 @@
+#!/bin/bash
+
+set -o errexit -o nounset -o pipefail
+
+echo "🍺 Setting up Homebrew and packages..."
+
+# ------------------------------
+# Install Homebrew if not present
+# ------------------------------
+if test ! "$(which brew)"; then
+    echo "Installing Homebrew..."
+    /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+
+    echo >> "$HOME/.zshrc"
+    echo 'eval "$(/opt/homebrew/bin/brew shellenv)"' >> "$HOME/.zshrc"
+    eval "$(/opt/homebrew/bin/brew shellenv)"
+fi
+
+# ------------------------------
+# Update Homebrew
+# ------------------------------
+echo "Updating Homebrew..."
+brew update
+
+# ------------------------------
+# Install packages from Brewfile
+# ------------------------------
+echo "Installing packages from Brewfile..."
+if [[ -f "$(dirname "$0")/Brewfile" ]]; then
+    brew bundle --file="$(dirname "$0")/Brewfile"
+else
+    echo "❌ Brewfile not found in $(dirname "$0")"
+    exit 1
+fi
+
+# ------------------------------
+# Java setup (if openjdk was installed)
+# ------------------------------
+if brew list --formula | grep -q "^openjdk$"; then
+    echo "Setting up Java..."
+    sudo ln -sfn "$(brew --prefix)/opt/openjdk/libexec/openjdk.jdk" /Library/Java/JavaVirtualMachines/openjdk.jdk
+fi
+
+# ------------------------------
+# Cleanup
+# ------------------------------
+echo "Cleaning up outdated packages..."
+brew cleanup
+
+echo "✅ Homebrew setup completed!"

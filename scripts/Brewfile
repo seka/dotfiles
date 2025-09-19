@@ -1,0 +1,155 @@
+# ------------------------------
+# taps
+# ------------------------------
+tap "homebrew/bundle"
+tap "mongodb/brew"
+tap "neovim/neovim"
+
+# ------------------------------
+# programming languages
+# ------------------------------
+brew "asdf"     # Multi-language version manager
+
+# ruby
+brew "rbenv"
+brew "ruby-build"
+
+# js
+brew "nodenv"
+brew "deno"
+
+# go
+brew "go"
+
+# java
+brew "openjdk"
+
+# swift
+brew "mint"
+brew "libxml2", link: true
+
+# clang
+brew "gcc"
+
+# ------------------------------
+# shell and terminal tools
+# ------------------------------
+brew "zsh"
+brew "zsh-completions"
+brew "zplug"
+brew "fzf"               # Command-line fuzzy finder
+brew "tig"               # Text-mode interface for git
+brew "tmux"              # Terminal multiplexer
+brew "starship"          # Fast and customizable prompt
+
+# ------------------------------
+# build tools and compilers
+# ------------------------------
+brew "cmake"
+brew "autoconf"          # Extensible package of M4 macros
+brew "automake"          # Tool for automatically generating 'Makefile.in'
+
+# ------------------------------
+# utilities
+# ------------------------------
+brew "curl"
+brew "tree"
+brew "wget"
+brew "ripgrep"
+brew "codespell"
+brew "bat"                  # Cat with syntax highlighting
+brew "eza"                  # Modern ls replacement
+brew "fd"                   # Fast find alternative
+brew "htop"                 # Interactive process viewer
+brew "unar"                 # Archive extraction tool
+
+# GNU utils (for macOS)
+brew "binutils"
+brew "coreutils"
+brew "findutils"
+brew "gnu-sed"
+
+# ------------------------------
+# git tools
+# ------------------------------
+brew "git"
+brew "git-extras"
+brew "git-lfs"
+brew "gh"                   # GitHub CLI
+brew "ghq"                  # Remote repository management made easy
+brew "lazygit"              # Simple terminal UI for git commands
+
+# ------------------------------
+# development tools
+# ------------------------------
+brew "neovim"
+brew "ctags"                # Programming tool that generates an index
+brew "shellcheck"           # Static analysis tool for shell scripts
+brew "highlight"            # Converts sourcecode to HTML, RTF, LaTeX, etc
+brew "httpie"               # Command line HTTP client
+brew "fontforge"            # Font editor
+brew "mkcert"               # Simple tool for making locally-trusted development certificates
+brew "jq"                   # JSON processor
+brew "jid"                  # JSON incremental digger
+brew "yq"                   # YAML processor
+brew "mcp-toolbox"
+
+# Docker
+brew "docker"
+brew "docker-machine"
+
+# AWS
+brew "awscli"
+brew "aws-elasticbeanstalk"
+
+# CI
+brew "circleci"
+brew "bitrise"
+
+# network tools
+brew "ngrep"                # Network grep
+brew "lftp"                 # Sophisticated file transfer program
+
+# brew "imagemagick@6", link: true
+brew "nss"
+
+# DB
+brew "mongodb/brew/mongodb-database-tools"
+
+# ------------------------------
+# GUI applications (cask)
+# ------------------------------
+# Development tools
+cask "android-sdk"
+cask "android-studio"
+cask "visual-studio-code"
+cask "dash"                    # API documentation browser
+cask "dbeaver-community"        # Universal database tool (sequel-pro successor)
+
+# Terminal and git tools
+cask "ghostty"
+cask "git-credential-manager"
+cask "gitify"                  # GitHub notifications
+
+# Productivity tools
+cask "clipy"                   # Clipboard extension app
+cask "rectangle"               # Window manager (spectacle successor)
+cask "appcleaner"              # Uninstaller
+cask "the-unarchiver"          # Archive utility
+
+# Communication and browsers
+cask "slack"
+
+# Cloud and storage
+cask "dropbox"
+
+# Design and media
+cask "figma"
+cask "kindle"
+
+# System utilities
+cask "google-japanese-ime"
+cask "docker-desktop"
+
+# Fonts
+cask "font-source-han-code-jp"

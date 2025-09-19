@@ -10,8 +10,7 @@ DOTFILES_ROOT=$(cd $(dirname $0);pwd)
 # ------------------------------
 # scripts
 # ------------------------------
-bash scripts/brew
-bash scripts/brew-cask
+bash scripts/setup-brew
 bash scripts/setup-login-shell
 bash scripts/osx-defaults
 
