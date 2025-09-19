@@ -1,0 +1,202 @@
+#!/bin/bash
+
+set -o errexit -o nounset -o pipefail
+
+SCREENCAPTURE_PATH="${HOME}/Desktop/screencaptures"
+
+# Update App Store apps
+# sudo softwareupdate -i -a
+
+# Finder: show hidden files by default
+defaults write com.apple.finder AppleShowAllFiles -bool true
+
+# Finder: Show Path bar in Finder
+defaults write com.apple.finder ShowPathbar -bool true
+
+# Finder: Show Tab bar in Finder
+defaults write com.apple.finder ShowTabView -bool true
+
+# Restart finder app
+killall Finder
+
+# Automatically hide and show the Dock
+defaults write com.apple.dock autohide -bool true
+
+# Save screenshots to the desktop
+mkdir -p "${SCREENCAPTURE_PATH}"
+defaults write com.apple.screencapture location -string "${SCREENCAPTURE_PATH}"
+
+# Save screenshots in PNG format (other options: BMP, GIF, JPG, PDF, TIFF)
+defaults write com.apple.screencapture type -string "png"
+
+# Display full POSIX path as Finder window title
+defaults write com.apple.finder _FXShowPosixPathInTitle -bool true
+
+# Disable the sound effects on boot (modern method)
+defaults write com.apple.loginwindow LoginHook -string "/bin/bash -c 'sudo nvram StartupMute=%01'"
+
+# Battery settings are now managed through System Settings
+
+# Avoid creating `.DS_Store` files on network volumes
+defaults write com.apple.desktopservices DSDontWriteNetworkStores -bool true
+
+# Date options: Show the day of the week and date
+defaults write com.apple.menuextra.clock 'DateFormat' -string 'EEE MMM d  H:mm'
+
+# Always show scrollbars
+defaults write NSGlobalDomain AppleShowScrollBars -string "Always"
+
+# Disable auto-correct
+defaults write NSGlobalDomain NSAutomaticSpellingCorrectionEnabled -bool false
+
+# Media keys are now managed by Music.app preferences
+
+# Use column view in all Finder windows by default (overridden below)
+# Four-letter codes for the other view modes: `icnv`, `clmv`, `Flwv`, `Nlsv`
+# defaults write com.apple.finder FXPreferredViewStyle -string "Nlsv"
+
+# Prevent Photos from opening automatically when devices are plugged in
+defaults -currentHost write com.apple.ImageCapture disableHotPlug -bool true
+
+# =============================================================================
+# MODERN macOS SETTINGS (macOS 15+)
+# =============================================================================
+
+# System Appearance Settings
+# Enable Dark Mode by default
+defaults write NSGlobalDomain AppleInterfaceStyle -string "Dark"
+
+# Set accent color to blue (1=Red, 2=Orange, 3=Yellow, 4=Green, 5=Purple, 6=Pink, -1=Graphite)
+defaults write NSGlobalDomain AppleAccentColor -int 4
+
+# Reduce transparency for better performance
+defaults write com.apple.universalaccess reduceTransparency -bool true
+
+# Control Center Settings
+# Show Bluetooth in menu bar
+defaults write ~/Library/Preferences/ByHost/com.apple.controlcenter.plist Bluetooth -int 18
+
+# Show Wi-Fi in menu bar
+defaults write ~/Library/Preferences/ByHost/com.apple.controlcenter.plist WiFi -int 18
+
+# Show Battery percentage in menu bar
+defaults write ~/Library/Preferences/ByHost/com.apple.controlcenter.plist BatteryShowPercentage -bool true
+
+# Dock Settings (Enhanced)
+# Set the icon size of Dock items to 48 pixels
+defaults write com.apple.dock tilesize -int 48
+
+# Don't show recent applications in Dock
+defaults write com.apple.dock show-recents -bool false
+
+# Minimize windows using scale effect
+defaults write com.apple.dock mineffect -string "scale"
+
+# Enable spring loading for all Dock items
+defaults write com.apple.dock enable-spring-load-actions-on-all-items -bool true
+
+# Stage Manager (disable by default)
+defaults write com.apple.WindowManager GloballyEnabled -bool false
+
+# Privacy and Security Settings
+# Disable location-based ads
+defaults write com.apple.AdLib allowApplePersonalizedAdvertising -bool false
+
+# Disable analytics and diagnostics sharing
+defaults write /Library/Application\ Support/CrashReporter/DiagnosticMessagesHistory.plist AutoSubmit -bool false
+
+# Finder Enhancements
+# Show all filename extensions
+defaults write NSGlobalDomain AppleShowAllExtensions -bool true
+
+# Use column view in all Finder windows by default
+defaults write com.apple.finder FXPreferredViewStyle -string "clmv"
+
+# Show the ~/Library folder
+chflags nohidden ~/Library
+
+# Show the /Volumes folder
+sudo chflags nohidden /Volumes
+
+# Disable disk image verification
+defaults write com.apple.frameworks.diskimages skip-verify -bool true
+defaults write com.apple.frameworks.diskimages skip-verify-locked -bool true
+defaults write com.apple.frameworks.diskimages skip-verify-remote -bool true
+
+# Trackpad Settings
+# Enable tap to click for this user and for the login screen
+defaults write com.apple.driver.AppleBluetoothMultitouch.trackpad Clicking -bool true
+defaults -currentHost write NSGlobalDomain com.apple.mouse.tapBehavior -int 1
+defaults write NSGlobalDomain com.apple.mouse.tapBehavior -int 1
+
+# Enable three finger drag
+defaults write com.apple.driver.AppleBluetoothMultitouch.trackpad TrackpadThreeFingerDrag -bool true
+defaults write com.apple.AppleMultitouchTrackpad TrackpadThreeFingerDrag -bool true
+
+# Security and Privacy Enhancements
+# Require password immediately after sleep or screen saver begins
+defaults write com.apple.screensaver askForPassword -int 1
+defaults write com.apple.screensaver askForPasswordDelay -int 0
+
+# Enable firewall
+sudo defaults write /Library/Preferences/com.apple.alf globalstate -int 1
+
+# Enable stealth mode (don't respond to ICMP ping requests)
+sudo defaults write /Library/Preferences/com.apple.alf stealthenabled -bool true
+
+# Disable automatic login
+sudo defaults delete /Library/Preferences/com.apple.loginwindow autoLoginUser 2>/dev/null || true
+
+# Enable Secure Keyboard Entry in Terminal.app
+defaults write com.apple.terminal SecureKeyboardEntry -bool true
+
+# Disable guest account
+sudo defaults write /Library/Preferences/com.apple.loginwindow GuestEnabled -bool false
+
+# Developer Settings
+# Enable developer options for Safari
+defaults write com.apple.Safari IncludeDevelopMenu -bool true
+defaults write com.apple.Safari WebKitDeveloperExtrasEnabledPreferenceKey -bool true
+defaults write com.apple.Safari com.apple.Safari.ContentPageGroupIdentifier.WebKit2DeveloperExtrasEnabled -bool true
+
+# Enable debug menu in Mac App Store
+defaults write com.apple.appstore ShowDebugMenu -bool true
+
+# Enable debug menu in Address Book
+defaults write com.apple.addressbook ABShowDebugMenu -bool true
+
+# Enable debug menu in iCal (Calendar)
+defaults write com.apple.iCal IncludeDebugMenu -bool true
+
+# Show build version in login window
+sudo defaults write /Library/Preferences/com.apple.loginwindow AdminHostInfo HostName
+
+# Xcode settings
+# Always use tabs for indenting
+defaults write com.apple.dt.Xcode DVTTextIndentUsingTabs -bool true
+
+# Show tab bar in Xcode
+defaults write com.apple.dt.Xcode AlwaysShowTabBar -bool true
+
+# =============================================================================
+# RESTART APPLICATIONS TO APPLY SETTINGS
+# =============================================================================
+
+# Restart affected applications
+echo "Restarting affected applications..."
+
+# Restart Dock
+killall Dock
+
+# Restart SystemUIServer (for menu bar changes)
+killall SystemUIServer 2>/dev/null || true
+
+# Restart ControlCenter (for Control Center changes)
+killall ControlCenter 2>/dev/null || true
+
+# Note: Finder is already restarted earlier in the script
+
+echo "macOS defaults have been updated successfully!"
+echo "Some changes may require a restart to take full effect."
+echo "To see all changes, consider logging out and logging back in."
+
