@@ -42,34 +42,40 @@ export PATH=$PATH:/sbin
 export PATH=$PATH:/usr/bin
 export PATH=$PATH:/usr/local/bin
 export PATH=$PATH:/usr/local/sbin
+export PATH=$PATH:/opt/homebrew/bin
 
 # XDG configuration
 export XDG_CONFIG_HOME=$HOME/.config
 
 # node.js
-export NODEBREW_PATH=$HOME/.nodebrew/current/bin:$PATH
-export PATH=$PATH:$NODEBREW_PATH/current/bin
-export PATH=$PATH:/usr/local/var/nodebrew/current/bin
+eval "$(nodenv init - zsh)"
 
 # ruby
-export RENV_ROOT=$HOME/.rbenv
-export PATH=$PATH:$RENV_ROOT/bin
 eval "$(rbenv init -)"
 
-# python
-export PYENV_ROOT=$HOME/.pyenv
-export PATH=$PATH:$PYENV_ROOT/bin
-eval "$(pyenv init -)"
-
 # go lang
-export GO15VENDOREXPERIMENT=1
-export GOPATH=$HOME/Documents/golang
+export GOPATH=$(ghq root)
 export PATH=$PATH:$GOPATH/bin
 
 # java8
 export JAVA_HOME=$(/usr/libexec/java_home -v 1.8)
 
-# android
-export ANDROID_SDK_ROOT="/usr/local/share/android-sdk"
-export ANDROID_HOME="/usr/local/share/android-sdk"
 
+# ----------------------------------------
+# Secret
+# ----------------------------------------
+# 1. op signin でサインイン
+# 2. op item create --category="Password" --title="github-yarn-token" password="your-token-here"
+# 3. load-1password-secrets でトークンを読み込み
+if command -v op >/dev/null 2>&1 && op account list >/dev/null 2>&1; then
+  if op item get "github-yarn-token" >/dev/null 2>&1; then
+    export PATIENT_WEB_YARN_GITHUB_TOKEN=$(op read "op://Private/github-yarn-token/password" 2>/dev/null)
+  fi
+else
+  # unset しておいて必要に応じて load-1password-secrets を実行する
+  unset PATIENT_WEB_YARN_GITHUB_TOKEN
+fi
+
+# ----------------------------------------
+# 未整理
+# ----------------------------------------
