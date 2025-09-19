@@ -35,8 +35,6 @@ defaults write com.apple.finder _FXShowPosixPathInTitle -bool true
 # Disable the sound effects on boot (modern method)
 defaults write com.apple.loginwindow LoginHook -string "/bin/bash -c 'sudo nvram StartupMute=%01'"
 
-# Battery settings are now managed through System Settings
-
 # Avoid creating `.DS_Store` files on network volumes
 defaults write com.apple.desktopservices DSDontWriteNetworkStores -bool true
 
@@ -48,12 +46,6 @@ defaults write NSGlobalDomain AppleShowScrollBars -string "Always"
 
 # Disable auto-correct
 defaults write NSGlobalDomain NSAutomaticSpellingCorrectionEnabled -bool false
-
-# Media keys are now managed by Music.app preferences
-
-# Use column view in all Finder windows by default (overridden below)
-# Four-letter codes for the other view modes: `icnv`, `clmv`, `Flwv`, `Nlsv`
-# defaults write com.apple.finder FXPreferredViewStyle -string "Nlsv"
 
 # Prevent Photos from opening automatically when devices are plugged in
 defaults -currentHost write com.apple.ImageCapture disableHotPlug -bool true
@@ -68,9 +60,6 @@ defaults write NSGlobalDomain AppleInterfaceStyle -string "Dark"
 
 # Set accent color to blue (1=Red, 2=Orange, 3=Yellow, 4=Green, 5=Purple, 6=Pink, -1=Graphite)
 defaults write NSGlobalDomain AppleAccentColor -int 4
-
-# Reduce transparency for better performance
-defaults write com.apple.universalaccess reduceTransparency -bool true
 
 # Control Center Settings
 # Show Bluetooth in menu bar
