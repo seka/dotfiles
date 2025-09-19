@@ -3,7 +3,7 @@
 " ----------------------------------------
 " encoding
 set encoding=utf-8
-set termencoding=utf-8
+" set termencoding=utf-8  " Not supported in Neovim
 set fileencoding=utf-8
 set fileencodings=utf-8,cp932,euc-jp
 
@@ -25,6 +25,11 @@ autocmd BufWritePre * :%s/\s\+$//e
 " (), {} hilight
 set showmatch
 
+" tab
+set tabstop=2
+set shiftwidth=2
+set expandtab
+
 " swap, backup
 set directory=~/dotfiles/editors/vim/swaps
 set backupdir=~/dotfiles/editors/vim/backups
@@ -35,15 +40,16 @@ set backupdir=~/dotfiles/editors/vim/backups
 runtime! ./install-plugins.vim
 
 " ----------------------------------------
-" Color
+" Plugin settings
 " ----------------------------------------
-let g:solarized_termcolors=256
-set background=dark
-colorscheme solarized
-hi Comment ctermfg=2
+runtime! setting-plugins.vim
+
+" ----------------------------------------
+" LSP and Plugin configuration
+" ----------------------------------------
+lua require('lsp_config')
 
 " ----------------------------------------
 " Original command
 " ----------------------------------------
 runtime! commands.vim
-

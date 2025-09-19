@@ -19,6 +19,7 @@ brew install rbenv
 brew install ruby-build
 brew install readline
 brew install nodebrew
+brew install deno
 brew install go
 brew cask install java
 
@@ -58,7 +59,7 @@ brew install hub
 brew install tig
 
 # vim
-brew install neovim/neovim/neovim
+brew install neovim
 
 # Simplistic interactive filtering tool
 brew install peco

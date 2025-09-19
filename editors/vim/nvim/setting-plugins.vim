@@ -4,24 +4,37 @@
 " 隠しファイルを表示する
 let NERDTreeShowHidden = 1
 
+" WinEnterエラー回避のための安全な設定
+let g:NERDTreeQuitOnOpen = 0
+let g:NERDTreeAutoDeleteBuffer = 1
+let g:NERDTreeMinimalUI = 1
+let g:NERDTreeDirArrows = 1
+
+" 自動クローズ機能を無効化してエラーを回避
+let g:NERDTreeChDirMode = 0
+
+" vim-nerdtree-tabsとの競合回避
+let g:nerdtree_tabs_open_on_console_startup = 0
+let g:nerdtree_tabs_focus_on_files = 1
+let g:nerdtree_tabs_smart_startup_focus = 1
+
+" 削除済み: minibufexpl設定
+
+" WinEnterイベントでのエラーハンドリング強化
+augroup NERDTreeErrorHandling
+  autocmd!
+  " NERDTreeウィンドウでのエラーを安全に処理
+  autocmd WinEnter * if exists("t:NERDTreeBufName") && bufname() == t:NERDTreeBufName | silent! call nerdtree#ui_glue#invoke_key_map('p') | endif
+augroup END
+
 " ----------------------------------------
-" minibufxpl
+" 分割ウィンドウ移動設定
 " ----------------------------------------
-"分割ウィンドウ時に移動を行う設定
 noremap <C-H> <C-W>h
 noremap <C-J> <C-W>j
 noremap <C-K> <C-W>k
 noremap <C-L> <C-W>l
 
-" ----------------------------------------
-" taglist
-" ----------------------------------------
-"編集中ファイルのみのタグを表示
-"taglistの右側表示
-"taglistのみの時に終了
-let Tlist_Show_One_File = 1
-let Tlist_Use_Right_Window = 1
-let Tlist_Exit_OnlyWindow = 1
 
 " ----------------------------------------
 " vim-indent-line
@@ -43,41 +56,19 @@ nnoremap <silent> sp :call YanktmpPaste_p()<CR>
 nnoremap <silent> sP :call YanktmpPaste_P()<CR>
 
 " ----------------------------------------
-" unite
+" telescope.nvim
 " ----------------------------------------
-let g:unite_enable_start_insert = 1
-let g:unite_source_file_mru_filename_format = ''
-let g:unite_source_file_mru_limit = 100
-let g:unite_split_rule = 'rightbelow'
-let g:loaded_unite_source_bookmark = 1
-let g:loaded_unite_source_tab = 1
-let g:loaded_unite_source_window = 1
-
 " prefix
-nnoremap [unite] <Nop>
-nmap     <Space>u [unite]
+nnoremap [telescope] <Nop>
+nmap     <Space>t [telescope]
 
-" uniteのショートカットコマンド ,uy などの入力でuniteを起動する
-noremap  <silent> [unite]c: <C-u>UniteWithCurrentDir -buffer-name=files
-buffer file_mru bookmark file<CR>
-nnoremap <silent> [unite]b: <C-u>Unite buffer<CR>
-nnoremap <silent> [unite]bd: <C-u>UniteWithBufferDir -buffer-name=files
-file<CR>
-nnoremap <silent> [unite]s:  <C-u>Unite neosnippet<CR>
-
-" ウィンドウを分割して開く
-au FileType unite nnoremap <silent> <buffer> <expr> <C-J>
-unite#do_action('split')
-au FileType unite inoremap <silent> <buffer> <expr> <C-J>
-unite#do_action('split')
-
-" ウィンドウを縦に分割して開く
-au FileType unite nnoremap <silent> <buffer> <expr> <C-K> unite#do_action('vsplit')
-au FileType unite inoremap <silent> <buffer> <expr> <C-K> unite#do_action('vsplit')
-
-" ESCキーを2回押すと終了する
-au FileType unite nnoremap <silent> <buffer> <ESC><ESC> :q<CR>
-au FileType unite inoremap <silent> <buffer> <ESC><ESC> <ESC>:q<CR>
+" telescopeのショートカットコマンド
+nnoremap <silent> [telescope]f <cmd>Telescope find_files<cr>
+nnoremap <silent> [telescope]g <cmd>Telescope live_grep<cr>
+nnoremap <silent> [telescope]b <cmd>Telescope buffers<cr>
+nnoremap <silent> [telescope]h <cmd>Telescope help_tags<cr>
+nnoremap <silent> [telescope]r <cmd>Telescope oldfiles<cr>
+nnoremap <silent> [telescope]s <cmd>Telescope lsp_document_symbols<cr>
 
 " ----------------------------------------
 " vim-easy-align
@@ -88,7 +79,7 @@ vmap <Enter> <Plug>(EasyAlign)
 " yankround
 " ----------------------------------------
 let g:yankround_max_history = 20
-nnoremap <C-p> :<C-u>Unite yankround<CR>
+" nnoremap <C-p> :<C-u>Unite yankround<CR>  " 古いunite設定
 
 " ----------------------------------------
 " tagbar
@@ -97,10 +88,10 @@ nnoremap <C-p> :<C-u>Unite yankround<CR>
 nnoremap <F8> :TagbarToggle<CR>
 
 " ----------------------------------------
-" vim-airline
+" lualine.nvim
 " ----------------------------------------
 let g:lightline = {
-      \ 'colorscheme': 'wombat',
+      \ 'colorscheme': 'solarized_dark',
       \ 'active': {
       \   'left': [ [ 'mode', 'paste' ], [ 'fugitive', 'filename' ], ['ctrlpmark'] ],
       \   'right': [ [ 'syntastic', 'lineinfo' ], ['percent'], [ 'fileformat', 'fileencoding', 'filetype' ] ]
@@ -228,21 +219,37 @@ let g:unite_force_overwrite_statusline = 0
 let g:vimfiler_force_overwrite_statusline = 0
 let g:vimshell_force_overwrite_statusline = 0
 
-" ----------------------------------------
-" neomake
-" ----------------------------------------
-  let g:go_fmt_command = 'goimports'
-  let s:goargs = go#package#ImportPath(expand('%:p:h'))
-  let g:neomake_go_errcheck_maker = {
-    \ 'args': ['-abspath', s:goargs],
-    \ 'append_file': 0,
-    \ 'errorformat': '%f:%l:%c:\ %m, %f:%l:%c\ %#%m',
-    \ }
+" Automatic colorscheme detection for lightline
+augroup LightlineColorScheme
+  autocmd!
+  autocmd ColorScheme * call LightlineUpdate()
+augroup END
 
-  let g:neomake_go_enabled_makers = ['golint', 'govet', 'errcheck']
-  let g:neomake_css_enabled_makers = ['csslint', 'stylelint']
-  let g:neomake_html_enabled_makers = ['tidy', 'htmlhint']
-  let g:neomake_javascript_enabled_makers = ['jshint', 'jscs', 'eslint']
+function! LightlineUpdate()
+  " Update lightline colorscheme based on current vim colorscheme
+  if exists('g:colors_name')
+    if g:colors_name ==# 'solarized'
+      if &background ==# 'dark'
+        let g:lightline.colorscheme = 'solarized_dark'
+      else
+        let g:lightline.colorscheme = 'solarized_light'
+      endif
+    else
+      " Use wombat as fallback for other colorschemes
+      let g:lightline.colorscheme = 'wombat'
+    endif
+    
+    " Update lightline if it's already loaded
+    if exists(':LightlineReload')
+      LightlineReload
+    endif
+  endif
+endfunction
+
+" ----------------------------------------
+" nvim-lint + conform.nvim
+" ----------------------------------------
+" これらの設定はluaで行う（lsp-config.luaで設定）
 
 " ----------------------------------------
 " Vim-Tags
@@ -254,11 +261,9 @@ let g:vim_tags_auto_generate = 1
 let g:vim_tags_ignore_files = ['.gitignore', '.svnignore', '.cvsignore']
 
 " ----------------------------------------
-" ag.vim
+" 検索機能 (telescope.nvimで代替)
 " ----------------------------------------
-"  You can configure ag.vim to always start searching from your project root
-"  instead of the cwd
-let g:ag_working_path_mode="r"
+" 削除済み: ag.vim設定
 
 " ----------------------------------------
 " vim-go
@@ -280,20 +285,172 @@ let g:vim_tags_ignore_files = ['.gitignore', '.svnignore', '.cvsignore']
 let g:vim_tags_directories = [".git", ".hg", ".svn", ".bzr", "_darcs", "CVS"]
 
 " ----------------------------------------
-" deoplete
+" denops.vim
 " ----------------------------------------
-let g:deoplete#enable_at_startup = 1
+" Deno実行ファイルのパスを明示的に指定
+let g:denops#deno = '/opt/homebrew/bin/deno'
+
+" Denoサーバーの引数設定（セキュリティ重視・最小権限の原則）
+let g:denops#server#deno_args = ['-q', '--no-lock', '--allow-env', '--allow-read', '--allow-net']
+
+" バージョンチェック無効化（互換性問題回避）
+let g:denops_disable_version_check = 1
+
+" denopsのデバッグモード（必要時のみ有効化）
+let g:denops#debug = 0
+
+" 推奨設定：Ctrl+Cでの割り込み処理
+noremap <silent> <C-c> <Cmd>call denops#interrupt()<CR><C-c>
+inoremap <silent> <C-c> <Cmd>call denops#interrupt()<CR><C-c>
+cnoremap <silent> <C-c> <Cmd>call denops#interrupt()<CR><C-c>
+
+" 推奨コマンド：denopsサーバー再起動
+command! DenopsRestart call denops#server#restart()
+
+" 推奨コマンド：Denoキャッシュ修復
+command! DenopsFixCache call denops#cache#update(#{reload: v:true})
+
+" ----------------------------------------
+" denops共有サーバー設定（接続問題の確実な解決）
+" ----------------------------------------
+" 使用方法：
+" 1. 最初に :DenopsSharedServer を実行して共有サーバーを起動
+" 2. Vimを再起動するとdenopsが共有サーバーに接続
+" 3. 問題があれば以下のコマンドで状況確認:
+"    :DenopsCheck  - サーバープロセス確認
+"    :DenopsStatus - denops接続状況確認
+"    :DenopsLog    - サーバーログ確認
+"    :DenopsRestart - denops再起動
+"
+" 共有サーバーアドレスの設定（個別サーバー起動問題を回避）
+let g:denops_server_addr = '127.0.0.1:32123'
+
+" 共有サーバー起動コマンド（改善版 - より確実な起動）
+function! s:start_denops_shared_server() abort
+  let l:denops_dir = expand('~/dotfiles/editors/vim/plugins/repos/github.com/vim-denops/denops.vim')
+  let l:deno_path = '/opt/homebrew/bin/deno'
+  let l:script_path = l:denops_dir . '/denops/@denops-private/cli.ts'
+
+  " サーバーが既に起動しているかチェック
+  let l:ps_result = system('ps aux | grep "deno.*cli.ts" | grep -v grep')
+  if !empty(l:ps_result)
+    echo "denops共有サーバーは既に起動しています"
+    echo l:ps_result
+    return
+  endif
+
+  " サーバー起動（公式推奨の-Aフラグ使用）
+  let l:cmd = printf('cd %s && nohup %s run -A --no-lock %s --hostname=127.0.0.1 --port=32123 > /tmp/denops-server.log 2>&1 &',
+        \ shellescape(l:denops_dir),
+        \ shellescape(l:deno_path),
+        \ shellescape(l:script_path))
+
+  let l:result = system(l:cmd)
+  if v:shell_error == 0
+    echo "denops共有サーバーを起動しました。数秒後に :DenopsCheck で確認してください"
+    echo "ログ確認: :DenopsLog"
+  else
+    echo "エラー: サーバー起動に失敗しました"
+    echo "エラー詳細: " . l:result
+    echo "ログ確認: :DenopsLog"
+  endif
+endfunction
+
+command! DenopsSharedServer call s:start_denops_shared_server()
+
+" 自動起動機能（オプション - 有効にするには以下をアンコメント）
+" augroup DenopsAutoStart
+"   autocmd!
+"   autocmd VimEnter * call s:auto_start_denops_if_needed()
+" augroup END
+
+function! s:auto_start_denops_if_needed() abort
+  " 共有サーバーアドレスが設定されている場合のみ自動起動を試行
+  if exists('g:denops_server_addr') && !empty(g:denops_server_addr)
+    " サーバーが起動しているかチェック
+    let l:ps_result = system('ps aux | grep "deno.*cli.ts" | grep -v grep')
+    if empty(l:ps_result)
+      echo "denops共有サーバーが見つかりません。自動起動を試行します..."
+      call s:start_denops_shared_server()
+      " 少し待ってから接続を試行
+      sleep 2
+    endif
+  endif
+endfunction
+
+" denops接続状況確認コマンド
+command! DenopsStatus echo denops#server#status()
+
+" 共有サーバープロセス確認コマンド（改善版）
+function! s:check_denops_server() abort
+  let l:ps_result = system('ps aux | grep "deno.*cli.ts" | grep -v grep')
+  if !empty(l:ps_result)
+    echo "denops共有サーバーは起動中です:"
+    echo l:ps_result
+    echo "\nログ確認: :DenopsLog"
+  else
+    echo "denops共有サーバーは起動していません"
+    echo "起動するには: :DenopsSharedServer"
+  endif
+endfunction
+
+command! DenopsCheck call s:check_denops_server()
+command! DenopsLog !tail -20 /tmp/denops-server.log
+
+" ----------------------------------------
+" ddc.vim
+" ----------------------------------------
+" denopsが利用可能になってからddc設定を実行
+augroup DDCConfig
+  autocmd!
+  autocmd User DenopsReady call s:ddc_setup()
+augroup END
+
+function! s:ddc_setup() abort
+  try
+    " ddc基本設定
+    call ddc#custom#patch_global('ui', 'pum')
+    call ddc#custom#patch_global('sources', ['around', 'lsp'])
+    call ddc#custom#patch_global('sourceOptions', {
+    \ '_': {'matchers': ['matcher_head'], 'sorters': ['sorter_rank']},
+    \ 'around': {'mark': 'A'},
+    \ 'lsp': {'mark': 'L', 'dup': v:true},
+    \ })
+
+    " ddc有効化
+    call ddc#enable()
+
+    echo "ddc.vim initialized successfully with secure denops configuration"
+  catch
+    echo "Error initializing ddc.vim: " . v:exception
+  endtry
+endfunction
+
+" denopsが既に利用可能な場合は即座に設定実行
+if denops#plugin#is_loaded('ddc')
+  call s:ddc_setup()
+endif
+
+" Tab completion for ddc.vim
 inoremap <expr><tab> pumvisible() ? "\<C-n>" :
     \ neosnippet#expandable_or_jumpable() ?
     \    "\<Plug>(neosnippet_expand_or_jump)" : "\<tab>"
+inoremap <expr><s-tab> pumvisible() ? "\<C-p>" : "\<s-tab>"
 
 " ----------------------------------------
-" deoplete
+" bufferline.nvim
 " ----------------------------------------
-imap <C-k> <Plug>(neosnippet_expand_or_jump)
-smap <C-k> <Plug>(neosnippet_expand_or_jump)
-xmap <C-k> <Plug>(neosnippet_expand_target)
-if has('conceal')
-  set conceallevel=2 concealcursor=niv
-endif
+" bufferlineのナビゲーション
+nnoremap <silent> [b :BufferLineCyclePrev<CR>
+nnoremap <silent> ]b :BufferLineCycleNext<CR>
+nnoremap <silent> <leader>bp :BufferLineTogglePin<CR>
+nnoremap <silent> <leader>bc :BufferLinePickClose<CR>
+
+" ----------------------------------------
+" toggleterm.nvim
+" ----------------------------------------
+" Toggleterm keymaps
+nnoremap <silent> <C-t> :ToggleTerm<CR>
+tnoremap <silent> <C-t> <C-\><C-n>:ToggleTerm<CR>
+
 
