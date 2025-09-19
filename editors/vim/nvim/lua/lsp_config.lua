@@ -14,13 +14,22 @@ require("mason").setup({
 require("mason-lspconfig").setup({
   ensure_installed = {
     "lua_ls",           -- Lua
-    "ts_ls",            -- TypeScript/JavaScript
+    "ts_ls",            -- TypeScript/JavaScript/JSX
     "gopls",            -- Go
     "pyright",          -- Python
     "rust_analyzer",    -- Rust
     "html",             -- HTML
     "cssls",            -- CSS
     "jsonls",           -- JSON
+    "ruby_lsp",         -- Ruby
+    "jdtls",            -- Java
+    "kotlin_language_server", -- Kotlin
+    "sourcekit",        -- Swift
+    "lemminx",          -- XML
+    "clangd",           -- C/C++
+    "sqlls",            -- SQL
+    "bashls",           -- Shell script
+    "autotools_ls",     -- Makefile
   },
   automatic_installation = true,
 })
@@ -56,14 +65,20 @@ local capabilities = vim.lsp.protocol.make_client_capabilities()
 
 -- Setup language servers
 local servers = {
-  "lua_ls",
   "ts_ls",
   "gopls",
   "pyright",
   "rust_analyzer",
   "html",
   "cssls",
-  "jsonls"
+  "jsonls",
+  "ruby_lsp",
+  "kotlin_language_server",
+  "sourcekit",
+  "lemminx",
+  "sqlls",
+  "bashls",
+  "autotools_ls"
 }
 
 for _, server in ipairs(servers) do
@@ -93,6 +108,56 @@ lspconfig.lua_ls.setup({
         enable = false,
       },
     },
+  },
+})
+
+-- Special configuration for jdtls (Java)
+lspconfig.jdtls.setup({
+  on_attach = on_attach,
+  capabilities = capabilities,
+  cmd = { "jdtls" },
+  root_dir = lspconfig.util.root_pattern(".git", "mvnw", "gradlew", "pom.xml", "build.gradle"),
+  settings = {
+    java = {
+      eclipse = {
+        downloadSources = true,
+      },
+      configuration = {
+        updateBuildConfiguration = "interactive",
+      },
+      maven = {
+        downloadSources = true,
+      },
+      implementationsCodeLens = {
+        enabled = true,
+      },
+      referencesCodeLens = {
+        enabled = true,
+      },
+      references = {
+        includeDecompiledSources = true,
+      },
+    },
+  },
+})
+
+-- Special configuration for clangd (C/C++)
+lspconfig.clangd.setup({
+  on_attach = on_attach,
+  capabilities = capabilities,
+  cmd = {
+    "clangd",
+    "--background-index",
+    "--clang-tidy",
+    "--header-insertion=iwyu",
+    "--completion-style=detailed",
+    "--function-arg-placeholders",
+    "--fallback-style=llvm",
+  },
+  init_options = {
+    usePlaceholders = true,
+    completeUnimported = true,
+    clangdFileStatus = true,
   },
 })
 
