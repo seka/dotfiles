@@ -22,37 +22,28 @@ zstyle ':completion:*' list-colors ''
 zstyle ':completion:*' verbose yes
 
 # ------------------------------
-# zplug
+# Zinit
 # ------------------------------
-export ZPLUG_HOME=/usr/local/opt/zplug
-source $ZPLUG_HOME/init.zsh
+ZINIT_HOME="${XDG_DATA_HOME:-${HOME}/.local/share}/zinit/zinit.git"
+[ ! -d $ZINIT_HOME ] && mkdir -p "$(dirname $ZINIT_HOME)"
+[ ! -d $ZINIT_HOME/.git ] && git clone https://github.com/zdharma-continuum/zinit.git "$ZINIT_HOME"
+source "${ZINIT_HOME}/zinit.zsh"
 
 # fish shell like syntax highlighting for zsh
-zplug "zsh-users/zsh-syntax-highlighting", defer:3
+zinit light "zsh-users/zsh-syntax-highlighting"
 
 # Additional completion definitions for Zsh.
-zplug "zsh-users/zsh-completions"
+zinit light "zsh-users/zsh-completions"
 
 # Make sure to use double quotes
-zplug "zsh-users/zsh-history-substring-search"
+zinit light "zsh-users/zsh-history-substring-search"
 
 # peco/percol/fzf wrapper plugin for zsh
-zplug "mollifier/anyframe"
+zinit light "mollifier/anyframe"
 
 # zsh plugin to cd to git repository root directory.
-zplug "mollifier/cd-gitroot"
+zinit light "mollifier/cd-gitroot"
 
 # cd command with an interactive filter
-zplug "b4b4r07/enhancd", use:enhancd.sh
-
-# Install plugins if there are plugins that have not been installed
-if ! zplug check --verbose; then
-    printf "Install? [y/N]: "
-    if read -q; then
-        echo; zplug install
-    fi
-fi
-
-# Then, source plugins and add commands to $PATH
-zplug load
+zinit light "b4b4r07/enhancd"
 
