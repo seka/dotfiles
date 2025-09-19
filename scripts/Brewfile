@@ -126,8 +126,10 @@ cask "visual-studio-code"
 cask "dash"                    # API documentation browser
 cask "dbeaver-community"        # Universal database tool (sequel-pro successor)
 
-# Terminal and git tools
+# Terminal
 cask "ghostty"
+
+# git
 cask "git-credential-manager"
 cask "gitify"                  # GitHub notifications
 
@@ -153,3 +155,7 @@ cask "docker-desktop"
 
 # Fonts
 cask "font-source-han-code-jp"
+
+# Security
+cask "1password"
+cask "1password-cli"
