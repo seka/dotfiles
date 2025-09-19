@@ -47,7 +47,11 @@
 
 [credential]
     helper = osxkeychain
+	helper = /usr/local/share/gcm-core/git-credential-manager
 
 [help]
     autocorrect = 1
 
+[user]
+	name = seka
+	email = s.seka134704@gmail.com
