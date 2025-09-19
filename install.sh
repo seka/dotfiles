@@ -16,13 +16,23 @@ bash scripts/osx-defaults
 bash scripts/setup-pip
 
 # ------------------------------
-# symlink
+# XDG Base Directory setup
 # ------------------------------
-for F in $(find {terminal,git} -type f -not -name '.*'); do
-  ln -sf "$DOTFILES_ROOT/$F" "$HOME/.$(basename $F)"
+mkdir -p ~/.config/{git,zsh}
+mkdir -p ~/.local/state/zsh
+
+# ------------------------------
+# symlinks
+# ------------------------------
+for F in $(find {git,terminal} -type f -not -name '.*'); do
+  filename=$(basename $F)
+  case "$F" in
+    "terminal/zshenv") ln -sf "$DOTFILES_ROOT/$F" "$HOME/.zshenv" ;;
+    "terminal/zshrc") ln -sf "$DOTFILES_ROOT/$F" "$HOME/.config/zsh/.zshrc" ;;
+    "terminal/"*) ln -sf "$DOTFILES_ROOT/$F" "$HOME/.config/zsh/$filename" ;;
+    "git/"*) ln -sf "$DOTFILES_ROOT/$F" "$HOME/.config/git/$filename" ;;
+  esac
 done
 
-# xdg-config
-mkdir -p ~/.config
 ln -sf "$DOTFILES_ROOT/editors/vim/nvim" "$HOME/.config/nvim"
 

@@ -1,5 +1,4 @@
 [core]
-    excludesfile = ~/.gitignore_global
     editor = nvim
     whitespace = cr-at-eol
     filemode = false
@@ -31,14 +30,6 @@
 [mergetool]
     prompt = false
     path = nvim
-
-[merge "mergepbx"]
-    name = XCode project files merger
-    driver = /usr/local/bin/mergepbx %O %A %B
-
-[mergetool "sourcetree"]
-    cmd = /Applications/Sourcetree.app/Contents/Resources/opendiff-w.sh \"$LOCAL\" \"$REMOTE\" -ancestor \"$BASE\" -merge \"$MERGED\"
-    trustExitCode = true
 
 [filter "media"]
     required = true
