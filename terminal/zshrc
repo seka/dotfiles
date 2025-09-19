@@ -27,10 +27,8 @@ source $ZDOTDIR/keybinds
 # ----------------------------------------
 # development
 # ----------------------------------------
-# node.js
+eval "$(/opt/homebrew/bin/brew shellenv)"
 eval "$(nodenv init - zsh)"
-
-# ruby
 eval "$(rbenv init -)"
 
 # Google Cloud SDK.
