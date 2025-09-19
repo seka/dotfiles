@@ -12,16 +12,20 @@ if (( ${+terminfo[smkx]} )) && (( ${+terminfo[rmkx]} )); then
   zle -N zle-line-init
 
   # Ctrl + m => cdr
-  zle -N peco-cdr
-  bindkey '^xc' peco-cdr
+  zle -N fzf-cdr
+  bindkey '^xc' fzf-cdr
 
   # Ctrl + r => history
-  zle -N peco-select-history
-  bindkey '^r' peco-select-history
+  zle -N fzf-select-history
+  bindkey '^xr' fzf-select-history
 
   # Ctrl + g => ghq
-  zle -N peco-ghq
-  bindkey '^xg' peco-ghq
+  zle -N fzf-ghq
+  bindkey '^xg' fzf-ghq
+
+  # Ctrl + b => branch
+  zle -N fzf-git-branches
+  bindkey '^xb' fzf-git-branches
 
   zle -N zle-line-finish
 fi
