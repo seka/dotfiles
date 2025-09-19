@@ -21,13 +21,13 @@ source $ZDOTDIR/zsh-plugins
 source $ZDOTDIR/functions
 source $ZDOTDIR/aliases
 source $ZDOTDIR/inputrc
-source $ZDOTDIR/prompt
 source $ZDOTDIR/keybinds
 
 # ----------------------------------------
 # development
 # ----------------------------------------
 eval "$(/opt/homebrew/bin/brew shellenv)"
+eval "$(starship init zsh)"
 eval "$(nodenv init - zsh)"
 eval "$(rbenv init -)"
 
