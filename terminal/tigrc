@@ -1,0 +1,34 @@
+# tig configuration
+
+# General settings
+set main-view-date = custom
+set main-view-date-format = "%Y-%m-%d %H:%M"
+set main-view-author = abbreviated
+set main-view-id = yes
+
+# Commit message wrapping and display
+set commit-title-overflow = yes
+set wrap-lines = yes
+set tab-size = 4
+
+# Main view column widths
+set main-view = id date author:email-user commit-title:graph=yes,refs=yes
+
+# Horizontal scrolling for long commit messages
+bind generic h scroll-left
+bind generic l scroll-right
+
+# Show full commit message in pager
+bind main <Enter> !git show %(commit)
+
+# Color settings for better readability
+color cursor black green
+color title-focus black blue
+color title-blur black blue
+
+# Diff settings
+set diff-context = 3
+set ignore-space = some
+
+# Search settings
+set ignore-case = smart-case
