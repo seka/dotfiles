@@ -46,3 +46,6 @@ zinit light "mollifier/cd-gitroot"
 # cd command with an interactive filter
 zinit light "b4b4r07/enhancd"
 
+# Interactive git commands using fzf
+zinit light "wfxr/forgit"
+
