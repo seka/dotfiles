@@ -3,28 +3,21 @@
 # General settings
 set main-view-date = custom
 set main-view-date-format = "%Y-%m-%d %H:%M"
-set main-view-author = abbreviated
+set main-view-author = full
 set main-view-id = yes
-
-# Commit message wrapping and display
-set commit-title-overflow = yes
 set wrap-lines = yes
 set tab-size = 4
 
-# Main view column widths
-set main-view = id date author:email-user commit-title:graph=yes,refs=yes
+# Show working tree changes with a descriptive title
+set show-changes = yes
+
+# Main view with short commit ID (7 chars to distinguish from 0000000)
+set main-view-id-width = 7
+set main-view = id:7 date author commit-title:refs=yes
 
 # Horizontal scrolling for long commit messages
 bind generic h scroll-left
 bind generic l scroll-right
-
-# Show full commit message in pager
-bind main <Enter> !git show %(commit)
-
-# Color settings for better readability
-color cursor black green
-color title-focus black blue
-color title-blur black blue
 
 # Diff settings
 set diff-context = 3
