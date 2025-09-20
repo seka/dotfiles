@@ -21,3 +21,19 @@ alias grep='grep -G'
 # restart shell
 alias restart_shell="exec $SHELL -l"
 
+# port
+alias ports="lsof -i -P -n | grep LISTEN"
+
+# file operations
+alias ll="ls -la"
+alias la="ls -A"
+
+# macOS specific
+alias flushdns="sudo dscacheutil -flushcache && sudo killall -HUP mDNSResponder"
+alias showfiles="defaults write com.apple.finder AppleShowAllFiles -bool true && killall Finder"
+alias hidefiles="defaults write com.apple.finder AppleShowAllFiles -bool false && killall Finder"
+
+# dotfiles management
+alias dotfiles="cd ~/dotfiles"
+alias reload="source ~/.zshenv && source ~/.config/zsh/.zshrc"
+
