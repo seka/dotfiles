@@ -52,6 +52,11 @@ export CLOUD_ML_REGION=us-east5
 export ANTHROPIC_VERTEX_PROJECT_ID=anthropic-vertexai
 
 # ----------------------------------------
+# fzf configuration
+# ----------------------------------------
+export FZF_DEFAULT_OPTS="--reverse --height 40% --border"
+
+# ----------------------------------------
 # 未整理
 # ----------------------------------------
 PATH="/Users/shin.sekaryo/perl5/bin${PATH:+:${PATH}}"; export PATH;
