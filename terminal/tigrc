@@ -11,9 +11,8 @@ set tab-size = 4
 # Show working tree changes with a descriptive title
 set show-changes = yes
 
-# Main view with short commit ID (7 chars to distinguish from 0000000)
-set main-view-id-width = 7
-set main-view = id:7 date author commit-title:refs=yes
+# Main view with short commit ID (refs=yes enables branch/tag display)
+set main-view = id:true date author commit-title:refs=yes
 
 # Horizontal scrolling for long commit messages
 bind generic h scroll-left
@@ -45,12 +44,12 @@ color diff-chunk magenta default
 color diff-add green default
 color diff-del red default
 
-# Status view colors
-color stat-head cyan default
-color stat-section yellow default
-color stat-staged green default
-color stat-unstaged red default
-color stat-untracked cyan default
+# Status view colors (updated syntax)
+color status.header cyan default
+color status.section yellow default
+color "status.staged" green default
+color "status.unstaged" red default
+color "status.untracked" cyan default
 
 # Diff settings
 set diff-context = 3
