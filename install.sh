@@ -29,10 +29,11 @@ for F in $(find {git,terminal} -type f -not -name '.*'); do
   case "$F" in
     "terminal/zshenv") ln -sf "$DOTFILES_ROOT/$F" "$HOME/.zshenv" ;;
     "terminal/zshrc") ln -sf "$DOTFILES_ROOT/$F" "$HOME/.config/zsh/.zshrc" ;;
+    "terminal/tigrc") ln -sf "$DOTFILES_ROOT/$F" "$HOME/.tigrc" ;;
     "terminal/"*) ln -sf "$DOTFILES_ROOT/$F" "$HOME/.config/zsh/$filename" ;;
     "git/"*) ln -sf "$DOTFILES_ROOT/$F" "$HOME/.config/git/$filename" ;;
   esac
 done
 
-ln -sf "$DOTFILES_ROOT/editors/vim/nvim" "$HOME/.config/nvim"
+ln -sfn "$DOTFILES_ROOT/editors/vim/nvim" "$HOME/.config/nvim"
 
