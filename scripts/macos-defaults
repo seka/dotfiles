@@ -145,12 +145,12 @@ sudo defaults write /Library/Preferences/com.apple.loginwindow GuestEnabled -boo
 # Show build version in login window
 sudo defaults write /Library/Preferences/com.apple.loginwindow AdminHostInfo HostName
 
-# Xcode settings
+# Xcode settings (only if Xcode is installed)
 # Always use tabs for indenting
-defaults write com.apple.dt.Xcode DVTTextIndentUsingTabs -bool true
+defaults write com.apple.dt.Xcode DVTTextIndentUsingTabs -bool true 2>/dev/null || true
 
 # Show tab bar in Xcode
-defaults write com.apple.dt.Xcode AlwaysShowTabBar -bool true
+defaults write com.apple.dt.Xcode AlwaysShowTabBar -bool true 2>/dev/null || true
 
 # =============================================================================
 # RESTART APPLICATIONS TO APPLY SETTINGS
