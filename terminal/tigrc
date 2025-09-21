@@ -5,7 +5,6 @@ set main-view-date = custom
 set main-view-date-format = "%Y-%m-%d %H:%M"
 set main-view-author = full
 set main-view-id = yes
-set wrap-lines = yes
 set tab-size = 4
 
 # Show working tree changes with a descriptive title
@@ -18,38 +17,8 @@ set main-view = id:true date author commit-title:refs=yes
 bind generic h scroll-left
 bind generic l scroll-right
 
-# Color settings (correct tig syntax)
-color default default default
-color cursor white blue bold
-color status green default
-color delimiter cyan default
-color date yellow default
-color mode cyan default
-color id magenta default
-color overflow red default
-color header yellow default
-color section cyan default
-color directory yellow default
-color file default default
-color grep.file blue default
-color file-size default default
-color line-number cyan default
-color title-blur white blue
-color title-focus white blue bold
-
-# Diff colors
-color diff-header yellow default
-color diff-index blue default
-color diff-chunk magenta default
-color diff-add green default
-color diff-del red default
-
-# Status view colors (updated syntax)
-color status.header cyan default
-color status.section yellow default
-color "status.staged" green default
-color "status.unstaged" red default
-color "status.untracked" cyan default
+# Horizontal scroll settings to help with wide content
+set horizontal-scroll = 25%
 
 # Diff settings
 set diff-context = 3
