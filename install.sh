@@ -20,6 +20,7 @@ bash scripts/setup-pip
 # ------------------------------
 mkdir -p ~/.config/{git,zsh}
 mkdir -p ~/.local/state/zsh
+mkdir -p ~/.claude
 
 # ------------------------------
 # symlinks
@@ -36,4 +37,10 @@ for F in $(find {git,terminal} -type f -not -name '.*'); do
 done
 
 ln -sfn "$DOTFILES_ROOT/editors/vim/nvim" "$HOME/.config/nvim"
+
+# ------------------------------
+# Claude AI settings
+# ------------------------------
+ln -sf "$DOTFILES_ROOT/ai-agents/claude/CLAUDE.md" "$HOME/.claude/CLAUDE.md"
+ln -sf "$DOTFILES_ROOT/ai-agents/claude/settings.json" "$HOME/.claude/settings.json"
 

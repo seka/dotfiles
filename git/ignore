@@ -166,3 +166,7 @@ bower.json
 
 ### ctags
 .tags
+
+# Claude Code
+CLAUDE.local.md
+.claude/*.local.json
