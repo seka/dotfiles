@@ -40,8 +40,9 @@ export PATH=$PATH:/opt/homebrew/bin
 export GOPATH=$(ghq root)
 export PATH=$PATH:$GOPATH/bin
 
-# java8
-export JAVA_HOME=$(/usr/libexec/java_home -v 1.8)
+# java7
+export JAVA_HOME=/opt/homebrew/opt/openjdk@17
+export PATH="$PATH:$JAVA_HOME/bin"
 
 # imagemagick
 export PATH="/opt/homebrew/opt/imagemagick@6/bin:$PATH"
