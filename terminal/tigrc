@@ -22,7 +22,7 @@ set horizontal-scroll = 25%
 
 # Diff settings
 set diff-context = 3
-set ignore-space = some
+set ignore-space = no
 
 # Search settings
 set ignore-case = smart-case
