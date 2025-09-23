@@ -6,6 +6,11 @@ typeset -A key
 bindkey "^[^[[D" backward-word  # bind option ←
 bindkey "^[^[[C" forward-word   # bind option →
 
+# Simple editing shortcuts
+bindkey "^A" end-of-line        # Ctrl+A for end of line
+bindkey "^W" backward-word      # Ctrl+W for backward word
+bindkey "^B" forward-word       # Ctrl+B for forward word
+
 # Finally, make sure the terminal is in application mode, when zle is
 # active. Only then are the values from $terminfo valid.
 if (( ${+terminfo[smkx]} )) && (( ${+terminfo[rmkx]} )); then

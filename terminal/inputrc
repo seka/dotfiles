@@ -18,3 +18,16 @@ set input-meta on
 set output-meta on
 set convert-meta off
 
+# History search
+set history-preserve-point on
+set history-size 10000
+set history-search-backward "\e[A"
+set history-search-forward "\e[B"
+
+# Enhanced completion
+set completion-query-items 100
+set completion-prefix-display-length 2
+set colored-completion-prefix on
+set colored-stats on
+set menu-complete-display-prefix on
+set skip-completed-text on
