@@ -50,6 +50,14 @@ runtime! setting-plugins.vim
 lua require('lsp_config')
 
 " ----------------------------------------
+" Git Mergetool Enhancement
+" ----------------------------------------
+" diffモード時にmergetool専用設定を読み込み
+if &diff
+  runtime! mergetool.vim
+endif
+
+" ----------------------------------------
 " Original command
 " ----------------------------------------
 runtime! commands.vim
