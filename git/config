@@ -24,12 +24,15 @@
 
 [merge]
     tool = nvim
-    conflictstyle = diff3
+    conflictstyle = zdiff3
     defaultToUpstream = true
 
 [mergetool]
     prompt = false
     path = nvim
+
+[mergetool "nvim"]
+    cmd = nvim -d -c "wincmd l" -c "norm ]c" "$LOCAL" "$MERGED" "$REMOTE"
 
 [filter "media"]
     required = true
