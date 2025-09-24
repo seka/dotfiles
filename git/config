@@ -32,7 +32,7 @@
     path = nvim
 
 [mergetool "nvim"]
-    cmd = nvim -d -c "wincmd l" -c "norm ]c" "$LOCAL" "$MERGED" "$REMOTE"
+    cmd = nvim -d "$LOCAL" "$MERGED" "$REMOTE"
 
 [filter "media"]
     required = true
