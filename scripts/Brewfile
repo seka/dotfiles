@@ -64,6 +64,7 @@ brew "bat"                  # Cat with syntax highlighting
 brew "eza"                  # Modern ls replacement
 brew "fd"                   # Fast find alternative
 brew "htop"                 # Interactive process viewer
+brew "sd"                   # Intuitive find & replace CLI (sed alternative)
 brew "unar"                 # Archive extraction tool
 
 # GNU utils (for macOS)
@@ -80,6 +81,7 @@ brew "git-extras"
 brew "git-lfs"
 brew "gh"                   # GitHub CLI
 brew "ghq"                  # Remote repository management made easy
+brew "gitmoji-cli"          # Emoji guide for git commit messages
 brew "lazygit"              # Simple terminal UI for git commands
 
 # ------------------------------
