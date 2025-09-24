@@ -48,14 +48,10 @@ if &diff
 
   " ステータスライン設定をdiff用に調整
   set laststatus=2
-  set statusline=%f\ %m%r%h%w\ [%{&fileformat}]\ [%{&fileencoding}]\ %=[diff]\ %l,%c\ %p%%
+  set statusline=%f\ %m%r%h%w\ %=[diff]\ %l,%c\ %p%%
 endif
 
-" ----------------------------------------
-" mergetool起動時の自動設定
-" ----------------------------------------
 augroup MergetoolEnhancement
   autocmd!
-  " mergetool起動時に自動でdiffモードの設定を適用
-  autocmd BufEnter * if &diff | source ~/dotfiles/editors/vim/nvim/mergetool.vim | endif
+  autocmd BufEnter * if &diff && !exists('g:mergetool_loaded') | let g:mergetool_loaded = 1 | source ~/dotfiles/editors/vim/nvim/mergetool.vim | endif
 augroup END
