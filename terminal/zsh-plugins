@@ -28,7 +28,11 @@ zinit light "mollifier/anyframe"
 zinit light "mollifier/cd-gitroot"
 
 # cd command with an interactive filter
-zinit light "b4b4r07/enhancd"
+zinit light changyuheng/zsh-interactive-cd
+
+export ENHANCD_FILTER="fzf --height 40%:fzy:peco"
+zinit ice pick"init.sh"
+zinit light 'b4b4r07/enhancd'
 
 # Interactive git commands using fzf
 zinit light "wfxr/forgit"
@@ -54,4 +58,3 @@ zstyle ':chpwd:*' recent-dirs-file '/tmp/chpwd-recent-dirs'
 zstyle ':completion:*' menu select=1
 zstyle ':completion:*' list-colors ''
 zstyle ':completion:*' verbose yes
-
