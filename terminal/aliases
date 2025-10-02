@@ -36,3 +36,8 @@ alias hidefiles="defaults write com.apple.finder AppleShowAllFiles -bool false &
 # dotfiles management
 alias dotfiles="cd ~/dotfiles"
 alias reload="source ~/.zshenv && source ~/.config/zsh/.zshrc"
+
+# Git shortcuts
+alias gts="git status"
+alias gtc="git commit"
+alias gtbm="git branch -M"
