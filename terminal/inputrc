@@ -21,8 +21,8 @@ set convert-meta off
 # History search
 set history-preserve-point on
 set history-size 10000
-set history-search-backward "\e[A"
-set history-search-forward "\e[B"
+"\e[A": history-search-backward
+"\e[B": history-search-forward
 
 # Enhanced completion
 set completion-query-items 100
