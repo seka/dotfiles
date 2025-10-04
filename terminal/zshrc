@@ -15,12 +15,16 @@ setopt hist_reduce_blanks
 setopt noautoremoveslash
 
 # ----------------------------------------
+# environment variables
+# ----------------------------------------
+export INPUTRC="$ZDOTDIR/inputrc"
+
+# ----------------------------------------
 # expansions
 # ----------------------------------------
 source $ZDOTDIR/zsh-plugins
 source $ZDOTDIR/functions
 source $ZDOTDIR/aliases
-source $ZDOTDIR/inputrc
 source $ZDOTDIR/keybinds
 
 # ----------------------------------------
