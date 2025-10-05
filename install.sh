@@ -31,7 +31,7 @@ for F in $(find {git,terminal} -type f -not -name '.*'); do
     "terminal/zshenv") ln -sf "$DOTFILES_ROOT/$F" "$HOME/.zshenv" ;;
     "terminal/zshrc") ln -sf "$DOTFILES_ROOT/$F" "$HOME/.config/zsh/.zshrc" ;;
     "terminal/tigrc") ln -sf "$DOTFILES_ROOT/$F" "$HOME/.tigrc" ;;
-    "terminal/.tmux.conf") ln -sf "$DOTFILES_ROOT/$F" "$HOME/.tmux.conf" ;;
+    "terminal/tmux.conf") ln -sf "$DOTFILES_ROOT/$F" "$HOME/.tmux.conf" ;;
     "terminal/"*) ln -sf "$DOTFILES_ROOT/$F" "$HOME/.config/zsh/$filename" ;;
     "git/"*) ln -sf "$DOTFILES_ROOT/$F" "$HOME/.config/git/$filename" ;;
   esac
