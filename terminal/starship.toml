@@ -46,9 +46,9 @@ style = "fg:#cba6f7"
 format = 'at [$time]($style) '
 
 [character]
-success_symbol = '[](bold fg:#a6e3a1)'
-error_symbol = '[](bold fg:#f38ba8)'
-vimcmd_symbol = '[](bold fg:#a6e3a1)'
+success_symbol = '[\$ ](bold fg:#a6e3a1)'
+error_symbol = '[\$ ](bold fg:#f38ba8)'
+vimcmd_symbol = '[\$ ](bold fg:#a6e3a1)'
 
 [cmd_duration]
 min_time = 4
