@@ -2,14 +2,21 @@
 
 set -o errexit -o nounset -o pipefail
 
-# check if pipx is installed
 if ! command -v pipx &> /dev/null; then
     echo "pipx not found. Installing pipx via Homebrew..."
     brew install pipx
 fi
 
-# install pynvim using pipx
-pipx install pynvim
+if ! pipx list 2> /dev/null | grep -Fq "package pynvim"; then
+    echo "Installing pynvim via pipx..."
+    pipx install pynvim
+else
+    echo "pynvim already managed by pipx. Skipping install."
+fi
 
-# ensure pipx PATH is configured
-pipx ensurepath
+if ! command -v pynvim &> /dev/null; then
+    echo "pynvim executable not on PATH. Running pipx ensurepath..."
+    pipx ensurepath
+else
+    echo "pynvim already on PATH. Skipping pipx ensurepath."
+fi
