@@ -3,7 +3,8 @@
   "env": {},
   "permissions": {
     "allow": [
-      "Bash(osascript:*)"
+      "Bash(osascript:*)",
+      "Bash(gemini:*)"
     ],
     "deny": [
       "Bash(curl:*)",
