@@ -24,7 +24,6 @@ require("mason-lspconfig").setup({
     "ruby_lsp",         -- Ruby
     "jdtls",            -- Java
     "kotlin_language_server", -- Kotlin
-    "sourcekit",        -- Swift
     "lemminx",          -- XML
     "clangd",           -- C/C++
     "sqlls",            -- SQL
@@ -37,7 +36,7 @@ require("mason-lspconfig").setup({
 -- ----------------------------------------
 -- LSP configuration
 -- ----------------------------------------
-local lspconfig = require("lspconfig")
+local util = require("lspconfig.util")
 
 -- Common on_attach function
 local on_attach = function(client, bufnr)
@@ -61,7 +60,19 @@ local on_attach = function(client, bufnr)
 end
 
 -- LSP capabilities (for ddc.vim integration)
-local capabilities = vim.lsp.protocol.make_client_capabilities()
+local base_capabilities = vim.lsp.protocol.make_client_capabilities()
+
+local function merge_config(extra)
+  return vim.tbl_deep_extend("force", {
+    on_attach = on_attach,
+    capabilities = vim.deepcopy(base_capabilities),
+  }, extra or {})
+end
+
+local function configure(server, extra)
+  vim.lsp.config(server, merge_config(extra))
+  vim.lsp.enable(server)
+end
 
 -- Setup language servers
 local servers = {
@@ -82,16 +93,11 @@ local servers = {
 }
 
 for _, server in ipairs(servers) do
-  lspconfig[server].setup({
-    on_attach = on_attach,
-    capabilities = capabilities,
-  })
+  configure(server)
 end
 
 -- Special configuration for lua_ls
-lspconfig.lua_ls.setup({
-  on_attach = on_attach,
-  capabilities = capabilities,
+configure("lua_ls", {
   settings = {
     Lua = {
       runtime = {
@@ -112,11 +118,9 @@ lspconfig.lua_ls.setup({
 })
 
 -- Special configuration for jdtls (Java)
-lspconfig.jdtls.setup({
-  on_attach = on_attach,
-  capabilities = capabilities,
+configure("jdtls", {
   cmd = { "jdtls" },
-  root_dir = lspconfig.util.root_pattern(".git", "mvnw", "gradlew", "pom.xml", "build.gradle"),
+  root_dir = util.root_pattern(".git", "mvnw", "gradlew", "pom.xml", "build.gradle"),
   settings = {
     java = {
       eclipse = {
@@ -142,9 +146,7 @@ lspconfig.jdtls.setup({
 })
 
 -- Special configuration for clangd (C/C++)
-lspconfig.clangd.setup({
-  on_attach = on_attach,
-  capabilities = capabilities,
+configure("clangd", {
   cmd = {
     "clangd",
     "--background-index",
