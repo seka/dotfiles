@@ -1,6 +1,5 @@
 model = "gpt-5-codex"
 model_reasoning_effort = "high"
-
 approval_policy = "untrusted"
 
 [agents.codex.env]
@@ -10,7 +9,12 @@ notifications = ["agent-turn-complete", "approval-requested"]
 
 [agents.codex.permissions]
 default_mode = "plan"
-allow = ["Bash(osascript:*)", "Bash(gemini:*)"]
+
+allow = [
+  "Bash(terminal-notifier:*)",
+  "Bash(gemini:*)"
+]
+
 deny = [
   "Bash(curl:*)",
   "Bash(wget:*)",

@@ -3,7 +3,7 @@
   "env": {},
   "permissions": {
     "allow": [
-      "Bash(osascript:*)",
+      "Bash(terminal-notifier:*)",
       "Bash(gemini:*)"
     ],
     "deny": [
