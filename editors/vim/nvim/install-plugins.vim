@@ -36,6 +36,7 @@ if dein#load_state(pluginBaseDir)
   call dein#add('akinsho/toggleterm.nvim')
   call dein#add('nvim-lua/plenary.nvim')
   call dein#add('nvim-telescope/telescope.nvim')
+  call dein#add('nvim-treesitter/nvim-treesitter')
   call dein#add('Shougo/neomru.vim')
   call dein#add('scrooloose/nerdtree')
   call dein#add('scrooloose/nerdcommenter')
@@ -90,4 +91,3 @@ endif
 if dein#check_install()
   call dein#install()
 endif
-
