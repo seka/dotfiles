@@ -1,7 +1,6 @@
 # ------------------------------
 # taps
 # ------------------------------
-tap "homebrew/bundle"
 tap "mongodb/brew"
 tap "neovim/neovim"
 
@@ -27,6 +26,7 @@ brew "openjdk"
 # swift
 brew "mint"
 brew "libxml2", link: true
+brew "xcodesorg/made/xcodes"
 
 # clang
 brew "gcc"
@@ -44,6 +44,7 @@ brew "fzf"               # Command-line fuzzy finder
 brew "tig"               # Text-mode interface for git
 brew "tmux"              # Terminal multiplexer
 brew "starship"          # Fast and customizable prompt
+brew "terminal-notifier" # notification
 
 # ------------------------------
 # build tools and compilers
@@ -66,6 +67,7 @@ brew "fd"                   # Fast find alternative
 brew "htop"                 # Interactive process viewer
 brew "sd"                   # Intuitive find & replace CLI (sed alternative)
 brew "unar"                 # Archive extraction tool
+brew "clamav"               # Antivirus
 
 # GNU utils (for macOS)
 brew "binutils"
@@ -81,7 +83,7 @@ brew "git-extras"
 brew "git-lfs"
 brew "gh"                   # GitHub CLI
 brew "ghq"                  # Remote repository management made easy
-brew "gitmoji-cli"          # Emoji guide for git commit messages
+brew "gitmoji"              # Emoji guide for git commit messages
 brew "lazygit"              # Simple terminal UI for git commands
 
 # ------------------------------
@@ -114,8 +116,6 @@ brew "bitrise"
 # network tools
 brew "ngrep"                # Network grep
 brew "lftp"                 # Sophisticated file transfer program
-
-# brew "imagemagick@6", link: true
 brew "nss"
 
 # DB
@@ -125,11 +125,10 @@ brew "mongodb/brew/mongodb-database-tools"
 # GUI applications (cask)
 # ------------------------------
 # Development tools
-cask "android-sdk"
 cask "android-studio"
 cask "visual-studio-code"
 cask "dash"                    # API documentation browser
-cask "dbeaver-community"        # Universal database tool (sequel-pro successor)
+cask "dbeaver-community"       # Universal database tool (sequel-pro successor)
 
 # Terminal
 cask "ghostty"
@@ -139,7 +138,7 @@ cask "git-credential-manager"
 cask "gitify"                  # GitHub notifications
 
 # Productivity tools
-cask "clipy"                   # Clipboard extension app
+cask "maccy"                   # Clipboard extension app
 cask "rectangle"               # Window manager (spectacle successor)
 cask "appcleaner"              # Uninstaller
 cask "the-unarchiver"          # Archive utility
@@ -152,10 +151,9 @@ cask "dropbox"
 
 # Design and media
 cask "figma"
-cask "kindle"
 
 # System utilities
-cask "google-japanese-ime"
+# cask "google-japanese-ime" # only Rosetta
 cask "docker-desktop"
 
 # Fonts
@@ -164,3 +162,13 @@ cask "font-source-han-code-jp"
 # Security
 cask "1password"
 cask "1password-cli"
+
+# AI
+cask "chatgpt"
+cask "claude-code"
+cask "codex"
+brew "gemini-cli"
+cask "chatgpt-atlas"
+
+# Desktop
+cask "backdrop"
