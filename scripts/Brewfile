@@ -172,3 +172,6 @@ cask "chatgpt-atlas"
 
 # Desktop
 cask "backdrop"
+
+# memo/note
+cask "obsidian"
