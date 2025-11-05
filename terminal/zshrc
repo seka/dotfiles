@@ -35,16 +35,6 @@ eval "$(starship init zsh)"
 eval "$(nodenv init - zsh)"
 eval "$(rbenv init -)"
 
-# Google Cloud SDK.
-if [ -f '/Users/shin.sekaryo/google-cloud-sdk/path.zsh.inc' ]; then
-  . '/Users/shin.sekaryo/google-cloud-sdk/path.zsh.inc';
-fi
-
-# gcloud.
-if [ -f '/Users/shin.sekaryo/google-cloud-sdk/completion.zsh.inc' ]; then
-  . '/Users/shin.sekaryo/google-cloud-sdk/completion.zsh.inc';
-fi
-
 # ----------------------------------------
 # Secret
 # ----------------------------------------
