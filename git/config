@@ -46,6 +46,9 @@
 [help]
     autocorrect = 1
 
+[alias]
+    gtr = !/opt/homebrew/opt/git-gtr/bin/gtr
+
 [user]
 	name = seka
 	email = s.seka134704@gmail.com
