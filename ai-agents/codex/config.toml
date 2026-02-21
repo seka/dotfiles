@@ -1,4 +1,4 @@
-model = "gpt-5-codex"
+model = "gpt-5.3-codex"
 model_reasoning_effort = "high"
 
 approval_policy = "untrusted"
@@ -8,6 +8,9 @@ sandbox_mode = "workspace-write"
 
 [tui]
 notifications = ["agent-turn-complete", "approval-requested"]
+
+[notice.model_migrations]
+gpt-5-codex = "gpt-5.3-codex"
 
 [agents.codex.permissions]
 default_mode = "plan"
