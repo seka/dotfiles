@@ -3,6 +3,7 @@
 # ------------------------------
 tap "mongodb/brew"
 tap "neovim/neovim"
+tap "coderabbitai/tap"
 
 # ------------------------------
 # programming languages
@@ -79,6 +80,7 @@ brew "gnu-sed"
 # git tools
 # ------------------------------
 brew "git"
+brew "coderabbitai/tap/git-gtr", link: false # git-worktree-runner (conflicts with coreutils gtr)
 brew "git-extras"
 brew "git-lfs"
 brew "gh"                   # GitHub CLI
