@@ -32,5 +32,9 @@ if (( ${+terminfo[smkx]} )) && (( ${+terminfo[rmkx]} )); then
   zle -N fzf-git-branches
   bindkey '^xb' fzf-git-branches
 
+  # Ctrl + x, w => worktree
+  zle -N fzf-git-worktrees
+  bindkey '^xw' fzf-git-worktrees
+
   zle -N zle-line-finish
 fi

@@ -141,6 +141,75 @@ fzf-git-branches() {
     zle clear-screen
 }
 
+git-gtr-pick-branch() {
+    local prompt="${1:-GTR WORKTREE > }"
+    local selected
+    selected="$(
+        git gtr list 2>/dev/null | awk '
+            NF == 0 { next }
+            toupper($1) == "BRANCH" { next }
+            { print }
+        ' | fzf --prompt "${prompt}" --query "$LBUFFER"
+    )"
+    if [[ -z "$selected" ]]; then
+        return 1
+    fi
+    printf '%s\n' "$selected" | awk '{print $1}'
+}
+
+git-gtr-cd() {
+    local branch="$1"
+    local path
+
+    if ! git gtr version >/dev/null 2>&1; then
+        echo "git gtr is not installed (https://github.com/coderabbitai/git-worktree-runner)"
+        return 1
+    fi
+
+    if [[ -z "$branch" ]]; then
+        branch="$(git-gtr-pick-branch "GTR WORKTREE > ")" || return 1
+    fi
+
+    path="$(git gtr go "$branch" 2>/dev/null)" || {
+        echo "failed to resolve worktree for branch: $branch"
+        return 1
+    }
+
+    if [[ -z "$path" ]]; then
+        echo "failed to resolve worktree for branch: $branch"
+        return 1
+    fi
+
+    cd "$path" || return 1
+}
+
+fzf-git-worktrees() {
+    local branch path
+
+    if ! git gtr version >/dev/null 2>&1; then
+        zle -M "git gtr is not installed (see github.com/coderabbitai/git-worktree-runner)"
+        zle clear-screen
+        return 1
+    fi
+
+    branch="$(git-gtr-pick-branch "GTR WORKTREE > ")" || {
+        zle clear-screen
+        return 0
+    }
+
+    path="$(git gtr go "$branch" 2>/dev/null)" || {
+        zle -M "failed to resolve worktree for branch: $branch"
+        zle clear-screen
+        return 1
+    }
+
+    if [[ -n "$path" ]]; then
+        BUFFER="cd ${(q)path}"
+        zle accept-line
+    fi
+    zle clear-screen
+}
+
 # ------------------------------
 # 1Password CLI
 # ------------------------------
