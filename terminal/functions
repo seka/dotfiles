@@ -159,7 +159,7 @@ git-gtr-pick-branch() {
 
 git-gtr-cd() {
     local branch="$1"
-    local path
+    local target_path
 
     if ! git gtr version >/dev/null 2>&1; then
         echo "git gtr is not installed (https://github.com/coderabbitai/git-worktree-runner)"
@@ -170,21 +170,21 @@ git-gtr-cd() {
         branch="$(git-gtr-pick-branch "GTR WORKTREE > ")" || return 1
     fi
 
-    path="$(git gtr go "$branch" 2>/dev/null)" || {
+    target_path="$(git gtr go "$branch" 2>/dev/null)" || {
         echo "failed to resolve worktree for branch: $branch"
         return 1
     }
 
-    if [[ -z "$path" ]]; then
+    if [[ -z "$target_path" ]]; then
         echo "failed to resolve worktree for branch: $branch"
         return 1
     fi
 
-    cd "$path" || return 1
+    cd "$target_path" || return 1
 }
 
 fzf-git-worktrees() {
-    local branch path
+    local branch target_path
 
     if ! git gtr version >/dev/null 2>&1; then
         zle -M "git gtr is not installed (see github.com/coderabbitai/git-worktree-runner)"
@@ -197,14 +197,14 @@ fzf-git-worktrees() {
         return 0
     }
 
-    path="$(git gtr go "$branch" 2>/dev/null)" || {
+    target_path="$(git gtr go "$branch" 2>/dev/null)" || {
         zle -M "failed to resolve worktree for branch: $branch"
         zle clear-screen
         return 1
     }
 
-    if [[ -n "$path" ]]; then
-        BUFFER="cd ${(q)path}"
+    if [[ -n "$target_path" ]]; then
+        BUFFER="cd ${(q)target_path}"
         zle accept-line
     fi
     zle clear-screen
