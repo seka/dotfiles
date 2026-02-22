@@ -9,6 +9,9 @@ sandbox_mode = "workspace-write"
 [tui]
 notifications = ["agent-turn-complete", "approval-requested"]
 
+[notice]
+hide_rate_limit_model_nudge = true
+
 [notice.model_migrations]
 gpt-5-codex = "gpt-5.3-codex"
 
