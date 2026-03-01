@@ -45,7 +45,10 @@ export JAVA_HOME=/opt/homebrew/opt/openjdk@17
 export PATH="$PATH:$JAVA_HOME/bin"
 
 # imagemagick
-export PATH="/opt/homebrew/opt/imagemagick@6/bin:$PATH"
+export PATH="$PATH:/opt/homebrew/opt/imagemagick@6/bin"
+
+# aqua
+export PATH="$PATH:$(aqua root-dir)/bin"
 
 # ----------------------------------------
 # fzf configuration
