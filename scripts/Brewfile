@@ -102,6 +102,7 @@ brew "jq"                   # JSON processor
 brew "jid"                  # JSON incremental digger
 brew "yq"                   # YAML processor
 brew "mcp-toolbox"
+brew "aqua"                 # CLI Version Manager
 
 # Docker
 brew "docker"
