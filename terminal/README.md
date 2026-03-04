@@ -21,9 +21,6 @@ exec zsh
 
 # 1Password CLIの認証確認
 check-1password-auth
-
-# シークレットの読み込み
-load-1password-secrets
 ```
 
 ### ディレクトリ構成
@@ -128,7 +125,6 @@ terminal/
 
 | 関数 | 引数 | 説明 |
 |------|------|------|
-| `load-1password-secrets()` | なし | 1Passwordからシークレット読み込み |
 | `check-1password-auth()` | なし | 1Password CLI認証状態確認 |
 
 ## キーバインド一覧
@@ -199,9 +195,6 @@ check-1password-auth
 
 # 再認証
 op signin
-
-# シークレット再読み込み
-load-1password-secrets
 ```
 
 ### fzf統合が動作しない
