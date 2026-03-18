@@ -1,4 +1,4 @@
-model = "gpt-5.3-codex"
+model = "gpt-5.4"
 model_reasoning_effort = "high"
 
 approval_policy = "untrusted"
@@ -14,6 +14,20 @@ hide_rate_limit_model_nudge = true
 
 [notice.model_migrations]
 gpt-5-codex = "gpt-5.3-codex"
+"gpt-5.3-codex" = "gpt-5.4"
 
 [agents.codex.permissions]
 default_mode = "plan"
+
+[projects."/Users/shin.sekaryo/dotfiles"]
+trust_level = "trusted"
+
+[projects."/Users/shin.sekaryo/ghq/github.com/seka/fish-auction"]
+trust_level = "trusted"
+
+[features]
+multi_agent = true
+
+[agents]
+max_threads = 5
+max_depth = 2
