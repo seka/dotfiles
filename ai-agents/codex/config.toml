@@ -1,5 +1,5 @@
 model = "gpt-5.4"
-model_reasoning_effort = "high"
+model_reasoning_effort = "medium"
 
 approval_policy = "untrusted"
 sandbox_mode = "workspace-write"
@@ -23,6 +23,9 @@ default_mode = "plan"
 trust_level = "trusted"
 
 [projects."/Users/shin.sekaryo/ghq/github.com/seka/fish-auction"]
+trust_level = "trusted"
+
+[projects."/Users/shin.sekaryo/ghq/github.com/seka/reci-pin"]
 trust_level = "trusted"
 
 [features]

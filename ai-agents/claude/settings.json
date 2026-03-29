@@ -12,12 +12,14 @@
       "Bash(sudo:*)",
       "Bash(rm:*)",
       "Bash(git push:*)",
-      "Bash(git commit:*)",
       "Read(.env.*)"
     ],
     "defaultMode": "plan"
   },
   "feedbackSurveyState": {
     "lastShownTime": 1754015090951
+  },
+  "enabledPlugins": {
+    "gopls-lsp@claude-plugins-official": true
   }
 }
