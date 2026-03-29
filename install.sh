@@ -68,6 +68,23 @@ ln -sf "$DOTFILES_ROOT/ai-agents/AGENTS.md" "$HOME/.claude/CLAUDE.md"
 ln -sf "$DOTFILES_ROOT/ai-agents/claude/settings.json" "$HOME/.claude/settings.json"
 echo "--> Claude settings linked"
 
+# Claude commands (custom skills)
+echo "==> Linking Claude commands"
+mkdir -p ~/.claude/commands
+for F in ai-agents/skills/*.md; do
+  ln -sf "$DOTFILES_ROOT/$F" "$HOME/.claude/commands/$(basename $F)"
+done
+echo "--> Claude commands linked"
+
+# Gemini skills (custom skills)
+echo "==> Linking Gemini skills"
+for F in ai-agents/skills/*.md; do
+  skill_name=$(basename "$F" .md)
+  mkdir -p "$HOME/.gemini/skills/$skill_name"
+  ln -sf "$DOTFILES_ROOT/$F" "$HOME/.gemini/skills/$skill_name/SKILL.md"
+done
+echo "--> Gemini skills linked"
+
 # ------------------------------
 # Codex settings
 # ------------------------------
