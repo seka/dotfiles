@@ -49,6 +49,9 @@
 [alias]
     gtr = !/opt/homebrew/opt/git-gtr/bin/gtr
 
+[gtr "worktrees"]
+    dir = .git_worktrees
+
 [user]
 	name = seka
 	email = s.seka134704@gmail.com

@@ -170,3 +170,6 @@ bower.json
 # Claude Code
 CLAUDE.local.md
 .claude/*.local.json
+
+# git-gtr worktrees under project root
+/.git_worktrees/
