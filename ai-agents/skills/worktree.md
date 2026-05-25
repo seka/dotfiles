@@ -2,7 +2,7 @@
 name: worktree
 description: |
   git-worktree-runner (gtr) を使って新機能ブランチのワークツリーを作成し、実装・マージまでのワークフローをガイドする
-allowed-tools: [Bash(git gtr:*), Bash(git worktree:*), Bash(git checkout:*), Bash(git merge:*), Bash(git branch:*), Bash(git status:*), Bash(git log:*)]
+allowed-tools: [Bash(git gtr:*), Bash(git checkout:*), Bash(git merge:*), Bash(git branch:*), Bash(git status:*), Bash(git log:*)]
 argument-hint: <feature/branch-name>
 ---
 
@@ -58,7 +58,7 @@ git gtr clean --merged
 個別削除の場合:
 
 ```bash
-git worktree remove ../your-feature-name
+git gtr rm feature/your-feature-name
 git branch -d feature/your-feature-name
 ```
 
@@ -67,4 +67,4 @@ git branch -d feature/your-feature-name
 - 必ず `develop` や `master` / `main` をベースにワークツリーを作成する
 - 実装前に `git status` で現在のリポジトリ状態を確認する
 - マージ前に変更内容を `git log` で確認してからユーザーに承認を求める
-- 破壊的操作（`clean --merged` / `worktree remove`）は実行前にユーザーに確認する
+- 破壊的操作（`git gtr clean --merged` / `git gtr rm`）は実行前にユーザーに確認する
