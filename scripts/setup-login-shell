@@ -8,5 +8,5 @@ if [ $? -eq 0 ]; then
 fi
 
 echo "/usr/local/bin/zsh" | sudo tee -a /etc/shells
-chsh -s /usr/local/bin/zsh
+sudo chsh -s /usr/local/bin/zsh "$(whoami)"
 
