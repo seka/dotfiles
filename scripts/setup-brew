@@ -24,7 +24,10 @@ brew update
 
 # ------------------------------
 # Trust third-party taps
+# Homebrew v4.x からサードパーティ tap は明示的な trust が必要
 # ------------------------------
+brew trust coderabbitai/tap
+brew trust mongodb/brew
 brew trust xcodesorg/made
 
 # ------------------------------
