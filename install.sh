@@ -8,6 +8,13 @@ set -o errexit -o nounset -o pipefail
 DOTFILES_ROOT=$(cd $(dirname $0);pwd)
 
 # ------------------------------
+# sudo pre-authentication
+# スクリプト冒頭で1回だけパスワードを求め、以降はキャッシュを使い回す
+# ------------------------------
+sudo -v
+while true; do sudo -n true; sleep 60; kill -0 "$$" || exit; done 2>/dev/null &
+
+# ------------------------------
 # scripts
 # ------------------------------
 echo "==> Running scripts/setup-brew"
