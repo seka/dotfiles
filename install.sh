@@ -26,6 +26,10 @@ echo "==> Running scripts/setup-pip"
 bash scripts/setup-pip
 echo "--> Completed scripts/setup-pip"
 
+echo "==> Running scripts/setup-ai-agents"
+bash scripts/setup-ai-agents
+echo "--> Completed scripts/setup-ai-agents"
+
 # ------------------------------
 # XDG Base Directory setup
 # ------------------------------
