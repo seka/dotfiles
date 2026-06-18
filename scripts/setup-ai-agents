@@ -20,7 +20,7 @@ AGENTS=(
 echo "Installing awesome-copilot skills..."
 for skill in "${SKILLS[@]}"; do
   for agent in "${AGENTS[@]}"; do
-    gh skill install github/awesome-copilot "$skill" --agent "$agent" --scope user
+    gh skill install github/awesome-copilot "$skill" --agent "$agent" --scope user --force
   done
 done
 echo "awesome-copilot skills installed."
