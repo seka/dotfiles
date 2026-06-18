@@ -1,0 +1,26 @@
+#!/bin/bash
+
+set -o errexit -o nounset -o pipefail
+
+if ! command -v gh &>/dev/null; then
+  echo "gh not found. Skipping AI agent skill installation."
+  exit 0
+fi
+
+SKILLS=(
+  "lsp-setup"
+)
+
+AGENTS=(
+  "github-copilot"
+  "claude-code"
+  "codex"
+)
+
+echo "Installing awesome-copilot skills..."
+for skill in "${SKILLS[@]}"; do
+  for agent in "${AGENTS[@]}"; do
+    gh skill install github/awesome-copilot "$skill" --agent "$agent" --scope user
+  done
+done
+echo "awesome-copilot skills installed."
