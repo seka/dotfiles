@@ -1,8 +1,12 @@
-model = "gpt-5.4"
+model = "gpt-5.5"
 model_reasoning_effort = "medium"
 
 approval_policy = "untrusted"
 sandbox_mode = "workspace-write"
+personality = "pragmatic"
+
+[agents.codex]
+description = "Pragmatic software engineering agent for coding tasks"
 
 [agents.codex.env]
 
@@ -19,17 +23,21 @@ gpt-5-codex = "gpt-5.3-codex"
 [agents.codex.permissions]
 default_mode = "plan"
 
-[projects."/Users/shin.sekaryo/dotfiles"]
-trust_level = "trusted"
+[plugins."browser-use@openai-bundled"]
+enabled = true
 
-[projects."/Users/shin.sekaryo/ghq/github.com/seka/fish-auction"]
-trust_level = "trusted"
+[plugins."documents@openai-primary-runtime"]
+enabled = true
 
-[projects."/Users/shin.sekaryo/ghq/github.com/seka/reci-pin"]
-trust_level = "trusted"
+[plugins."spreadsheets@openai-primary-runtime"]
+enabled = true
+
+[plugins."presentations@openai-primary-runtime"]
+enabled = true
 
 [features]
 multi_agent = true
+remote_control = true
 
 [agents]
 max_threads = 5
