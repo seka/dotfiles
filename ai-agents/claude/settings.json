@@ -10,16 +10,14 @@
       "Bash(curl:*)",
       "Bash(wget:*)",
       "Bash(sudo:*)",
-      "Bash(rm:*)",
-      "Bash(git push:*)",
       "Read(.env.*)"
     ],
     "defaultMode": "plan"
   },
+  "advisorModel": "sonnet",
+  "skipDangerousModePermissionPrompt": true,
+  "agentPushNotifEnabled": true,
   "feedbackSurveyState": {
     "lastShownTime": 1754015090951
-  },
-  "enabledPlugins": {
-    "gopls-lsp@claude-plugins-official": true
   }
 }
