@@ -23,6 +23,11 @@ echo "Updating Homebrew..."
 brew update
 
 # ------------------------------
+# Trust third-party taps
+# ------------------------------
+brew trust xcodesorg/made
+
+# ------------------------------
 # Install packages from Brewfile
 # ------------------------------
 echo "Installing packages from Brewfile..."
