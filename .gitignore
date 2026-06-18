@@ -1,6 +1,13 @@
-*.ttf
-*.otf
-*.swp
+### macOS ###
+# General
+.DS_Store
+
+# vim
+
 editors/vim/backups/*
+editors/vim/swaps/*
 editors/vim/repos/*
 editors/vim/plugins/*
+
+# Claude Code
+.claude/
