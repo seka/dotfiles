@@ -2,7 +2,6 @@
 # taps
 # ------------------------------
 tap "mongodb/brew"
-tap "neovim/neovim"
 tap "coderabbitai/tap"
 
 # ------------------------------
