@@ -27,6 +27,7 @@ brew "openjdk"
 # swift
 brew "mint"
 brew "libxml2", link: true
+tap "xcodesorg/made"
 brew "xcodesorg/made/xcodes"
 
 # clang
