@@ -5,7 +5,7 @@
 alias vim="nvim"
 
 # Miscellaneous
-alias speedtest="wget -O /dev/null http://speed.transip.nl/100mb.bin"
+alias speedtest="networkQuality"
 
 # git archive
 alias gitzip="git archive HEAD -o "
