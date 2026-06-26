@@ -4,6 +4,7 @@
     filemode = false
     trustctime = false
     autocrlf = input
+    excludesfile = ~/.gitignore_global
 
 [color]
     ui = auto
@@ -41,7 +42,7 @@
 
 [credential]
     helper = osxkeychain
-	helper = /usr/local/share/gcm-core/git-credential-manager
+    helper = /usr/local/share/gcm-core/git-credential-manager
 
 [help]
     autocorrect = 1
@@ -53,5 +54,10 @@
     dir = .git_worktrees
 
 [user]
-	name = seka
-	email = s.seka134704@gmail.com
+    name = seka
+    email = s.seka134704@gmail.com
+
+[gtr "copy"]
+    include = .env
+    include = .claude
+    include = .codex

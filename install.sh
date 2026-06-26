@@ -58,10 +58,8 @@ for F in $(find {git,terminal} -type f -not -name '.*'); do
     "terminal/tmux.conf") ln -sf "$DOTFILES_ROOT/$F" "$HOME/.tmux.conf" ;;
     "terminal/"*) ln -sf "$DOTFILES_ROOT/$F" "$HOME/.config/zsh/$filename" ;;
 
-    # git の config を以前は XDG 形式で管理していたが、SandBox制限に引っかかるので
-    # これだけグローバルで管理することにする
-    "git/config") cp "$DOTFILES_ROOT/$F" "$HOME/.gitconfig" ;;
-    "git/ignore") cp "$DOTFILES_ROOT/$F" "$HOME/.gitignore_global" ;;
+    "git/config") ln -sf "$DOTFILES_ROOT/$F" "$HOME/.gitconfig" ;;
+    "git/ignore") ln -sf "$DOTFILES_ROOT/$F" "$HOME/.gitignore_global" ;;
   esac
 done
 echo "--> Dotfile symlinks created"
