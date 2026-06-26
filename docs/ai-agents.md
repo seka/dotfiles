@@ -16,7 +16,7 @@
 
 | 種別 | 対象 |
 | --- | --- |
-| 許可 | `terminal-notifier`, `gemini` |
+| 許可 | `gemini` |
 | 拒否 | `curl`, `wget`, `sudo`, `.env.*` の読み取り |
 
 共通エージェントガイドは `ai-agents/AGENTS.md` を参照。
