@@ -45,7 +45,6 @@ brew "fzf"               # Command-line fuzzy finder
 brew "tig"               # Text-mode interface for git
 brew "tmux"              # Terminal multiplexer
 brew "starship"          # Fast and customizable prompt
-brew "terminal-notifier" # notification
 
 # ------------------------------
 # build tools and compilers

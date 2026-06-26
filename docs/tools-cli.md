@@ -52,7 +52,6 @@
 | ツール | 説明 |
 | --- | --- |
 | [tmux](https://github.com/tmux/tmux) | ターミナルマルチプレクサ |
-| [terminal-notifier](https://github.com/julienXX/terminal-notifier) | macOS 通知送信 CLI |
 
 ## モダン代替ツール
 
