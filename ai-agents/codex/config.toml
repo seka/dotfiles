@@ -1,17 +1,27 @@
 model = "gpt-5.5"
 model_reasoning_effort = "medium"
-
 approval_policy = "untrusted"
 sandbox_mode = "workspace-write"
 personality = "pragmatic"
+
+notify = ["~/.codex/computer-use/Codex Computer Use.app/Contents/SharedSupport/SkyComputerUseClient.app/Contents/MacOS/SkyComputerUseClient", "turn-ended"]
+
+[agents]
+max_threads = 5
+max_depth = 2
 
 [agents.codex]
 description = "Pragmatic software engineering agent for coding tasks"
 
 [agents.codex.env]
+[agents.codex.permissions]
+default_mode = "plan"
 
 [tui]
-notifications = ["agent-turn-complete", "approval-requested"]
+notifications = [ "agent-turn-complete", "approval-requested" ]
+
+[tui.model_availability_nux]
+"gpt-5.5" = 2
 
 [notice]
 hide_rate_limit_model_nudge = true
@@ -19,9 +29,6 @@ hide_rate_limit_model_nudge = true
 [notice.model_migrations]
 gpt-5-codex = "gpt-5.3-codex"
 "gpt-5.3-codex" = "gpt-5.4"
-
-[agents.codex.permissions]
-default_mode = "plan"
 
 [plugins."browser-use@openai-bundled"]
 enabled = true
@@ -35,10 +42,53 @@ enabled = true
 [plugins."presentations@openai-primary-runtime"]
 enabled = true
 
+[plugins."browser@openai-bundled"]
+enabled = true
+
+[plugins."pdf@openai-primary-runtime"]
+enabled = true
+
+[plugins."template-creator@openai-primary-runtime"]
+enabled = true
+
 [features]
 multi_agent = true
-remote_control = true
+js_repl = false
 
-[agents]
-max_threads = 5
-max_depth = 2
+[desktop]
+followUpQueueMode = "queue"
+
+[desktop.open-in-target-preferences]
+global = "ghostty"
+
+[desktop.open-in-target-preferences.perPath]
+"~/ghq/github.com/seka/fish-auction" = "ghostty"
+
+[marketplaces.openai-bundled]
+last_updated = "2026-06-26T15:26:49Z"
+source_type = "local"
+source = "~/.codex/.tmp/bundled-marketplaces/openai-bundled"
+
+[marketplaces.openai-primary-runtime]
+last_updated = "2026-06-25T09:10:39Z"
+source_type = "local"
+source = "~/.cache/codex-runtimes/codex-primary-runtime/plugins/openai-primary-runtime"
+
+[mcp_servers.node_repl]
+args = []
+command = "/Applications/Codex.app/Contents/Resources/cua_node/bin/node_repl"
+startup_timeout_sec = 120
+
+[mcp_servers.node_repl.env]
+NODE_REPL_NATIVE_PIPE_CONNECT_TIMEOUT_MS = "1000"
+NODE_REPL_NODE_MODULE_DIRS = "/Applications/Codex.app/Contents/Resources/cua_node/lib/node_modules"
+NODE_REPL_NODE_PATH = "/Applications/Codex.app/Contents/Resources/cua_node/bin/node"
+NODE_REPL_TRUSTED_CODE_PATHS = "~/.codex"
+CODEX_HOME = "~/.codex"
+NODE_REPL_TRUSTED_BROWSER_CLIENT_SHA256S = "d1a8040310e3ed270b3d17f6f3d41f4cdbad9096fa1a4f7c425fbb37afe949d3"
+BROWSER_USE_AVAILABLE_BACKENDS = "chrome,iab"
+NODE_REPL_INSTRUCTIONS_USE_CASE_BROWSER = "Control the in-app browser in conjunction with the Browser Plugin."
+NODE_REPL_INSTRUCTIONS_USE_CASE_CHROME = "Control the Chrome browser in conjunction with the Chrome Plugin. Prefer this method of controlling Chrome over alternatives (such as Computer Use) unless the user explicitly mentions an alternative."
+BROWSER_USE_CODEX_APP_BUILD_FLAVOR = "prod"
+BROWSER_USE_CODEX_APP_VERSION = "26.623.31921"
+CODEX_CLI_PATH = "/Applications/Codex.app/Contents/Resources/codex"
