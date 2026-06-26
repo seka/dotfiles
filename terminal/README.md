@@ -77,7 +77,7 @@ terminal/
 |-----------|----------|------|
 | `ip` | `dig +short myip.opendns.com @resolver1.opendns.com` | 外部IPアドレス表示 |
 | `ports` | `lsof -i -P -n \| grep LISTEN` | 使用中ポート一覧 |
-| `speedtest` | `wget -O /dev/null http://speed.transip.nl/100mb.bin` | 回線速度測定 |
+| `speedtest` | `networkQuality` | 回線速度測定（macOS 標準コマンド） |
 
 ### macOS固有
 
