@@ -7,20 +7,56 @@ if ! command -v gh &>/dev/null; then
   exit 0
 fi
 
-SKILLS=(
-  "lsp-setup"
-)
-
 AGENTS=(
   "github-copilot"
   "claude-code"
   "codex"
+  "gemini-cli"
 )
 
+# awesome-copilot
+# https://github.com/github/awesome-copilot
+
+AWESOME_COPILOT_SKILLS=(
+  "lsp-setup"
+  "acquire-codebase-knowledge"
+  "context-map"
+  "refactor-plan"
+  "prd"
+  "breakdown-test"
+  "web-design-reviewer"
+)
+
+
 echo "Installing awesome-copilot skills..."
-for skill in "${SKILLS[@]}"; do
+for skill in "${AWESOME_COPILOT_SKILLS[@]}"; do
   for agent in "${AGENTS[@]}"; do
     gh skill install github/awesome-copilot "$skill" --agent "$agent" --scope user --force
   done
 done
 echo "awesome-copilot skills installed."
+
+# pm-skills
+# https://github.com/product-on-purpose/pm-skills
+
+PM_SKILLS=(
+  "skills/foundation-stakeholder-update"
+  "skills/foundation-meeting-agenda"
+  "skills/foundation-meeting-brief"
+  "skills/foundation-meeting-recap"
+  "skills/foundation-meeting-synthesize"
+  "skills/foundation-stakeholder-briefings"
+  "skills/discover-interview-synthesis"
+  "skills/discover-stakeholder-summary"
+  "skills/define-problem-statement"
+  "skills/define-hypothesis"
+  "skills/develop-adr"
+)
+
+echo "Installing pm_skills skills..."
+for skill in "${PM_SKILLS[@]}"; do
+  for agent in "${AGENTS[@]}"; do
+    gh skill install product-on-purpose/pm-skills "$skill" --agent "$agent" --scope user --force
+  done
+done
+echo "pm_skills skills installed."
