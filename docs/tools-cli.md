@@ -106,6 +106,7 @@ macOS 標準の BSD 系コマンドを GNU 版に置き換えます。
 | [mkcert](https://github.com/FiloSottile/mkcert) | ローカル信頼済み SSL 証明書生成 |
 | [FontForge](https://fontforge.org) | フォントエディタ |
 | [mcp-toolbox](https://github.com/googleapis/genai-toolbox) | MCP ツールボックス |
+| [crit](https://crit.md) | AI エージェント向けブラウザベースコードレビュー |
 
 ## Git
 

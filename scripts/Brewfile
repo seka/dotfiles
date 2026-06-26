@@ -102,6 +102,7 @@ brew "jid"                  # JSON incremental digger
 brew "yq"                   # YAML processor
 brew "mcp-toolbox"
 brew "aqua"                 # CLI Version Manager
+brew "crit"                 # ブラウザベースのコードレビューツール (AI エージェント向け)
 
 # Docker
 brew "docker"
