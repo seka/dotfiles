@@ -60,3 +60,21 @@ for skill in "${PM_SKILLS[@]}"; do
   done
 done
 echo "pm_skills skills installed."
+
+# crit — browser-based code review for AI agents
+# https://crit.md/
+
+echo "Installing crit plugins..."
+
+if command -v crit &>/dev/null; then
+  crit install github-copilot
+  crit install gemini
+  (cd ~ && crit install codex-plugin)
+fi
+
+if command -v claude &>/dev/null; then
+  claude plugin marketplace add tomasz-tomczyk/crit
+  claude plugin install crit@crit
+fi
+
+echo "crit plugins installed."
