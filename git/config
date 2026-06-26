@@ -4,7 +4,6 @@
     filemode = false
     trustctime = false
     autocrlf = input
-    excludesfile = ~/.gitignore_global
 
 [color]
     ui = auto

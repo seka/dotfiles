@@ -58,8 +58,8 @@ for F in $(find {git,terminal} -type f -not -name '.*'); do
     "terminal/tmux.conf") ln -sf "$DOTFILES_ROOT/$F" "$HOME/.tmux.conf" ;;
     "terminal/"*) ln -sf "$DOTFILES_ROOT/$F" "$HOME/.config/zsh/$filename" ;;
 
-    "git/config") ln -sf "$DOTFILES_ROOT/$F" "$HOME/.gitconfig" ;;
-    "git/ignore") ln -sf "$DOTFILES_ROOT/$F" "$HOME/.gitignore_global" ;;
+    "git/config") ln -sf "$DOTFILES_ROOT/$F" "$HOME/.config/git/config" ;;
+    "git/ignore") ln -sf "$DOTFILES_ROOT/$F" "$HOME/.config/git/ignore" ;;
   esac
 done
 echo "--> Dotfile symlinks created"
