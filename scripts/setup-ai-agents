@@ -67,8 +67,8 @@ echo "pm_skills skills installed."
 echo "Installing crit plugins..."
 
 if command -v crit &>/dev/null; then
-  crit install github-copilot
-  crit install gemini
+  (cd ~ && crit install github-copilot)
+  (cd ~ && crit install gemini)
   (cd ~ && crit install codex-plugin)
 fi
 
