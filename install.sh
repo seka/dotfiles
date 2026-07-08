@@ -104,6 +104,15 @@ ln -sf "$DOTFILES_ROOT/ai-agents/AGENTS.md" "$HOME/.codex/AGENTS.md"
 ln -sf "$DOTFILES_ROOT/ai-agents/codex/config.toml" "$HOME/.codex/config.toml"
 echo "--> Codex settings linked"
 
+# Codex skills (custom skills)
+echo "==> Linking Codex skills"
+for F in ai-agents/skills/*.md; do
+  skill_name=$(basename "$F" .md)
+  mkdir -p "$HOME/.codex/skills/$skill_name"
+  ln -sf "$DOTFILES_ROOT/$F" "$HOME/.codex/skills/$skill_name/SKILL.md"
+done
+echo "--> Codex skills linked"
+
 # ------------------------------
 # Gemini settings
 # ------------------------------
@@ -112,4 +121,3 @@ mkdir -p ~/.config/gemini
 ln -sf "$DOTFILES_ROOT/ai-agents/AGENTS.md" "$HOME/.config/gemini/GEMINI.md"
 ln -sf "$DOTFILES_ROOT/ai-agents/gemini/settings.json" "$HOME/.config/gemini/settings.json"
 echo "--> Gemini settings linked"
-
