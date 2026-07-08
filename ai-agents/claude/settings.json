@@ -15,6 +15,7 @@
   },
   "enabledPlugins": {
     "crit@crit": true,
+    "gopls-lsp@claude-plugins-official": true
   },
   "extraKnownMarketplaces": {
     "crit": {
@@ -26,6 +27,7 @@
   },
   "advisorModel": "sonnet",
   "tui": "fullscreen",
+  "skipDangerousModePermissionPrompt": true,
   "agentPushNotifEnabled": true,
   "feedbackSurveyState": {
     "lastShownTime": 1754015090951
