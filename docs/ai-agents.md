@@ -2,6 +2,18 @@
 
 `ai-agents/` ディレクトリに各エージェントの設定ファイルをまとめています。
 
+## セットアップ
+
+### macOS
+
+Claude Code、Codex CLI、Gemini CLIは`scripts/macos/Brewfile`から導入します。`install.sh`が設定ファイルのシンボリックリンクとスキルのセットアップまで実行します。
+
+### Windows
+
+Claude CodeとCodex CLIはwingetから導入します。Gemini CLIはvfoxで管理するNode.jsのnpmから導入します。`install.ps1`が設定ファイルのコピーとスキルのセットアップまで実行します。
+
+設定ファイルはOS間で共有します。Codexの`config.toml`のみテンプレートをレンダリングし、OS固有の値を切り替えます。
+
 ## Claude Code
 
 設定ファイル: `ai-agents/claude/settings.json`
@@ -31,7 +43,7 @@
 
 ## スキル
 
-スキルは `gh skill install` でユーザースコープにインストールされ、全エージェント（Claude Code / GitHub Copilot / Codex / Gemini CLI）で共有されます。インストールスクリプトは `scripts/setup-ai-agents` を参照。
+スキルは `gh skill install` でユーザースコープにインストールされ、全エージェント（Claude Code / GitHub Copilot / Codex / Gemini CLI）で共有されます。インストールスクリプトは `scripts/common/setup-ai-agents` を参照。
 
 ### カスタムスキル (`ai-agents/skills/`)
 
