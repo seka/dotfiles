@@ -1,5 +1,9 @@
 $ErrorActionPreference = "Stop"
 
+# Docker Desktop uses its WSL2 backend on Windows. This script enables only
+# the Windows platform pieces required for that backend; it intentionally does
+# not install Ubuntu or another user-facing Linux distribution.
+
 function Test-IsAdministrator {
     $Identity = [Security.Principal.WindowsIdentity]::GetCurrent()
     $Principal = [Security.Principal.WindowsPrincipal]::new($Identity)
