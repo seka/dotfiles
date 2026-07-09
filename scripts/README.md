@@ -42,6 +42,7 @@ scripts/windows/setup-runtimes.ps1
 scripts/windows/setup-python-tools.ps1
 scripts/windows/setup-ai-cli.ps1
 scripts/windows/setup-ai-workspace.ps1
+scripts/windows/setup-explorer.ps1
 scripts/windows/setup-startup.ps1
 ```
 

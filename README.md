@@ -75,13 +75,15 @@ powershell -ExecutionPolicy Bypass -File .\install.ps1
 5. Pythonツールをセットアップ
 6. AI CLIをセットアップ
 7. AIワークスペースツールをセットアップ
-8. 不要な自動起動アプリを無効化
-9. Git設定を配置
-10. エディタ設定とVS Code拡張をセットアップ
-11. AIエージェント設定とスキルをセットアップ
+8. Explorerの表示設定をセットアップ
+9. 不要な自動起動アプリを無効化
+10. Git設定を配置
+11. エディタ設定とVS Code拡張をセットアップ
+12. AIエージェント設定とスキルをセットアップ
 
 WindowsではPowerShellとWindowsネイティブツールに統一しています。MSYS2、zsh、tmuxはWindowsセットアップの対象外です。Git Bashは共通設定スクリプトを内部実行するために使いますが、通常の開発シェルとして意識する必要はありません。
 HerdrはWindows previewのため、通常のパッケージ導入とは分けてセットアップします。
+Explorerでは隠しファイルと拡張子を表示するように設定します。
 
 スクリプトは再実行できます。wingetやvfoxで導入済みの項目は再利用され、失敗した項目はログを確認して再試行できます。
 Windowsセットアップでは、Docker Desktop、Slack、Microsoft Teams、Dropboxなどの重いGUIアプリはインストール対象に含めつつ、自動起動からは外します。1Passwordは自動起動を維持します。
