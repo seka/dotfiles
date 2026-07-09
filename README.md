@@ -85,7 +85,7 @@ powershell -ExecutionPolicy Bypass -File .\install.ps1
 WindowsではPowerShellとWindowsネイティブツールに統一しています。MSYS2、zsh、tmuxはWindowsセットアップの対象外です。Git Bashは共通設定スクリプトを内部実行するために使いますが、通常の開発シェルとして意識する必要はありません。
 HerdrはWindows previewのため、通常のパッケージ導入とは分けてセットアップします。
 Explorerでは隠しファイルと拡張子を表示するように設定します。
-Docker DesktopではWSL2 backendを使うため、WindowsのWSL機能とVirtual Machine Platformを有効化します。UbuntuなどのLinux distroは自動インストールしません。
+Docker Desktopの実行にはWSL2 backendの基盤が必要なため、WindowsのWSL機能とVirtual Machine Platformを有効化します。Ubuntuなどのユーザー向けLinux distroは自動インストールしません。
 
 スクリプトは再実行できます。wingetやvfoxで導入済みの項目は再利用され、失敗した項目はログを確認して再試行できます。
 Windowsセットアップでは、Docker Desktop、Slack、Microsoft Teams、Dropboxなどの重いGUIアプリはインストール対象に含めつつ、自動起動からは外します。1Passwordは自動起動を維持します。
