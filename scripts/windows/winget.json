@@ -19,6 +19,9 @@
           "PackageIdentifier": "Microsoft.PowerShell"
         },
         {
+          "PackageIdentifier": "Microsoft.WSL"
+        },
+        {
           "PackageIdentifier": "Microsoft.WindowsTerminal"
         },
         {

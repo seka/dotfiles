@@ -32,15 +32,41 @@ $Features = @(
 $RestartNeeded = $false
 
 foreach ($Feature in $Features) {
-    $FeatureState = Get-WindowsOptionalFeature -Online -FeatureName $Feature
-    if ($FeatureState.State -eq "Enabled") {
+    $FeatureInfo = & dism.exe /Online /Get-FeatureInfo /FeatureName:$Feature /English
+    $FeatureEnabled = $FeatureInfo | Select-String -Pattern "State : Enabled" -Quiet
+    if ($FeatureEnabled) {
         Write-Host ("Already enabled: " + $Feature)
         continue
     }
 
-    $Result = Enable-WindowsOptionalFeature -Online -FeatureName $Feature -All -NoRestart
-    if ($Result.RestartNeeded) {
+    & dism.exe /Online /Enable-Feature /FeatureName:$Feature /All /NoRestart
+    if ($LASTEXITCODE -ne 0) {
+        Write-Host ("Could not enable Windows feature: " + $Feature)
+        continue
+    }
+
+    $RestartNeeded = $true
+    $FeatureInfo = & dism.exe /Online /Get-FeatureInfo /FeatureName:$Feature /English
+    $RestartRequired = $FeatureInfo | Select-String -Pattern "Restart Required : Possible|Restart Required : Required" -Quiet
+    if ($RestartRequired) {
         $RestartNeeded = $true
+    }
+}
+
+if (Get-Command winget -ErrorAction SilentlyContinue) {
+    $WslPackage = & winget list --id Microsoft.WSL --exact --source winget 2>$null
+    if ($LASTEXITCODE -ne 0 -or -not ($WslPackage | Select-String -Pattern "Microsoft.WSL" -Quiet)) {
+        Write-Host "Installing Windows Subsystem for Linux package..."
+        & winget install `
+            --id Microsoft.WSL `
+            --exact `
+            --source winget `
+            --accept-package-agreements `
+            --accept-source-agreements `
+            --disable-interactivity
+        if ($LASTEXITCODE -eq 0) {
+            $RestartNeeded = $true
+        }
     }
 }
 
@@ -48,10 +74,12 @@ try {
     & wsl --install --no-distribution
     if ($LASTEXITCODE -ne 0) {
         Write-Host "wsl --install --no-distribution did not complete successfully."
+        $RestartNeeded = $true
     }
 } catch {
     Write-Host "Could not run wsl --install --no-distribution."
     Write-Host ("  " + $_.Exception.Message)
+    $RestartNeeded = $true
 }
 
 try {
