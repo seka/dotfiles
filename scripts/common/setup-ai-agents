@@ -1,8 +1,8 @@
-#!/bin/bash
+#!/usr/bin/env bash
 
 set -o errexit -o nounset -o pipefail
 
-if ! command -v gh &>/dev/null; then
+if ! command -v gh >/dev/null 2>&1; then
   echo "gh not found. Skipping AI agent skill installation."
   exit 0
 fi
@@ -14,9 +14,6 @@ AGENTS=(
   "gemini-cli"
 )
 
-# awesome-copilot
-# https://github.com/github/awesome-copilot
-
 AWESOME_COPILOT_SKILLS=(
   "lsp-setup"
   "acquire-codebase-knowledge"
@@ -27,7 +24,6 @@ AWESOME_COPILOT_SKILLS=(
   "web-design-reviewer"
 )
 
-
 echo "Installing awesome-copilot skills..."
 for skill in "${AWESOME_COPILOT_SKILLS[@]}"; do
   for agent in "${AGENTS[@]}"; do
@@ -35,9 +31,6 @@ for skill in "${AWESOME_COPILOT_SKILLS[@]}"; do
   done
 done
 echo "awesome-copilot skills installed."
-
-# pm-skills
-# https://github.com/product-on-purpose/pm-skills
 
 PM_SKILLS=(
   "skills/foundation-stakeholder-update"
@@ -53,28 +46,34 @@ PM_SKILLS=(
   "skills/develop-adr"
 )
 
-echo "Installing pm_skills skills..."
+echo "Installing pm-skills skills..."
 for skill in "${PM_SKILLS[@]}"; do
   for agent in "${AGENTS[@]}"; do
     gh skill install product-on-purpose/pm-skills "$skill" --agent "$agent" --scope user --force
   done
 done
-echo "pm_skills skills installed."
-
-# crit — browser-based code review for AI agents
-# https://crit.md/
+echo "pm-skills skills installed."
 
 echo "Installing crit plugins..."
+if command -v crit >/dev/null 2>&1; then
+  (
+    cd ~
+    crit install github-copilot
+  ) || echo "crit github-copilot install skipped or failed."
 
-if command -v crit &>/dev/null; then
-  (cd ~ && crit install github-copilot)
-  (cd ~ && crit install gemini)
-  (cd ~ && crit install codex-plugin)
+  (
+    cd ~
+    crit install gemini
+  ) || echo "crit gemini install skipped or failed."
+
+  (
+    cd ~
+    crit install codex-plugin
+  ) || echo "crit codex-plugin install skipped or failed."
 fi
 
-if command -v claude &>/dev/null; then
-  claude plugin marketplace add tomasz-tomczyk/crit
-  claude plugin install crit@crit
+if command -v claude >/dev/null 2>&1; then
+  claude plugin marketplace add tomasz-tomczyk/crit || echo "claude crit marketplace already exists or failed."
+  claude plugin install crit@crit || echo "claude crit plugin already installed or failed."
 fi
-
 echo "crit plugins installed."

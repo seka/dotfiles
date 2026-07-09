@@ -10,7 +10,6 @@ ms-vscode-remote.remote-containers
 ms-vscode.makefile-tools
 bradlc.vscode-tailwindcss
 github.copilot
-github.copilot-chat
 pkief.material-icon-theme
 redhat.vscode-yaml
 shopify.ruby-extensions-pack
