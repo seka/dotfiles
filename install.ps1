@@ -128,6 +128,9 @@ Write-Host "==> Setting up AI CLIs"
 Write-Host "==> Setting up AI workspace tools"
 & $PowerShellHost -NoProfile -ExecutionPolicy Bypass -File "$DotfilesRoot\scripts\windows\setup-ai-workspace.ps1"
 
+Write-Host "==> Configuring Explorer preferences"
+& $PowerShellHost -NoProfile -ExecutionPolicy Bypass -File "$DotfilesRoot\scripts\windows\setup-explorer.ps1"
+
 Write-Host "==> Configuring startup apps"
 & $PowerShellHost -NoProfile -ExecutionPolicy Bypass -File "$DotfilesRoot\scripts\windows\setup-startup.ps1"
 
