@@ -38,6 +38,7 @@ Windows-specific files:
 
 ```text
 scripts/windows/winget.json
+scripts/windows/setup-wsl2.ps1
 scripts/windows/setup-runtimes.ps1
 scripts/windows/setup-python-tools.ps1
 scripts/windows/setup-ai-cli.ps1

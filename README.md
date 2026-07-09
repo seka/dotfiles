@@ -70,20 +70,22 @@ powershell -ExecutionPolicy Bypass -File .\install.ps1
 
 1. OSパッケージをwingetからインストール
 2. PowerShell 7を導入し、残りの処理をPowerShell 7で再開
-3. vfoxで言語ランタイムをセットアップ
-4. PowerShellプロファイルを設定
-5. Pythonツールをセットアップ
-6. AI CLIをセットアップ
-7. AIワークスペースツールをセットアップ
-8. Explorerの表示設定をセットアップ
-9. 不要な自動起動アプリを無効化
-10. Git設定を配置
-11. エディタ設定とVS Code拡張をセットアップ
-12. AIエージェント設定とスキルをセットアップ
+3. Docker Desktop向けにWSL2基盤をセットアップ
+4. vfoxで言語ランタイムをセットアップ
+5. PowerShellプロファイルを設定
+6. Pythonツールをセットアップ
+7. AI CLIをセットアップ
+8. AIワークスペースツールをセットアップ
+9. Explorerの表示設定をセットアップ
+10. 不要な自動起動アプリを無効化
+11. Git設定を配置
+12. エディタ設定とVS Code拡張をセットアップ
+13. AIエージェント設定とスキルをセットアップ
 
 WindowsではPowerShellとWindowsネイティブツールに統一しています。MSYS2、zsh、tmuxはWindowsセットアップの対象外です。Git Bashは共通設定スクリプトを内部実行するために使いますが、通常の開発シェルとして意識する必要はありません。
 HerdrはWindows previewのため、通常のパッケージ導入とは分けてセットアップします。
 Explorerでは隠しファイルと拡張子を表示するように設定します。
+Docker DesktopではWSL2 backendを使うため、WindowsのWSL機能とVirtual Machine Platformを有効化します。UbuntuなどのLinux distroは自動インストールしません。
 
 スクリプトは再実行できます。wingetやvfoxで導入済みの項目は再利用され、失敗した項目はログを確認して再試行できます。
 Windowsセットアップでは、Docker Desktop、Slack、Microsoft Teams、Dropboxなどの重いGUIアプリはインストール対象に含めつつ、自動起動からは外します。1Passwordは自動起動を維持します。
