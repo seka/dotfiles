@@ -1,0 +1,77 @@
+#!/usr/bin/env bash
+
+set -o errexit -o nounset -o pipefail
+
+DOTFILES_ROOT="${DOTFILES_ROOT:-$(cd "$(dirname "$0")/../.." && pwd)}"
+DOTFILES_OS="${DOTFILES_OS:-macos}"
+
+copy_or_link_file() {
+  local source="$1"
+  local target="$2"
+
+  mkdir -p "$(dirname "$target")"
+
+  if [[ "$DOTFILES_OS" == "windows" ]]; then
+    cp -f "$source" "$target"
+  else
+    ln -sf "$source" "$target"
+  fi
+}
+
+render_template() {
+  local template="$1"
+  local target="$2"
+  local os="$3"
+
+  mkdir -p "$(dirname "$target")"
+
+  awk -v os="$os" '
+    /^# @if / {
+      active = ($3 == os)
+      next
+    }
+    /^# @endif/ {
+      active = 1
+      next
+    }
+    active != 0 {
+      print
+    }
+  ' "$template" > "$target"
+}
+
+echo "==> Installing Claude settings"
+mkdir -p "$HOME/.claude"
+copy_or_link_file "$DOTFILES_ROOT/ai-agents/AGENTS.md" "$HOME/.claude/CLAUDE.md"
+copy_or_link_file "$DOTFILES_ROOT/ai-agents/claude/settings.json" "$HOME/.claude/settings.json"
+
+mkdir -p "$HOME/.claude/commands"
+for F in "$DOTFILES_ROOT"/ai-agents/skills/*.md; do
+  copy_or_link_file "$F" "$HOME/.claude/commands/$(basename "$F")"
+done
+echo "--> Claude settings installed"
+
+echo "==> Installing Gemini settings"
+for F in "$DOTFILES_ROOT"/ai-agents/skills/*.md; do
+  skill_name=$(basename "$F" .md)
+  mkdir -p "$HOME/.gemini/skills/$skill_name"
+  copy_or_link_file "$F" "$HOME/.gemini/skills/$skill_name/SKILL.md"
+done
+
+mkdir -p "$HOME/.config/gemini"
+copy_or_link_file "$DOTFILES_ROOT/ai-agents/AGENTS.md" "$HOME/.config/gemini/GEMINI.md"
+copy_or_link_file "$DOTFILES_ROOT/ai-agents/gemini/settings.json" "$HOME/.config/gemini/settings.json"
+echo "--> Gemini settings installed"
+
+echo "==> Installing Codex settings"
+mkdir -p "$HOME/.codex"
+copy_or_link_file "$DOTFILES_ROOT/ai-agents/codex/CODEX.md" "$HOME/.codex/CODEX.md"
+copy_or_link_file "$DOTFILES_ROOT/ai-agents/AGENTS.md" "$HOME/.codex/AGENTS.md"
+render_template "$DOTFILES_ROOT/ai-agents/codex/config.toml.template" "$HOME/.codex/config.toml" "$DOTFILES_OS"
+
+for F in "$DOTFILES_ROOT"/ai-agents/skills/*.md; do
+  skill_name=$(basename "$F" .md)
+  mkdir -p "$HOME/.codex/skills/$skill_name"
+  copy_or_link_file "$F" "$HOME/.codex/skills/$skill_name/SKILL.md"
+done
+echo "--> Codex settings installed"

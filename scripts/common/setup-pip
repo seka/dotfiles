@@ -1,0 +1,57 @@
+#!/usr/bin/env bash
+
+set -o errexit -o nounset -o pipefail
+
+DOTFILES_OS="${DOTFILES_OS:-macos}"
+
+if ! command -v pipx >/dev/null 2>&1; then
+  case "$DOTFILES_OS" in
+    macos)
+      echo "pipx not found. Installing pipx via Homebrew..."
+      brew install pipx
+      ;;
+    windows|linux)
+      if command -v python >/dev/null 2>&1; then
+        echo "pipx not found. Installing pipx via Python..."
+        python -m pip install --user pipx
+        python -m pipx ensurepath || true
+      elif command -v python3 >/dev/null 2>&1; then
+        echo "pipx not found. Installing pipx via Python..."
+        python3 -m pip install --user pipx
+        python3 -m pipx ensurepath || true
+      elif command -v py >/dev/null 2>&1; then
+        echo "pipx not found. Installing pipx via Python launcher..."
+        py -m pip install --user pipx
+        py -m pipx ensurepath || true
+      else
+        echo "Python not found. Skipping pipx setup."
+        exit 0
+      fi
+      ;;
+  esac
+fi
+
+if command -v pipx >/dev/null 2>&1; then
+  if ! pipx list 2>/dev/null | grep -Fq "package pynvim"; then
+    echo "Installing pynvim via pipx..."
+    pipx install pynvim
+  else
+    echo "pynvim already managed by pipx. Skipping install."
+  fi
+
+  if ! command -v pynvim >/dev/null 2>&1; then
+    echo "pynvim executable not on PATH. Running pipx ensurepath..."
+    pipx ensurepath || true
+  else
+    echo "pynvim already on PATH. Skipping pipx ensurepath."
+  fi
+
+  if ! pipx list 2>/dev/null | grep -Fq "package codespell"; then
+    echo "Installing codespell via pipx..."
+    pipx install codespell
+  else
+    echo "codespell already managed by pipx. Skipping install."
+  fi
+else
+  echo "pipx is not visible in this shell yet. Open a new shell and rerun if pynvim is needed."
+fi

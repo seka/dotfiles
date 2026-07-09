@@ -1,0 +1,74 @@
+#!/usr/bin/env bash
+
+set -o errexit -o nounset -o pipefail
+
+DOTFILES_ROOT="${DOTFILES_ROOT:-$(cd "$(dirname "$0")/../.." && pwd)}"
+DOTFILES_OS="${DOTFILES_OS:-macos}"
+
+copy_or_link_file() {
+  local source="$1"
+  local target="$2"
+
+  mkdir -p "$(dirname "$target")"
+
+  if [[ "$DOTFILES_OS" == "windows" ]]; then
+    cp -f "$source" "$target"
+  else
+    ln -sf "$source" "$target"
+  fi
+}
+
+copy_or_link_dir() {
+  local source="$1"
+  local target="$2"
+
+  if [[ -z "$target" || "$target" == "/" ]]; then
+    echo "Refusing to replace unsafe target directory: $target"
+    return 1
+  fi
+
+  mkdir -p "$(dirname "$target")"
+
+  if [[ "$DOTFILES_OS" == "windows" ]]; then
+    rm -rf "$target"
+    cp -R "$source" "$target"
+  else
+    ln -sfn "$source" "$target"
+  fi
+}
+
+vscode_user_dir() {
+  case "$DOTFILES_OS" in
+    macos) printf "%s\n" "$HOME/Library/Application Support/Code/User" ;;
+    windows)
+      if command -v cygpath >/dev/null 2>&1; then
+        cygpath -u "$APPDATA/Code/User"
+      else
+        printf "%s\n" "$APPDATA/Code/User"
+      fi
+      ;;
+    linux) printf "%s\n" "$HOME/.config/Code/User" ;;
+    *) return 1 ;;
+  esac
+}
+
+echo "==> Installing Neovim configuration"
+copy_or_link_dir "$DOTFILES_ROOT/editors/vim/nvim" "$HOME/.config/nvim"
+echo "--> Neovim configuration installed"
+
+echo "==> Installing VS Code settings"
+VSCODE_USER_DIR="$(vscode_user_dir)"
+copy_or_link_file "$DOTFILES_ROOT/editors/vscode/settings.json" "$VSCODE_USER_DIR/settings.json"
+copy_or_link_file "$DOTFILES_ROOT/editors/vscode/keybindings.json" "$VSCODE_USER_DIR/keybindings.json"
+
+if command -v code >/dev/null 2>&1 && [[ -f "$DOTFILES_ROOT/editors/vscode/extensions.txt" ]]; then
+  while IFS= read -r extension; do
+    case "$extension" in
+      ""|\#*) continue ;;
+      *) code --install-extension "$extension" --force || echo "VS Code extension install failed: $extension" ;;
+    esac
+  done < "$DOTFILES_ROOT/editors/vscode/extensions.txt"
+else
+  echo "VS Code CLI 'code' was not found. Skipping extension install."
+fi
+echo "--> VS Code settings installed"

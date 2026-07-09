@@ -1,0 +1,12 @@
+#!/bin/bash
+
+set -o errexit -o nounset -o pipefail
+
+ZSH_PATH="$(brew --prefix)/bin/zsh"
+
+if grep -q -e "$ZSH_PATH" /etc/shells; then
+    exit 0
+fi
+
+echo "$ZSH_PATH" | sudo tee -a /etc/shells
+sudo chsh -s "$ZSH_PATH" "$(whoami)"
