@@ -1,0 +1,157 @@
+{
+  "$schema": "https://aka.ms/winget-packages.schema.2.0.json",
+  "Sources": [
+    {
+      "Packages": [
+        {
+          "PackageIdentifier": "Git.Git"
+        },
+        {
+          "PackageIdentifier": "GitHub.cli"
+        },
+        {
+          "PackageIdentifier": "GitHub.GitLFS"
+        },
+        {
+          "PackageIdentifier": "x-motemen.ghq"
+        },
+        {
+          "PackageIdentifier": "Microsoft.PowerShell"
+        },
+        {
+          "PackageIdentifier": "Microsoft.WindowsTerminal"
+        },
+        {
+          "PackageIdentifier": "OliverSchwendener.ueli"
+        },
+        {
+          "PackageIdentifier": "Microsoft.VisualStudioCode"
+        },
+        {
+          "PackageIdentifier": "Neovim.Neovim"
+        },
+        {
+          "PackageIdentifier": "version-fox.vfox"
+        },
+        {
+          "PackageIdentifier": "astral-sh.uv"
+        },
+        {
+          "PackageIdentifier": "DenoLand.Deno"
+        },
+        {
+          "PackageIdentifier": "Kitware.CMake"
+        },
+        {
+          "PackageIdentifier": "GnuWin32.Make"
+        },
+        {
+          "PackageIdentifier": "BurntSushi.ripgrep.MSVC"
+        },
+        {
+          "PackageIdentifier": "sharkdp.fd"
+        },
+        {
+          "PackageIdentifier": "sharkdp.bat"
+        },
+        {
+          "PackageIdentifier": "eza-community.eza"
+        },
+        {
+          "PackageIdentifier": "ajeetdsouza.zoxide"
+        },
+        {
+          "PackageIdentifier": "junegunn.fzf"
+        },
+        {
+          "PackageIdentifier": "Starship.Starship"
+        },
+        {
+          "PackageIdentifier": "MikeFarah.yq"
+        },
+        {
+          "PackageIdentifier": "jqlang.jq"
+        },
+        {
+          "PackageIdentifier": "HTTPie.HTTPie"
+        },
+        {
+          "PackageIdentifier": "sharkdp.hyperfine"
+        },
+        {
+          "PackageIdentifier": "JesseDuffield.lazygit"
+        },
+        {
+          "PackageIdentifier": "koalaman.shellcheck"
+        },
+        {
+          "PackageIdentifier": "UniversalCtags.Ctags"
+        },
+        {
+          "PackageIdentifier": "FiloSottile.mkcert"
+        },
+        {
+          "PackageIdentifier": "chmln.sd"
+        },
+        {
+          "PackageIdentifier": "JernejSimoncic.Wget"
+        },
+        {
+          "PackageIdentifier": "gerardog.gsudo"
+        },
+        {
+          "PackageIdentifier": "Anthropic.ClaudeCode"
+        },
+        {
+          "PackageIdentifier": "OpenAI.Codex"
+        },
+        {
+          "PackageIdentifier": "7zip.7zip"
+        },
+        {
+          "PackageIdentifier": "Docker.DockerDesktop"
+        },
+        {
+          "PackageIdentifier": "Amazon.AWSCLI"
+        },
+        {
+          "PackageIdentifier": "DBeaver.DBeaver.Community"
+        },
+        {
+          "PackageIdentifier": "Google.AndroidStudio"
+        },
+        {
+          "PackageIdentifier": "SlackTechnologies.Slack"
+        },
+        {
+          "PackageIdentifier": "Microsoft.Teams"
+        },
+        {
+          "PackageIdentifier": "Figma.Figma"
+        },
+        {
+          "PackageIdentifier": "Dropbox.Dropbox"
+        },
+        {
+          "PackageIdentifier": "AgileBits.1Password"
+        },
+        {
+          "PackageIdentifier": "AgileBits.1Password.CLI"
+        },
+        {
+          "PackageIdentifier": "Amazon.Kindle"
+        },
+        {
+          "PackageIdentifier": "Obsidian.Obsidian"
+        }
+      ],
+      "SourceDetails": {
+        "Argument": "https://cdn.winget.microsoft.com/cache",
+        "Identifier": "Microsoft.Winget.Source_8wekyb3d8bbwe",
+        "Name": "winget",
+        "Type": "Microsoft.PreIndexed.Package"
+      }
+    }
+  ],
+  "WinGetVersion": "1.8.0"
+}

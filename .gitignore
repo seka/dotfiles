@@ -11,3 +11,6 @@ editors/vim/plugins/*
 
 # Claude Code
 .claude/
+
+# Setup logs
+.logs/
