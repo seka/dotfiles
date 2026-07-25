@@ -156,6 +156,7 @@ cask "figma"
 # System utilities
 # cask "google-japanese-ime" # only Rosetta
 cask "docker-desktop"
+cask "jordanbaird-ice"          # Menu bar manager
 
 # Fonts
 cask "font-source-han-code-jp"
