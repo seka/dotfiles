@@ -116,6 +116,9 @@ if ($PSVersionTable.PSEdition -ne "Core") {
 
 $PowerShellHost = (Get-Process -Id $PID).Path
 
+Write-Host "==> Configuring development storage"
+& "$DotfilesRoot\scripts\windows\setup-storage.ps1"
+
 Write-Host "==> Setting up WSL2 platform"
 & $PowerShellHost -NoProfile -ExecutionPolicy Bypass -File "$DotfilesRoot\scripts\windows\setup-wsl2.ps1"
 

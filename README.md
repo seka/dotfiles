@@ -70,17 +70,18 @@ powershell -ExecutionPolicy Bypass -File .\install.ps1
 
 1. OSパッケージをwingetからインストール
 2. PowerShell 7を導入し、残りの処理をPowerShell 7で再開
-3. Docker Desktop向けにWSL2基盤をセットアップ
-4. vfoxで言語ランタイムをセットアップ
-5. PowerShellプロファイルを設定
-6. Pythonツールをセットアップ
-7. AI CLIをセットアップ
-8. AIワークスペースツールをセットアップ
-9. Explorerの表示設定をセットアップ
-10. 不要な自動起動アプリを無効化
-11. Git設定を配置
-12. エディタ設定とVS Code拡張をセットアップ
-13. AIエージェント設定とスキルをセットアップ
+3. 開発データの保存先をDドライブへ設定
+4. Docker Desktop向けにWSL2基盤をセットアップ
+5. vfoxで言語ランタイムをセットアップ
+6. PowerShellプロファイルを設定
+7. Pythonツールをセットアップ
+8. AI CLIをセットアップ
+9. AIワークスペースツールをセットアップ
+10. Explorerの表示設定をセットアップ
+11. 不要な自動起動アプリを無効化
+12. Git設定を配置
+13. エディタ設定とVS Code拡張をセットアップ
+14. AIエージェント設定とスキルをセットアップ
 
 WindowsではPowerShellとWindowsネイティブツールに統一しています。MSYS2、zsh、tmuxはWindowsセットアップの対象外です。Git Bashは共通設定スクリプトを内部実行するために使いますが、通常の開発シェルとして意識する必要はありません。
 HerdrはWindows previewのため、通常のパッケージ導入とは分けてセットアップします。
@@ -89,6 +90,27 @@ Docker Desktopの実行にはWSL2 backendの基盤が必要なため、Windows�
 
 スクリプトは再実行できます。wingetやvfoxで導入済みの項目は再利用され、失敗した項目はログを確認して再試行できます。
 Windowsセットアップでは、Docker Desktop、Slack、Microsoft Teams、Dropboxなどの重いGUIアプリはインストール対象に含めつつ、自動起動からは外します。1Passwordは自動起動を維持します。
+
+Windowsではコマンド本体をwingetの標準インストール先に残し、容量が増えやすい開発データをDドライブへ配置します。`scripts\windows\setup-storage.ps1`は再実行可能で、既存ディレクトリを維持したまま次の保存先を設定します。
+
+```text
+D:\dev\ghq       # ghqリポジトリ
+D:\dev\go        # GOPATH
+D:\dev\vfox      # vfoxランタイム
+D:\Hyper-V       # Hyper-V VM
+D:\containers    # Docker Desktopデータ
+D:\build         # ビルド成果物
+D:\iso           # ISOイメージ
+```
+
+Dドライブ以外を使う場合は、実行前に保存先ドライブを指定します。
+
+```powershell
+$env:DOTFILES_DATA_DRIVE = "E:\"
+powershell -ExecutionPolicy Bypass -File .\install.ps1
+```
+
+このセットアップは保存先と標準ディレクトリを構成しますが、既存のGitリポジトリ、Hyper-V VM、Docker仮想ディスク、Cargo/Rustupデータは自動移動しません。各製品の正規手順で移行し、動作確認後にCドライブ側を削除してください。
 
 wingetログ:
 

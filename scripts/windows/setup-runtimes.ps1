@@ -36,15 +36,21 @@ $vfoxExecutable = Join-Path $env:ProgramFiles "vfox\vfox.exe"
 if (Test-Path $vfoxExecutable) {
     Invoke-Expression "$(& $vfoxExecutable activate pwsh)"
 
+    $vfoxHome = if ($env:VFOX_HOME) {
+        $env:VFOX_HOME
+    } else {
+        Join-Path $HOME ".vfox"
+    }
+
     $vfoxGlobalPaths = @(
-        "$HOME\.vfox\sdks\nodejs"
-        "$HOME\.vfox\sdks\java\bin"
-        "$HOME\.vfox\sdks\golang\bin"
-        "$HOME\.vfox\sdks\golang\packages\bin"
-        "$HOME\.vfox\sdks\python"
-        "$HOME\.vfox\sdks\python\Scripts"
-        "$HOME\.vfox\sdks\ruby\bin"
-        "$HOME\.vfox\sdks\ruby\share\gems\bin"
+        (Join-Path $vfoxHome "sdks\nodejs")
+        (Join-Path $vfoxHome "sdks\java\bin")
+        (Join-Path $vfoxHome "sdks\golang\bin")
+        (Join-Path $vfoxHome "sdks\golang\packages\bin")
+        (Join-Path $vfoxHome "sdks\python")
+        (Join-Path $vfoxHome "sdks\python\Scripts")
+        (Join-Path $vfoxHome "sdks\ruby\bin")
+        (Join-Path $vfoxHome "sdks\ruby\share\gems\bin")
     ) | Where-Object { Test-Path $_ }
 
     $env:PATH = (($vfoxGlobalPaths + @($env:PATH)) -join ";")
