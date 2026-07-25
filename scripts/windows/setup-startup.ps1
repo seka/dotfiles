@@ -23,12 +23,6 @@ $StartupItems = @(
             "ms-teams"
         )
     }
-    @{
-        Name = "Dropbox"
-        Patterns = @(
-            "Dropbox"
-        )
-    }
 )
 
 function Test-StartupMatch {

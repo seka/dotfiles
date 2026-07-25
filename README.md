@@ -89,7 +89,7 @@ Explorerでは隠しファイルと拡張子を表示するように設定しま
 Docker Desktopの実行にはWSL2 backendの基盤が必要なため、WindowsのWSL機能とVirtual Machine Platformを有効化します。Ubuntuなどのユーザー向けLinux distroは自動インストールしません。
 
 スクリプトは再実行できます。wingetやvfoxで導入済みの項目は再利用され、失敗した項目はログを確認して再試行できます。
-Windowsセットアップでは、Docker Desktop、Slack、Microsoft Teams、Dropboxなどの重いGUIアプリはインストール対象に含めつつ、自動起動からは外します。1Passwordは自動起動を維持します。
+Windowsセットアップでは、Docker Desktop、Slack、Microsoft Teamsなどの重いGUIアプリはインストール対象に含めつつ、自動起動からは外します。1Passwordは自動起動を維持します。
 
 Windowsではコマンド本体をwingetの標準インストール先に残し、容量が増えやすい開発データをDドライブへ配置します。`scripts\windows\setup-storage.ps1`は再実行可能で、既存ディレクトリを維持したまま次の保存先を設定します。
 
