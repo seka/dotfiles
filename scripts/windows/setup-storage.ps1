@@ -18,8 +18,17 @@ $Paths = @{
     Repositories = Join-Path $DataDrive "dev\ghq"
     Go = Join-Path $DataDrive "dev\go"
     Vfox = Join-Path $DataDrive "dev\vfox"
+    Rust = Join-Path $DataDrive "dev\rust"
+    Cargo = Join-Path $DataDrive "dev\rust\cargo"
+    Rustup = Join-Path $DataDrive "dev\rust\rustup"
     Build = Join-Path $DataDrive "build"
+    Caches = Join-Path $DataDrive "caches"
+    CargoTarget = Join-Path $DataDrive "caches\cargo-target"
+    NpmCache = Join-Path $DataDrive "caches\npm"
+    PipCache = Join-Path $DataDrive "caches\pip"
+    UvCache = Join-Path $DataDrive "caches\uv"
     Containers = Join-Path $DataDrive "containers"
+    Docker = Join-Path $DataDrive "containers\docker"
     HyperV = Join-Path $DataDrive "Hyper-V"
     Iso = Join-Path $DataDrive "iso"
 }
@@ -45,6 +54,36 @@ function Set-UserEnvironmentVariable {
 Set-UserEnvironmentVariable -Name "DOTFILES_DATA_DRIVE" -Value $DataDrive
 Set-UserEnvironmentVariable -Name "GOPATH" -Value $Paths.Go
 Set-UserEnvironmentVariable -Name "VFOX_HOME" -Value $Paths.Vfox
+Set-UserEnvironmentVariable -Name "CARGO_HOME" -Value $Paths.Cargo
+Set-UserEnvironmentVariable -Name "RUSTUP_HOME" -Value $Paths.Rustup
+Set-UserEnvironmentVariable -Name "CARGO_TARGET_DIR" -Value $Paths.CargoTarget
+Set-UserEnvironmentVariable -Name "PIP_CACHE_DIR" -Value $Paths.PipCache
+Set-UserEnvironmentVariable -Name "UV_CACHE_DIR" -Value $Paths.UvCache
+
+$CargoBin = Join-Path $Paths.Cargo "bin"
+$LegacyCargoBin = Join-Path $HOME ".cargo\bin"
+$UserPath = [Environment]::GetEnvironmentVariable("Path", "User")
+$UserPathEntries = @(
+    $UserPath -split ";" |
+        Where-Object {
+            $_ -and $_.TrimEnd("\") -ine $LegacyCargoBin.TrimEnd("\")
+        }
+)
+if ($UserPathEntries -notcontains $CargoBin) {
+    $UserPathEntries = @($CargoBin) + $UserPathEntries
+}
+[Environment]::SetEnvironmentVariable(
+    "Path",
+    (($UserPathEntries | Select-Object -Unique) -join ";"),
+    "User"
+)
+
+if (Get-Command npm -ErrorAction SilentlyContinue) {
+    & npm config set cache $Paths.NpmCache --location=user
+    if ($LASTEXITCODE -ne 0) {
+        throw "Could not configure the npm cache."
+    }
+}
 
 if (Get-Command git -ErrorAction SilentlyContinue) {
     $CurrentGhqRoot = & git config --global --get ghq.root
@@ -82,5 +121,8 @@ Write-Host "--> Development storage configured"
 Write-Host ("    ghq.root: " + $Paths.Repositories)
 Write-Host ("    GOPATH:   " + $Paths.Go)
 Write-Host ("    VFOX_HOME:" + $Paths.Vfox)
+Write-Host ("    Cargo:    " + $Paths.Cargo)
+Write-Host ("    Rustup:   " + $Paths.Rustup)
+Write-Host ("    Caches:   " + $Paths.Caches)
 Write-Host ("    Hyper-V:  " + $Paths.HyperV)
-Write-Host ("    Docker:   " + $Paths.Containers)
+Write-Host ("    Docker:   " + $Paths.Docker)

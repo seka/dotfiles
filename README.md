@@ -97,8 +97,10 @@ Windowsではコマンド本体をwingetの標準インストール先に残し�
 D:\dev\ghq       # ghqリポジトリ
 D:\dev\go        # GOPATH
 D:\dev\vfox      # vfoxランタイム
+D:\dev\rust      # Cargo/Rustup
+D:\caches        # Cargo/npm/pip/uvキャッシュ
 D:\Hyper-V       # Hyper-V VM
-D:\containers    # Docker Desktopデータ
+D:\containers\docker # Docker Desktopデータ
 D:\build         # ビルド成果物
 D:\iso           # ISOイメージ
 ```
