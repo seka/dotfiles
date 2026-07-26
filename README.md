@@ -96,7 +96,8 @@ Windowsではコマンド本体をwingetの標準インストール先に残し�
 ```text
 D:\dev\ghq       # ghqリポジトリ
 D:\dev\go        # GOPATH
-D:\dev\vfox      # vfoxランタイム
+D:\dev\vfox      # vfox SDK実体
+D:\dev\node-global # npmグローバルパッケージ
 D:\dev\rust      # Cargo/Rustup
 D:\caches        # Cargo/npm/pip/uvキャッシュ
 D:\Hyper-V       # Hyper-V VM

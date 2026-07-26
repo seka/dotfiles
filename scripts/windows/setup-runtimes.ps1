@@ -36,11 +36,7 @@ $vfoxExecutable = Join-Path $env:ProgramFiles "vfox\vfox.exe"
 if (Test-Path $vfoxExecutable) {
     Invoke-Expression "$(& $vfoxExecutable activate pwsh)"
 
-    $vfoxHome = if ($env:VFOX_HOME) {
-        $env:VFOX_HOME
-    } else {
-        Join-Path $HOME ".vfox"
-    }
+    $vfoxHome = Join-Path $HOME ".vfox"
 
     $vfoxGlobalPaths = @(
         (Join-Path $vfoxHome "sdks\nodejs")
@@ -54,6 +50,13 @@ if (Test-Path $vfoxExecutable) {
     ) | Where-Object { Test-Path $_ }
 
     $env:PATH = (($vfoxGlobalPaths + @($env:PATH)) -join ";")
+
+    foreach ($name in @("GOPATH", "GOBIN", "GOMODCACHE", "GOCACHE")) {
+        $userValue = [Environment]::GetEnvironmentVariable($name, "User")
+        if ($userValue) {
+            Set-Item -Path "Env:$name" -Value $userValue
+        }
+    }
 }
 # dotfiles: end windows environment
 '@

@@ -17,13 +17,17 @@ $Paths = @{
     Development = Join-Path $DataDrive "dev"
     Repositories = Join-Path $DataDrive "dev\ghq"
     Go = Join-Path $DataDrive "dev\go"
+    GoBin = Join-Path $DataDrive "dev\go\bin"
+    GoModuleCache = Join-Path $DataDrive "dev\go\pkg\mod"
     Vfox = Join-Path $DataDrive "dev\vfox"
+    NodeGlobal = Join-Path $DataDrive "dev\node-global"
     Rust = Join-Path $DataDrive "dev\rust"
     Cargo = Join-Path $DataDrive "dev\rust\cargo"
     Rustup = Join-Path $DataDrive "dev\rust\rustup"
     Build = Join-Path $DataDrive "build"
     Caches = Join-Path $DataDrive "caches"
     CargoTarget = Join-Path $DataDrive "caches\cargo-target"
+    GoBuildCache = Join-Path $DataDrive "caches\go-build"
     NpmCache = Join-Path $DataDrive "caches\npm"
     PipCache = Join-Path $DataDrive "caches\pip"
     UvCache = Join-Path $DataDrive "caches\uv"
@@ -53,25 +57,44 @@ function Set-UserEnvironmentVariable {
 
 Set-UserEnvironmentVariable -Name "DOTFILES_DATA_DRIVE" -Value $DataDrive
 Set-UserEnvironmentVariable -Name "GOPATH" -Value $Paths.Go
-Set-UserEnvironmentVariable -Name "VFOX_HOME" -Value $Paths.Vfox
+Set-UserEnvironmentVariable -Name "GOBIN" -Value $Paths.GoBin
+Set-UserEnvironmentVariable -Name "GOMODCACHE" -Value $Paths.GoModuleCache
+Set-UserEnvironmentVariable -Name "GOCACHE" -Value $Paths.GoBuildCache
 Set-UserEnvironmentVariable -Name "CARGO_HOME" -Value $Paths.Cargo
 Set-UserEnvironmentVariable -Name "RUSTUP_HOME" -Value $Paths.Rustup
 Set-UserEnvironmentVariable -Name "CARGO_TARGET_DIR" -Value $Paths.CargoTarget
 Set-UserEnvironmentVariable -Name "PIP_CACHE_DIR" -Value $Paths.PipCache
 Set-UserEnvironmentVariable -Name "UV_CACHE_DIR" -Value $Paths.UvCache
 
+$LegacyVfoxHome = [Environment]::GetEnvironmentVariable("VFOX_HOME", "User")
+if ($LegacyVfoxHome) {
+    [Environment]::SetEnvironmentVariable("VFOX_HOME", $null, "User")
+}
+Remove-Item Env:VFOX_HOME -ErrorAction SilentlyContinue
+
+if (Get-Command vfox -ErrorAction SilentlyContinue) {
+    & vfox config storage.sdkPath $Paths.Vfox
+    if ($LASTEXITCODE -ne 0) {
+        throw "Could not configure the vfox SDK storage path."
+    }
+}
+
 $CargoBin = Join-Path $Paths.Cargo "bin"
 $LegacyCargoBin = Join-Path $HOME ".cargo\bin"
+$LegacyNpmRoot = Join-Path $env:APPDATA "npm"
+$LegacyGoBin = Join-Path $HOME "go\bin"
 $UserPath = [Environment]::GetEnvironmentVariable("Path", "User")
 $UserPathEntries = @(
     $UserPath -split ";" |
         Where-Object {
-            $_ -and $_.TrimEnd("\") -ine $LegacyCargoBin.TrimEnd("\")
+            $_ -and
+            $_.TrimEnd("\") -ine $LegacyCargoBin.TrimEnd("\") -and
+            $_.TrimEnd("\") -ine $LegacyNpmRoot.TrimEnd("\") -and
+            $_.TrimEnd("\") -ine $LegacyGoBin.TrimEnd("\")
         }
 )
-if ($UserPathEntries -notcontains $CargoBin) {
-    $UserPathEntries = @($CargoBin) + $UserPathEntries
-}
+$RequiredUserPaths = @($CargoBin, $Paths.NodeGlobal, $Paths.GoBin)
+$UserPathEntries = @($RequiredUserPaths + $UserPathEntries)
 [Environment]::SetEnvironmentVariable(
     "Path",
     (($UserPathEntries | Select-Object -Unique) -join ";"),
@@ -79,6 +102,10 @@ if ($UserPathEntries -notcontains $CargoBin) {
 )
 
 if (Get-Command npm -ErrorAction SilentlyContinue) {
+    & npm config set prefix $Paths.NodeGlobal --location=user
+    if ($LASTEXITCODE -ne 0) {
+        throw "Could not configure the npm global prefix."
+    }
     & npm config set cache $Paths.NpmCache --location=user
     if ($LASTEXITCODE -ne 0) {
         throw "Could not configure the npm cache."
@@ -120,7 +147,9 @@ if ((Get-Command Set-VMHost -ErrorAction SilentlyContinue) -and $IsAdministrator
 Write-Host "--> Development storage configured"
 Write-Host ("    ghq.root: " + $Paths.Repositories)
 Write-Host ("    GOPATH:   " + $Paths.Go)
-Write-Host ("    VFOX_HOME:" + $Paths.Vfox)
+Write-Host ("    GOCACHE:  " + $Paths.GoBuildCache)
+Write-Host ("    vfox SDKs:" + $Paths.Vfox)
+Write-Host ("    npm root: " + $Paths.NodeGlobal)
 Write-Host ("    Cargo:    " + $Paths.Cargo)
 Write-Host ("    Rustup:   " + $Paths.Rustup)
 Write-Host ("    Caches:   " + $Paths.Caches)
