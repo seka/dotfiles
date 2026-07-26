@@ -58,6 +58,26 @@ if (Get-Command git -ErrorAction SilentlyContinue) {
     Write-Host "git was not found. Skipping ghq.root configuration."
 }
 
+$IsAdministrator = (
+    [Security.Principal.WindowsPrincipal](
+        [Security.Principal.WindowsIdentity]::GetCurrent()
+    )
+).IsInRole([Security.Principal.WindowsBuiltInRole]::Administrator)
+
+if ((Get-Command Set-VMHost -ErrorAction SilentlyContinue) -and $IsAdministrator) {
+    $VMHost = Get-VMHost
+    if (
+        $VMHost.VirtualHardDiskPath -ne $Paths.HyperV -or
+        $VMHost.VirtualMachinePath -ne $Paths.HyperV
+    ) {
+        Set-VMHost `
+            -VirtualHardDiskPath $Paths.HyperV `
+            -VirtualMachinePath $Paths.HyperV
+    }
+} elseif (Get-Command Get-VMHost -ErrorAction SilentlyContinue) {
+    Write-Host "Run install.ps1 as administrator to configure Hyper-V default paths."
+}
+
 Write-Host "--> Development storage configured"
 Write-Host ("    ghq.root: " + $Paths.Repositories)
 Write-Host ("    GOPATH:   " + $Paths.Go)
