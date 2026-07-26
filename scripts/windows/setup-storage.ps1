@@ -83,6 +83,7 @@ $CargoBin = Join-Path $Paths.Cargo "bin"
 $LegacyCargoBin = Join-Path $HOME ".cargo\bin"
 $LegacyNpmRoot = Join-Path $env:APPDATA "npm"
 $LegacyGoBin = Join-Path $HOME "go\bin"
+$LegacyVirtualBoxBin = "C:\Program Files\Oracle\VirtualBox"
 $UserPath = [Environment]::GetEnvironmentVariable("Path", "User")
 $UserPathEntries = @(
     $UserPath -split ";" |
@@ -90,7 +91,8 @@ $UserPathEntries = @(
             $_ -and
             $_.TrimEnd("\") -ine $LegacyCargoBin.TrimEnd("\") -and
             $_.TrimEnd("\") -ine $LegacyNpmRoot.TrimEnd("\") -and
-            $_.TrimEnd("\") -ine $LegacyGoBin.TrimEnd("\")
+            $_.TrimEnd("\") -ine $LegacyGoBin.TrimEnd("\") -and
+            $_.TrimEnd("\") -ine $LegacyVirtualBoxBin.TrimEnd("\")
         }
 )
 $RequiredUserPaths = @($CargoBin, $Paths.NodeGlobal, $Paths.GoBin)
