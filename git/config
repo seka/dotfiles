@@ -27,6 +27,9 @@
     conflictstyle = zdiff3
     defaultToUpstream = true
 
+[pull]
+    rebase = false
+
 [mergetool]
     prompt = false
     path = nvim
