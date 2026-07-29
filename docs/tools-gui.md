@@ -1,61 +1,42 @@
-# GUI ツール一覧
+# GUIアプリ
 
-## ターミナル
+## 共通
 
-| ツール | 説明 |
+| 分類 | アプリ |
 | --- | --- |
-| [Ghostty](https://ghostty.org) | ターミナルエミュレータ |
+| 開発 | Visual Studio Code、Android Studio、DBeaver、Docker Desktop |
+| コミュニケーション | Slack、Microsoft Teams |
+| デザイン | Figma |
+| ストレージ | Dropbox |
+| セキュリティ | 1Password |
+| ノート・読書 | Obsidian、Kindle |
 
-## エディタ
+## macOS
 
-| ツール | 説明 |
+`scripts/macos/Brewfile`からHomebrew Caskで導入します。
+
+| 分類 | アプリ |
 | --- | --- |
-| [VS Code](https://code.visualstudio.com) | テキストエディタ |
+| ターミナル | Ghostty |
+| AI | ChatGPT、Claude、Codex App、ChatGPT Atlas |
+| Git | Git Credential Manager、Gitify |
+| 生産性 | Dash、Maccy、Rectangle |
+| システム | AppCleaner、The Unarchiver、Backdrop |
+| フォント | Source Han Code JP |
 
-## AI
+## Windows
 
-| ツール | 説明 |
+`scripts/windows/winget.json`からwingetで導入します。
+
+| 分類 | アプリ |
 | --- | --- |
-| [Claude](https://claude.ai) | Anthropic の AI アシスタント |
-| [Claude Code](https://claude.ai/code) | Anthropic のコーディング AI エージェント |
-| [ChatGPT](https://chatgpt.com) | OpenAI の AI アシスタント |
-| [ChatGPT Atlas](https://openai.com) | OpenAI の ChatGPT デスクトップアプリ |
-| [Codex](https://openai.com/codex) | OpenAI のコーディング AI エージェント（CLI） |
-| [Codex App](https://openai.com/codex) | OpenAI のコーディング AI エージェント（GUI） |
+| ターミナル | Windows Terminal |
+| 開発 | Visual Studio Code、Android Studio、DBeaver、Docker Desktop |
+| ランチャー | ueli |
+| 生産性 | 1Password、Obsidian、7-Zip |
+| コミュニケーション | Slack、Microsoft Teams |
+| デザイン | Figma |
+| ストレージ | Dropbox |
+| 読書 | Kindle |
 
-## 開発ツール
-
-| ツール | 説明 |
-| --- | --- |
-| [Android Studio](https://developer.android.com/studio) | Android 開発 IDE |
-| [Dash](https://kapeli.com/dash) | API ドキュメントブラウザ |
-| [DBeaver](https://dbeaver.io) | データベース GUI クライアント |
-| [Docker Desktop](https://www.docker.com/products/docker-desktop/) | Docker GUI |
-
-## Git
-
-| ツール | 説明 |
-| --- | --- |
-| [Git Credential Manager](https://github.com/git-ecosystem/git-credential-manager) | Git 認証情報マネージャ |
-| [Gitify](https://www.gitify.io) | GitHub 通知デスクトップアプリ |
-
-## フォント
-
-| ツール | 説明 |
-| --- | --- |
-| [Source Han Code JP](https://github.com/adobe-fonts/source-han-code-jp) | 日本語対応プログラミングフォント |
-
-## ユーティリティ
-
-| ツール | 説明 |
-| --- | --- |
-| [1Password](https://1password.com) | パスワードマネージャ |
-| [Rectangle](https://rectangleapp.com) | ウィンドウ管理 |
-| [Maccy](https://maccy.app) | クリップボードマネージャ |
-| [AppCleaner](https://freemacsoft.net/appcleaner/) | アプリ完全アンインストーラ |
-| [The Unarchiver](https://theunarchiver.com) | アーカイブ展開 |
-| [Backdrop](https://backdropapp.com) | デスクトップ背景ツール |
-| [Obsidian](https://obsidian.md) | Markdown ノートアプリ |
-| [Figma](https://www.figma.com) | デザインツール |
-| [Slack](https://slack.com) | チームコミュニケーション |
-| [Dropbox](https://www.dropbox.com) | クラウドストレージ |
+AI CLIはGUIアプリとは分け、Claude CodeとCodex CLIをwinget、Gemini CLIをvfox管理のnpmから導入します。
