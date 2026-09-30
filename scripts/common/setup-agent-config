@@ -65,7 +65,6 @@ echo "--> Gemini settings installed"
 
 echo "==> Installing Codex settings"
 mkdir -p "$HOME/.codex"
-copy_or_link_file "$DOTFILES_ROOT/ai-agents/codex/CODEX.md" "$HOME/.codex/CODEX.md"
 copy_or_link_file "$DOTFILES_ROOT/ai-agents/AGENTS.md" "$HOME/.codex/AGENTS.md"
 render_template "$DOTFILES_ROOT/ai-agents/codex/config.toml.template" "$HOME/.codex/config.toml" "$DOTFILES_OS"
 
