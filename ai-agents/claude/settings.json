@@ -14,7 +14,7 @@
       "Bash(sudo:*)",
       "Read(.env.*)"
     ],
-    "defaultMode": "plan"
+    "defaultMode": "auto"
   },
   "enabledPlugins": {
     "crit@crit": true,
