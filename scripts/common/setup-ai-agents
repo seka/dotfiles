@@ -54,6 +54,10 @@ for skill in "${PM_SKILLS[@]}"; do
 done
 echo "pm-skills skills installed."
 
+echo "Installing Anatomy skill..."
+npx --yes skills add wheresryan22/anatomy --global --agent "${AGENTS[@]}" --yes
+echo "Anatomy skill installed."
+
 echo "Installing crit plugins..."
 if command -v crit >/dev/null 2>&1; then
   (

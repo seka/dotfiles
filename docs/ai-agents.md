@@ -115,6 +115,20 @@ Geminiアプリでは、書き出された各 `名前/SKILL.md` または各ス�
 
 ---
 
+### [Anatomy](https://github.com/wheresryan22/anatomy)
+
+技術的な仕組みを、精密なアイソメトリック図や操作できるSVG・HTML・Reactコンポーネントとして説明するスキルです。共通セットアップで全エージェントに配置します。開発元が動作を案内しているのはClaude Code、Codexなどで、Gemini CLI・Copilotでの動作は未確認です。
+
+Node.js 20.10以降と、表示検証用のChromeまたはChromiumが必要です。Codexでは次のように呼び出します。
+
+```text
+$anatomy LRUキャッシュの仕組みを説明する図を作って、interactive
+```
+
+Claude Codeでは `/anatomy` を使います。`interactive` を付けると操作できる図になります。
+
+---
+
 ## Codex
 
 設定ファイル: `ai-agents/codex/config.toml`
