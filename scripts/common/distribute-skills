@@ -1,0 +1,185 @@
+#!/usr/bin/env bash
+
+set -o errexit -o pipefail
+
+DOTFILES_ROOT="${DOTFILES_ROOT:-$(cd "$(dirname "$0")/../.." && pwd -P)}"
+sources=()
+targets=()
+selected=()
+names=()
+entries=()
+planned_sources=()
+planned_targets=()
+export_dir=""
+copy=false
+dry_run=false
+
+fail() {
+  echo "Error: $*" >&2
+  exit 1
+}
+
+usage() {
+  cat <<'EOF'
+Usage: bash scripts/common/distribute-skills [options]
+  --source DIR    配布元（複数指定可、省略時 ai-agents/skills）
+  --target NAME   claude / codex / gemini / copilot（複数指定可、省略時すべて）
+  --skill NAME    スキル名で絞り込み（複数指定可）
+  --export DIR    CLIへ配置せず、アップロード用フォルダーへコピー
+  --copy          リンクの代わりにコピー（Windowsは常にコピー）
+  --dry-run       変更せず配布予定を表示
+  --help          このヘルプを表示
+EOF
+}
+
+contains() {
+  local expected="$1"
+  shift
+  local value
+  for value in "$@"; do
+    [[ "$value" != "$expected" ]] || return 0
+  done
+  return 1
+}
+
+absolute_dir() {
+  local path="$1"
+  if [[ -d "$path" ]]; then
+    (cd "$path" && pwd -P)
+  else
+    [[ ! -e "$path" && ! -L "$path" ]] || fail "配布先がディレクトリではありません: $path"
+    printf '%s/%s\n' "$(absolute_dir "$(dirname "$path")")" "$(basename "$path")"
+  fi
+}
+
+while [[ $# -gt 0 ]]; do
+  case "$1" in
+    --source|--target|--skill|--export)
+      [[ $# -ge 2 && -n "$2" && "$2" != --* ]] || fail "$1 には値が必要です"
+      case "$1" in
+        --source) sources+=("$2") ;;
+        --target)
+          case "$2" in claude|codex|gemini|copilot) ;; *) fail "不明な配布先: $2" ;; esac
+          contains "$2" "${targets[@]}" || targets+=("$2")
+          ;;
+        --skill) selected+=("$2") ;;
+        --export) export_dir="$2" ;;
+      esac
+      shift 2
+      ;;
+    --copy) copy=true; shift ;;
+    --dry-run) dry_run=true; shift ;;
+    --help|-h) usage; exit 0 ;;
+    *) fail "不明なオプション: $1" ;;
+  esac
+done
+
+[[ -z "$export_dir" || ${#targets[@]} -eq 0 ]] || fail "--export と --target は同時指定できません"
+if [[ "${DOTFILES_OS:-}" == windows || "${OS:-}" == Windows_NT ]]; then
+  copy=true
+fi
+[[ ${#sources[@]} -gt 0 ]] || sources=("$DOTFILES_ROOT/ai-agents/skills")
+shopt -s nullglob dotglob
+
+for source_dir in "${sources[@]}"; do
+  [[ -d "$source_dir" ]] || fail "配布元が見つかりません: $source_dir"
+  source_dir=$(cd "$source_dir" && pwd -P)
+  for entry in "$source_dir"/*; do
+    if [[ -d "$entry" ]]; then
+      skill_file="$entry/SKILL.md"
+      name=$(basename "$entry")
+    else
+      [[ "$entry" == *.md ]] || continue
+      skill_file="$entry"
+      name=$(basename "$entry" .md)
+    fi
+    [[ -f "$skill_file" ]] || continue
+    if [[ ${#selected[@]} -gt 0 ]] && ! contains "$name" "${selected[@]}"; then
+      continue
+    fi
+    [[ "$name" =~ ^[a-z0-9]+(-[a-z0-9]+)*$ ]] || fail "スキル名はkebab-caseが必要です: $name"
+    awk -v name="$name" '
+      { sub(/\r$/, "") }
+      NR == 1 { if ($0 != "---") exit; next }
+      $0 == "---" { closed = 1; exit }
+      /^name:[[:space:]]*/ {
+        sub(/^name:[[:space:]]*/, ""); sub(/[[:space:]]*$/, "")
+        if ($0 == name) found = 1
+      }
+      END { exit !(found && closed) }
+    ' "$skill_file" || fail "frontmatterのnameとファイル名が一致しません: $skill_file"
+    ! contains "$name" "${names[@]}" || fail "配布元のスキル名が重複しています: $name"
+    names+=("$name")
+    entries+=("$entry")
+  done
+done
+for name in "${selected[@]}"; do
+  contains "$name" "${names[@]}" || fail "スキルが見つかりません: $name"
+done
+[[ ${#names[@]} -gt 0 ]] || fail "配布するスキルがありません"
+
+destinations=()
+if [[ -n "$export_dir" ]]; then
+  destinations+=("$(absolute_dir "$export_dir")")
+  copy=true
+else
+  [[ ${#targets[@]} -gt 0 ]] || targets=(claude codex gemini copilot)
+  for target in "${targets[@]}"; do
+    destinations+=("$(absolute_dir "$HOME/.$target/skills")")
+  done
+fi
+
+plan_file() {
+  local source="$1" target="$2" destination="$3" parent
+  [[ -f "$source" && -r "$source" ]] || fail "配布元ファイルを読み込めません: $source"
+  if [[ -L "$target" && "$(readlink "$target")" == "$source" ]]; then
+    return
+  fi
+  if [[ -e "$target" || -L "$target" ]]; then
+    if [[ ! -L "$target" && -f "$target" ]] && cmp -s "$source" "$target"; then
+      return
+    fi
+    fail "既存ファイルと競合しています（上書きしません）: $target"
+  fi
+  parent=$(dirname "$target")
+  while [[ "$parent" != "$destination" ]]; do
+    [[ ! -L "$parent" && ( ! -e "$parent" || -d "$parent" ) ]] || fail "配布先の親がリンクまたはファイルです: $parent"
+    parent=$(dirname "$parent")
+  done
+  planned_sources+=("$source")
+  planned_targets+=("$target")
+}
+
+for destination in "${destinations[@]}"; do
+  for ((i = 0; i < ${#names[@]}; i++)); do
+    entry="${entries[i]}"
+    if [[ -d "$entry" ]]; then
+      while IFS= read -r -d '' source; do
+        [[ ! -d "$source" ]] || continue
+        plan_file "$source" "$destination/${names[i]}/${source#"$entry"/}" "$destination"
+      done < <(find "$entry" \( -type f -o -type l \) -print0)
+    else
+      plan_file "$entry" "$destination/${names[i]}/SKILL.md" "$destination"
+    fi
+  done
+done
+
+for ((i = 0; i < ${#planned_sources[@]}; i++)); do
+  source="${planned_sources[i]}"
+  target="${planned_targets[i]}"
+  if "$copy"; then action=COPY; else action=LINK; fi
+  printf '%s %s -> %s\n' "$action" "$source" "$target"
+  if ! "$dry_run"; then
+    mkdir -p "$(dirname "$target")"
+    if "$copy"; then
+      (set -o noclobber; cat "$source" > "$target")
+    else
+      ln -s "$source" "$target"
+    fi
+  fi
+done
+if "$dry_run"; then
+  echo "${#planned_sources[@]} ファイルを配布予定"
+else
+  echo "${#planned_sources[@]} ファイルを配布しました"
+fi

@@ -47,6 +47,33 @@ Claude CodeとCodex CLIはwingetから導入します。Gemini CLIはvfoxで管�
 
 ### カスタムスキル (`ai-agents/skills/`)
 
+`scripts/common/distribute-skills` で配布します。Bashと標準的なUnixコマンドを使用し、設定セットアップからも呼び出します。既存のClaudeコマンドも互換性のため維持します。
+
+```bash
+# 変更予定だけ確認
+bash scripts/common/distribute-skills --dry-run
+
+# Claude Code / Codex / Gemini CLI / Copilotに配布
+bash scripts/common/distribute-skills
+
+# 配布先・スキルを選択（どちらも複数指定可）
+bash scripts/common/distribute-skills --target gemini --skill review
+
+# Geminiアプリへ手動アップロードするフォルダーを書き出す
+bash scripts/common/distribute-skills --export /tmp/gemini-skills
+
+# 外部スキルも明示的に指定して配布（この例では外部スキルだけが対象）
+bash scripts/common/distribute-skills --source ~/.agents/skills --target gemini
+```
+
+配布元はデフォルトで `ai-agents/skills/`。`名前.md` と `名前/SKILL.md` の両形式を扱い、後者では参照資料も配布します。`--source` の複数指定で自作・外部スキルをまとめられます。同名スキルが重複する場合は停止するため、配布元を分けて実行してください。
+
+CLIの配置先は `~/.claude/skills/`、`~/.codex/skills/`、`~/.gemini/skills/`、`~/.copilot/skills/` です。通常はファイル単位のシンボリックリンクで原本の変更を反映し、Windowsまたは `--copy` ではコピーします。既存ファイルは同じ原本へのリンクまたは同一内容ならスキップし、内容が異なる場合は書き込み前に停止します。コピーの更新時は既存の配布先を別名で退避して再実行してください。削除済みスキルの自動削除は行いません。
+
+Geminiアプリでは、書き出された各 `名前/SKILL.md` または各スキルのフォルダーを「スキル」のアップロード画面から取り込みます。更新時も再アップロードが必要です。CLI向けツールや外部操作を前提とした指示はアプリでそのまま実行できるとは限りません。外部スキルの書き出し前には、参照資料の内容と再配布条件を確認してください。
+
+仕様: [Geminiアプリのスキル作成・管理](https://support.google.com/gemini/answer/17094296)、[Gemini CLI Agent Skills](https://geminicli.com/docs/cli/skills/)。
+
 | スキル | 説明 |
 | --- | --- |
 | `commit` | Conventional Commits 形式でコミット |
