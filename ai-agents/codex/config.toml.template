@@ -122,5 +122,10 @@ NODE_REPL_INSTRUCTIONS_USE_CASE_CHROME = "Control the Chrome browser in conjunct
 BROWSER_USE_CODEX_APP_BUILD_FLAVOR = "prod"
 BROWSER_USE_CODEX_APP_VERSION = "26.623.31921"
 
+[hooks.state]
+
+[hooks.state."crit@local:hooks/hooks.json:stop:0:0"]
+trusted_hash = "sha256:bf6ad428ae7902810fa2d68d8db42228377af118aa18508ad0eccf73a95ed1f8"
+
 [plugins."crit@local"]
 enabled = true
