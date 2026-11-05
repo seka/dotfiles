@@ -39,4 +39,4 @@
 | ストレージ | Dropbox |
 | 読書 | Kindle |
 
-AI CLIはGUIアプリとは分け、Claude CodeとCodex CLIをwinget、Gemini CLIをvfox管理のnpmから導入します。
+AI CLIはGUIアプリとは分け、Claude Code、Codex CLI、Antigravity CLIをwingetから導入します。

@@ -12,7 +12,7 @@ macOSではHomebrew、Windowsではwingetを使い、可能な範囲で同じCLI
 | データ処理 | jq、yq、HTTPie |
 | 開発支援 | CMake、ShellCheck、Universal Ctags、mkcert、codespell、uv |
 | クラウド | Docker、AWS CLI |
-| AI | Claude Code、Codex CLI、Gemini CLI、Herdr |
+| AI | Claude Code、Codex CLI、Antigravity CLI、Herdr |
 
 パッケージ名や提供状況の違いにより、一部のツールは片方のOSだけに導入されます。
 
@@ -85,8 +85,7 @@ WindowsではMSYS2、zsh、tmux、Unix版asdf/rbenv/nodenvを使用しません�
 | 経路 | ツール |
 | --- | --- |
 | pipx | pynvim、codespell |
-| npm | Gemini CLI |
-| winget | uv |
+| winget | Antigravity CLI、uv |
 
 Claude CodeとCodex CLIはwingetからWindowsネイティブ版を導入します。
 

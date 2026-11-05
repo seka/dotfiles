@@ -171,8 +171,7 @@ cask "claude"
 cask "claude-code"
 cask "codex-app"
 cask "codex"
-# Homebrew の `gemini` cask は Google Gemini ではないため、CLI だけを管理する
-brew "gemini-cli"
+cask "antigravity-cli"
 cask "chatgpt-atlas"
 
 # Desktop
