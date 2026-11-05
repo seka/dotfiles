@@ -45,6 +45,12 @@ Claude Code、Codex CLI、Antigravity CLIはwingetから導入します。Antigr
 
 スキルは `gh skill install` でユーザースコープにインストールされ、全エージェント（Claude Code / GitHub Copilot / Codex / Gemini CLI）で共有されます。インストールスクリプトは `scripts/common/setup-ai-agents` を参照。
 
+外部スキルのGemini CLI向け配置は互換性のため維持します。Antigravity CLIへは次のように配布できます。
+
+```bash
+bash scripts/common/distribute-skills --source ~/.agents/skills --target antigravity
+```
+
 ### カスタムスキル (`ai-agents/skills/`)
 
 `scripts/common/distribute-skills` で配布します。Bashと標準的なUnixコマンドを使用し、設定セットアップからも呼び出します。既存のClaudeコマンドも互換性のため維持します。
@@ -68,7 +74,7 @@ bash scripts/common/distribute-skills --source ~/.agents/skills --target gemini
 
 配布元はデフォルトで `ai-agents/skills/`。`名前.md` と `名前/SKILL.md` の両形式を扱い、後者では参照資料も配布します。`--source` の複数指定で自作・外部スキルをまとめられます。同名スキルが重複する場合は停止するため、配布元を分けて実行してください。
 
-CLIの配置先は `~/.claude/skills/`、`~/.codex/skills/`、`~/.gemini/skills/`、`~/.copilot/skills/` です。通常はファイル単位のシンボリックリンクで原本の変更を反映し、Windowsまたは `--copy` ではコピーします。既存ファイルは同じ原本へのリンクまたは同一内容ならスキップし、内容が異なる場合は書き込み前に停止します。コピーの更新時は既存の配布先を別名で退避して再実行してください。削除済みスキルの自動削除は行いません。
+CLIの配置先は `~/.claude/skills/`、`~/.codex/skills/`、`~/.gemini/skills/`、`~/.gemini/antigravity-cli/skills/`、`~/.copilot/skills/` です。通常はファイル単位のシンボリックリンクで原本の変更を反映し、Windowsまたは `--copy` ではコピーします。既存ファイルは同じ原本へのリンクまたは同一内容ならスキップし、内容が異なる場合は書き込み前に停止します。コピーの更新時は既存の配布先を別名で退避して再実行してください。削除済みスキルの自動削除は行いません。
 
 Geminiアプリでは、書き出された各 `名前/SKILL.md` または各スキルのフォルダーを「スキル」のアップロード画面から取り込みます。更新時も再アップロードが必要です。CLI向けツールや外部操作を前提とした指示はアプリでそのまま実行できるとは限りません。外部スキルの書き出し前には、参照資料の内容と再配布条件を確認してください。
 
@@ -152,6 +158,8 @@ agy -p "Web検索で調べ、一次情報のURLと日付を添えて回答して
 ```
 
 macOSは `brew upgrade --cask antigravity-cli`、Windowsは `winget upgrade --exact --id Google.AntigravityCLI` で更新できます。共通ガイドの配置先は `~/.gemini/GEMINI.md` です。既存ファイルがある場合は上書きせず保持するため、古い検索指示がある場合は手動で更新してください。Gemini CLIの設定を新しい設定ファイルへそのままコピーしません。
+
+スキルの配置先は `~/.gemini/antigravity-cli/skills/` です。`distribute-skills --target antigravity` で配布します。
 
 公式資料: [導入](https://antigravity.google/docs/getting-started/)、[移行](https://antigravity.google/docs/cli/gcli-migration)、[非対話モード](https://antigravity.google/docs/cli/headless/)。
 

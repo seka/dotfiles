@@ -23,7 +23,7 @@ usage() {
   cat <<'EOF'
 Usage: bash scripts/common/distribute-skills [options]
   --source DIR    配布元（複数指定可、省略時 ai-agents/skills）
-  --target NAME   claude / codex / gemini / copilot（複数指定可、省略時すべて）
+  --target NAME   claude / codex / gemini / antigravity / copilot（複数指定可、省略時すべて）
   --skill NAME    スキル名で絞り込み（複数指定可）
   --export DIR    CLIへ配置せず、アップロード用フォルダーへコピー
   --copy          リンクの代わりにコピー（Windowsは常にコピー）
@@ -59,7 +59,7 @@ while [[ $# -gt 0 ]]; do
       case "$1" in
         --source) sources+=("$2") ;;
         --target)
-          case "$2" in claude|codex|gemini|copilot) ;; *) fail "不明な配布先: $2" ;; esac
+          case "$2" in claude|codex|gemini|antigravity|copilot) ;; *) fail "不明な配布先: $2" ;; esac
           contains "$2" "${targets[@]}" || targets+=("$2")
           ;;
         --skill) selected+=("$2") ;;
@@ -123,9 +123,13 @@ if [[ -n "$export_dir" ]]; then
   destinations+=("$(absolute_dir "$export_dir")")
   copy=true
 else
-  [[ ${#targets[@]} -gt 0 ]] || targets=(claude codex gemini copilot)
+  [[ ${#targets[@]} -gt 0 ]] || targets=(claude codex gemini antigravity copilot)
   for target in "${targets[@]}"; do
-    destinations+=("$(absolute_dir "$HOME/.$target/skills")")
+    if [[ "$target" == antigravity ]]; then
+      destinations+=("$(absolute_dir "$HOME/.gemini/antigravity-cli/skills")")
+    else
+      destinations+=("$(absolute_dir "$HOME/.$target/skills")")
+    fi
   done
 fi
 

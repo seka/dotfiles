@@ -58,6 +58,8 @@ echo "Installing Anatomy skill..."
 npx --yes skills add wheresryan22/anatomy --global --agent "${AGENTS[@]}" --yes
 echo "Anatomy skill installed."
 
+bash "$(dirname "$0")/distribute-skills" --source "$HOME/.agents/skills" --target antigravity
+
 echo "Installing crit plugins..."
 if command -v crit >/dev/null 2>&1; then
   (
