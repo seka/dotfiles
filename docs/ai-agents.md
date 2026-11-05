@@ -159,6 +159,8 @@ agy -p "Web検索で調べ、一次情報のURLと日付を添えて回答して
 
 macOSは `brew upgrade --cask antigravity-cli`、Windowsは `winget upgrade --exact --id Google.AntigravityCLI` で更新できます。共通ガイドの配置先は `~/.gemini/GEMINI.md` です。既存ファイルがある場合は上書きせず保持するため、古い検索指示がある場合は手動で更新してください。Gemini CLIの設定を新しい設定ファイルへそのままコピーしません。
 
+自己更新でパッケージ管理下の実行ファイルが置き換わるのを防ぐため、`AGY_CLI_DISABLE_AUTO_UPDATE=true` を設定します。macOSは `terminal/zshenv`、Windowsはセットアップ時のユーザー環境変数で設定します。更新はHomebrew・wingetから行います。既存のtmuxペインでは `export AGY_CLI_DISABLE_AUTO_UPDATE=true` を実行し、そのシェルからAI CLIを起動し直してください。
+
 スキルの配置先は `~/.gemini/antigravity-cli/skills/` です。`distribute-skills --target antigravity` で配布します。
 
 公式資料: [導入](https://antigravity.google/docs/getting-started/)、[移行](https://antigravity.google/docs/cli/gcli-migration)、[非対話モード](https://antigravity.google/docs/cli/headless/)。

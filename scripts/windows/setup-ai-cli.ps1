@@ -1,5 +1,8 @@
 $ErrorActionPreference = "Stop"
 
+[Environment]::SetEnvironmentVariable("AGY_CLI_DISABLE_AUTO_UPDATE", "true", "User")
+$env:AGY_CLI_DISABLE_AUTO_UPDATE = "true"
+
 if (-not (Get-Command winget -ErrorAction SilentlyContinue)) {
     throw "winget was not found. Install App Installer and rerun install.ps1."
 }
