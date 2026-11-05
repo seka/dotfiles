@@ -57,6 +57,12 @@ copy_or_link_file "$DOTFILES_ROOT/ai-agents/AGENTS.md" "$HOME/.gemini/AGENTS.md"
 copy_or_link_file "$DOTFILES_ROOT/ai-agents/gemini/settings.json" "$HOME/.gemini/settings.json"
 echo "--> Gemini settings installed"
 
+if [[ ! -e "$HOME/.gemini/GEMINI.md" && ! -L "$HOME/.gemini/GEMINI.md" ]]; then
+  copy_or_link_file "$DOTFILES_ROOT/ai-agents/AGENTS.md" "$HOME/.gemini/GEMINI.md"
+else
+  echo "Existing ~/.gemini/GEMINI.md preserved; review Web search instructions there manually."
+fi
+
 echo "==> Installing Codex settings"
 mkdir -p "$HOME/.codex"
 copy_or_link_file "$DOTFILES_ROOT/ai-agents/AGENTS.md" "$HOME/.codex/AGENTS.md"

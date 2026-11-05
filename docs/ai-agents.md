@@ -28,7 +28,7 @@ Claude Code、Codex CLI、Antigravity CLIはwingetから導入します。Antigr
 
 | 種別 | 対象 |
 | --- | --- |
-| 許可 | `gemini` |
+| 許可 | `agy -p` |
 | 拒否 | `curl`, `wget`, `sudo`, `.env.*` の読み取り |
 
 共通エージェントガイドは `ai-agents/AGENTS.md` を参照。
@@ -143,7 +143,21 @@ Claude Codeでは `/anatomy` を使います。`interactive` を付けると操�
 
 ---
 
-## Gemini CLI
+## Antigravity CLI
+
+Web検索の委譲先です。macOSは `brew install --cask antigravity-cli`、Windowsは `winget install --exact --id Google.AntigravityCLI` で導入できます。導入後はターミナルを開き直し、`agy` で初回のGoogleログインを行います。個人の無料プランには週単位の利用枠があります。
+
+```bash
+agy -p "Web検索で調べ、一次情報のURLと日付を添えて回答してください。ファイル変更やシェルコマンドの実行は不要です。"
+```
+
+macOSは `brew upgrade --cask antigravity-cli`、Windowsは `winget upgrade --exact --id Google.AntigravityCLI` で更新できます。共通ガイドの配置先は `~/.gemini/GEMINI.md` です。既存ファイルがある場合は上書きせず保持するため、古い検索指示がある場合は手動で更新してください。Gemini CLIの設定を新しい設定ファイルへそのままコピーしません。
+
+公式資料: [導入](https://antigravity.google/docs/getting-started/)、[移行](https://antigravity.google/docs/cli/gcli-migration)、[非対話モード](https://antigravity.google/docs/cli/headless/)。
+
+## Gemini CLI（互換設定）
+
+旧設定は移行用に保持しています。新規導入とWeb検索にはAntigravity CLIを使います。
 
 設定ファイル: `ai-agents/gemini/settings.json`
 

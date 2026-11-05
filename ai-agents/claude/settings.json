@@ -3,7 +3,7 @@
   "env": {},
   "permissions": {
     "allow": [
-      "Bash(gemini:*)"
+      "Bash(agy -p:*)"
     ],
     "deny": [
       "Bash(curl:*)",
