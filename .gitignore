@@ -12,5 +12,8 @@ editors/vim/plugins/*
 # Claude Code
 .claude/
 
+# CodexのPC固有設定はローカルに残し、共有用テンプレートだけを追跡する
+/ai-agents/codex/config.toml
+
 # Setup logs
 .logs/
