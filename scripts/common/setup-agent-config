@@ -22,10 +22,48 @@ render_template() {
   local template="$1"
   local target="$2"
   local os="$3"
+  local home_path="$HOME"
+  local local_appdata="${LOCALAPPDATA:-}"
+
+  if [[ "$os" == windows ]]; then
+    if [[ -z "$local_appdata" ]]; then
+      echo "LOCALAPPDATA is required to render Windows Codex paths." >&2
+      return 1
+    fi
+    if command -v cygpath >/dev/null 2>&1; then
+      home_path="$(cygpath -m "$home_path")"
+      local_appdata="$(cygpath -m "$local_appdata")"
+    fi
+
+  fi
 
   mkdir -p "$(dirname "$target")"
 
-  awk -v os="$os" '
+  # 環境変数はawkの-vによるバックスラッシュ解釈を避けて渡し、挿入時にTOML文字列としてエスケープする。
+  DOTFILES_TEMPLATE_HOME="$home_path" DOTFILES_TEMPLATE_LOCALAPPDATA="$local_appdata" \
+    awk -v os="$os" '
+    function toml_escape(value, result, i, c) {
+      result = ""
+      for (i = 1; i <= length(value); i++) {
+        c = substr(value, i, 1)
+        if (c == "\\") result = result "\\\\"
+        else if (c == "\"") result = result "\\\""
+        else if (c == "\n") result = result "\\n"
+        else if (c == "\r") result = result "\\r"
+        else if (c == "\t") result = result "\\t"
+        else result = result c
+      }
+      return result
+    }
+    # gsubの置換規則で & やバックスラッシュを壊さず、挿入値を再展開しないよう元の文字列だけを走査する。
+    function replace_literal(text, token, value, result, pos) {
+      result = ""
+      while ((pos = index(text, token)) != 0) {
+        result = result substr(text, 1, pos - 1) value
+        text = substr(text, pos + length(token))
+      }
+      return result text
+    }
     /^# @if / {
       active = ($3 == os)
       next
@@ -35,7 +73,9 @@ render_template() {
       next
     }
     active != 0 {
-      print
+      line = replace_literal($0, "{{HOME}}", toml_escape(ENVIRON["DOTFILES_TEMPLATE_HOME"]))
+      line = replace_literal(line, "{{LOCALAPPDATA}}", toml_escape(ENVIRON["DOTFILES_TEMPLATE_LOCALAPPDATA"]))
+      print line
     }
   ' "$template" > "$target"
 }
