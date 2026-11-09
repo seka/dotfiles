@@ -114,7 +114,6 @@ NODE_REPL_NODE_PATH = "%LOCALAPPDATA%\\Programs\\Codex\\resources\\cua_node\\bin
 CODEX_CLI_PATH = "%LOCALAPPDATA%\\Programs\\Codex\\resources\\codex.exe"
 # @endif
 NODE_REPL_TRUSTED_CODE_PATHS = "~/.codex"
-CODEX_HOME = "~/.codex"
 NODE_REPL_TRUSTED_BROWSER_CLIENT_SHA256S = "d1a8040310e3ed270b3d17f6f3d41f4cdbad9096fa1a4f7c425fbb37afe949d3"
 BROWSER_USE_AVAILABLE_BACKENDS = "chrome,iab"
 NODE_REPL_INSTRUCTIONS_USE_CASE_BROWSER = "Control the in-app browser in conjunction with the Browser Plugin."
