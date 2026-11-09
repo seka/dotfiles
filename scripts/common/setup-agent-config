@@ -24,6 +24,8 @@ render_template() {
   local os="$3"
   local home_path="$HOME"
   local local_appdata="${LOCALAPPDATA:-}"
+  local codex_resources="/Applications/Codex.app/Contents/Resources"
+  local codex_cli="$codex_resources/codex"
 
   if [[ "$os" == windows ]]; then
     if [[ -z "$local_appdata" ]]; then
@@ -34,13 +36,21 @@ render_template() {
       home_path="$(cygpath -m "$home_path")"
       local_appdata="$(cygpath -m "$local_appdata")"
     fi
-
+  elif [[ "$os" == macos ]]; then
+    if [[ ! -x "$codex_resources/cua_node/bin/node_repl" && -x /Applications/ChatGPT.app/Contents/Resources/cua_node/bin/node_repl ]]; then
+      codex_resources="/Applications/ChatGPT.app/Contents/Resources"
+    fi
+    codex_cli="$codex_resources/codex"
+    if [[ -x "$codex_resources/codex-cli/CodexCLI.app/Contents/MacOS/codex" ]]; then
+      codex_cli="$codex_resources/codex-cli/CodexCLI.app/Contents/MacOS/codex"
+    fi
   fi
 
   mkdir -p "$(dirname "$target")"
 
   # 環境変数はawkの-vによるバックスラッシュ解釈を避けて渡し、挿入時にTOML文字列としてエスケープする。
   DOTFILES_TEMPLATE_HOME="$home_path" DOTFILES_TEMPLATE_LOCALAPPDATA="$local_appdata" \
+    DOTFILES_TEMPLATE_CODEX_RESOURCES="$codex_resources" DOTFILES_TEMPLATE_CODEX_CLI="$codex_cli" \
     awk -v os="$os" '
     function toml_escape(value, result, i, c) {
       result = ""
@@ -75,7 +85,8 @@ render_template() {
     active != 0 {
       line = replace_literal($0, "{{HOME}}", toml_escape(ENVIRON["DOTFILES_TEMPLATE_HOME"]))
       line = replace_literal(line, "{{LOCALAPPDATA}}", toml_escape(ENVIRON["DOTFILES_TEMPLATE_LOCALAPPDATA"]))
-      print line
+      line = replace_literal(line, "{{CODEX_APP_RESOURCES}}", toml_escape(ENVIRON["DOTFILES_TEMPLATE_CODEX_RESOURCES"]))
+      print replace_literal(line, "{{CODEX_CLI_PATH}}", toml_escape(ENVIRON["DOTFILES_TEMPLATE_CODEX_CLI"]))
     }
   ' "$template" > "$target"
 }
