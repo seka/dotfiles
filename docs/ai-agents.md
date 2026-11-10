@@ -6,11 +6,11 @@
 
 ### macOS
 
-Claude Code、Codex CLI、Antigravity CLIは`scripts/macos/Brewfile`から導入します。`install.sh`が設定ファイルのシンボリックリンクとスキルのセットアップまで実行します。
+Claude Code、Codex CLI、Gemini CLI、Antigravity CLIは`scripts/macos/Brewfile`から導入します。`install.sh`が設定ファイルのシンボリックリンクとスキルのセットアップまで実行します。
 
 ### Windows
 
-Claude Code、Codex CLI、Antigravity CLIはwingetから導入します。Antigravity CLIのパッケージIDは `Google.AntigravityCLI` です。`install.ps1`が設定ファイルのコピーとスキルのセットアップまで実行します。
+Claude Code、Codex CLI、Antigravity CLIはwingetから導入します。Antigravity CLIのパッケージIDは `Google.AntigravityCLI` です。Gemini CLIはvfoxで管理するNode.jsのnpmから導入します。`install.ps1`が設定ファイルのコピーとスキルのセットアップまで実行します。
 
 設定ファイルはOS間で共有します。Codexの`config.toml`のみテンプレートをレンダリングし、OS固有の値を切り替えます。
 
@@ -45,7 +45,7 @@ Claude Code、Codex CLI、Antigravity CLIはwingetから導入します。Antigr
 
 スキルは `gh skill install` でユーザースコープにインストールされ、全エージェント（Claude Code / GitHub Copilot / Codex / Gemini CLI）で共有されます。インストールスクリプトは `scripts/common/setup-ai-agents` を参照。
 
-外部スキルのGemini CLI向け配置は互換性のため維持します。Antigravity CLIへは次のように配布できます。
+Gemini CLIにも外部スキルを配置します。Web検索の委譲先であるAntigravity CLIへは次のように配布できます。
 
 ```bash
 bash scripts/common/distribute-skills --source ~/.agents/skills --target antigravity
@@ -155,7 +155,7 @@ Claude Codeでは `/anatomy` を使います。`interactive` を付けると操�
 
 ## Antigravity CLI
 
-Web検索の委譲先です。macOSは `brew install --cask antigravity-cli`、Windowsは `winget install --exact --id Google.AntigravityCLI` で導入できます。導入後はターミナルを開き直し、`agy` で初回のGoogleログインを行います。個人の無料プランには週単位の利用枠があります。
+各エージェントが利用するWeb検索の委譲先です。macOSは `brew install --cask antigravity-cli`、Windowsは `winget install --exact --id Google.AntigravityCLI` で導入できます。導入後はターミナルを開き直し、`agy` で初回のGoogleログインを行います。個人の無料プランには週単位の利用枠があります。
 
 ```bash
 agy -p "Web検索で調べ、一次情報のURLと日付を添えて回答してください。ファイル変更やシェルコマンドの実行は不要です。"
@@ -169,9 +169,9 @@ macOSは `brew upgrade --cask antigravity-cli`、Windowsは `winget upgrade --ex
 
 公式資料: [導入](https://antigravity.google/docs/getting-started/)、[移行](https://antigravity.google/docs/cli/gcli-migration)、[非対話モード](https://antigravity.google/docs/cli/headless/)。
 
-## Gemini CLI（互換設定）
+## Gemini CLI
 
-旧設定は移行用に保持しています。新規導入とWeb検索にはAntigravity CLIを使います。
+開発用エージェントです。Gemini CLIを含む各エージェントのWeb検索は、共通ガイドに従ってAntigravity CLIへ委譲します。
 
 設定ファイル: `ai-agents/gemini/settings.json`
 

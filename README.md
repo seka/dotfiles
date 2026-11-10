@@ -15,7 +15,7 @@ dotfiles/
 ├── terminal/          # zsh / tmux / starship設定
 ├── editors/           # Neovim / VS Code設定
 ├── git/               # Git設定
-├── ai-agents/         # Claude Code / Codex / Antigravity CLI設定
+├── ai-agents/         # Claude Code / Codex / Gemini CLI / Antigravity CLI設定
 └── docs/              # ツールと設定の詳細
 ```
 
@@ -126,7 +126,7 @@ wingetログ:
 - Git設定
 - NeovimとVS Code設定
 - VS Code拡張一覧
-- Claude Code、Codex、Antigravity CLI設定
+- Claude Code、Codex、Gemini CLI、Antigravity CLI設定
 - AIエージェント向けガイドとスキル
 
 パッケージの導入方法、シェル、ランタイム管理、PATH設定はOSごとに分離します。
