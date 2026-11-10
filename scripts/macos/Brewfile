@@ -171,6 +171,7 @@ cask "claude"
 cask "claude-code"
 cask "codex-app"
 cask "codex"
+brew "gemini-cli"
 cask "antigravity-cli"
 cask "chatgpt-atlas"
 
