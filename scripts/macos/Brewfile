@@ -62,6 +62,7 @@ brew "wget"
 brew "ripgrep"
 brew "codespell"
 brew "bat"                  # Cat with syntax highlighting
+brew "leaf-markdown-viewer" # Terminal Markdown previewer
 brew "eza"                  # Modern ls replacement
 brew "fd"                   # Fast find alternative
 brew "htop"                 # Interactive process viewer

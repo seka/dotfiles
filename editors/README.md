@@ -39,6 +39,25 @@ nvim
 :Mason
 ```
 
+### Markdown プレビュー
+
+[Leaf](https://github.com/rivolink/leaf) を使い、現在のファイルを右側の分割ウィンドウでプレビューできます。
+
+```bash
+brew install leaf-markdown-viewer
+```
+
+Markdown ファイルを保存してから、次のコマンドを実行します。
+
+```vim
+:Leaf
+```
+
+- `:w` で保存するたびにプレビューが更新されます。未保存の編集内容は反映されません。
+- ファイル名に空白が含まれていても利用できます。
+- プレビュー内の `q` で Leaf を終了します。
+- 設定追加後、起動中の Neovim には `:runtime commands.vim` でコマンドを読み込めます。
+
 ### ログ確認
 
 ```bash
