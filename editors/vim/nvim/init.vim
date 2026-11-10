@@ -38,7 +38,6 @@ set backupdir=~/dotfiles/editors/vim/backups
 " load plugin
 " ----------------------------------------
 runtime! ./install-plugins.vim
-lua require('treesitter_compat')
 
 " ----------------------------------------
 " Plugin settings

@@ -92,6 +92,7 @@ brew "lazygit"              # Simple terminal UI for git commands
 # development tools
 # ------------------------------
 brew "neovim"
+brew "tree-sitter-cli"           # nvim-treesitter parser generation (stable CLI)
 brew "ctags"                # Programming tool that generates an index
 brew "shellcheck"           # Static analysis tool for shell scripts
 brew "highlight"            # Converts sourcecode to HTML, RTF, LaTeX, etc

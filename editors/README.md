@@ -6,7 +6,9 @@
 
 #### 1. 依存関係
 
-- **Neovim** 0.8+
+- **Neovim** 0.12+
+- **tree-sitter CLI** 0.26.1+（macOS: `brew install tree-sitter-cli`。npm版は使用しない）
+- **Cコンパイラー**、**tar**、**curl**（パーサーのビルド・取得用）
 - **Deno** (denops.vim用)
 - **Node.js** (一部LSPサーバー用)
 - **Git**
@@ -38,6 +40,39 @@ nvim
 " 対応言語: Lua, TypeScript, Go, Python, Rust, HTML, CSS, JSON
 :Mason
 ```
+
+### Tree-sitter
+
+nvim-treesitter は旧 `master` から現行 `main` へ移行し、コミット
+`19bdfc04f40ed2ccb3340591d125f759b0406875` に固定しています。
+現行版には正式リリースタグがないための例外で、CLI は正式リリース版を利用します。
+旧版向けの `treesitter_compat.lua` は不要です。
+
+既存環境では Neovim 内で対象プラグインを更新し、キャッシュを再構築して再起動します。
+
+```vim
+:call dein#update(['nvim-treesitter'])
+" 更新完了後に実行
+:call dein#recache_runtimepath()
+```
+
+プラグインの固定コミットを今後更新した場合は、再起動後に `:TSUpdate` で
+導入済みパーサーも更新してください。
+現状はパーサーの自動インストールやハイライトの自動有効化は設定していません。
+必要な言語を `:TSInstall lua` などで導入し、ハイライトは
+`vim.treesitter.start()` で有効にします。
+
+### 保守終了プラグインの整理
+
+- `indentLine` は `indent-blankline.nvim` v3.10.1 に移行。インデントガイドは維持し、Tree-sitter が必要な scope 表示は無効。
+- `vim-multiple-cursors` は `vim-visual-multi` v0.5.8 に移行。`Ctrl-N` で単語・次の一致を選択し、`Tab` でカーソル／領域モードを切り替えます。詳細は `:help visual-multi`。
+- `vim-godef` は登録解除。Go の定義移動は既存の gopls / LSP の `gd` を使用。
+- `vim-nerdtree-tabs` は登録解除。NERDTree 本体は維持しますが、タブ間のツリー同期は提供しません。
+- Mason、NERDTree、NERDCommenter、Tagbar は移管後のリポジトリ名に更新。
+- `plenary.nvim` は保守終了の案内がありますが、Telescope の必須依存なので維持。
+- プラグインマネージャーは引き続き dein を使用。
+
+登録解除したプラグインの取得済みディレクトリは、復元用に残しています。
 
 ### Markdown プレビュー
 

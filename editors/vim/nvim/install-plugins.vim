@@ -36,11 +36,11 @@ if dein#load_state(pluginBaseDir)
   call dein#add('akinsho/toggleterm.nvim')
   call dein#add('nvim-lua/plenary.nvim')
   call dein#add('nvim-telescope/telescope.nvim')
-  call dein#add('nvim-treesitter/nvim-treesitter')
+  " main に正式タグがないためコミットを固定し、更新時の予期しない API 変更を防ぐ。
+  call dein#add('nvim-treesitter/nvim-treesitter', {'rev': '19bdfc04f40ed2ccb3340591d125f759b0406875'})
   call dein#add('Shougo/neomru.vim')
-  call dein#add('scrooloose/nerdtree')
-  call dein#add('scrooloose/nerdcommenter')
-  call dein#add('jistr/vim-nerdtree-tabs')
+  call dein#add('preservim/nerdtree')
+  call dein#add('preservim/nerdcommenter')
   call dein#add('akinsho/bufferline.nvim')
   call dein#add('nvim-tree/nvim-web-devicons')
   call dein#add('mfussenegger/nvim-lint')
@@ -50,15 +50,15 @@ if dein#load_state(pluginBaseDir)
   call dein#add('nvim-lualine/lualine.nvim')
   call dein#add('godlygeek/tabular')
   call dein#add('easymotion/vim-easymotion')
-  call dein#add('majutsushi/tagbar')
+  call dein#add('preservim/tagbar')
   call dein#add('jiangmiao/auto-pairs')
-  call dein#add('Yggdroot/indentLine')
-  call dein#add('terryma/vim-multiple-cursors')
+  call dein#add('lukas-reineke/indent-blankline.nvim', {'rev': 'v3.10.1'})
+  call dein#add('mg979/vim-visual-multi', {'rev': 'v0.5.8'})
   call dein#add('editorconfig/editorconfig-vim')
 
   " LSP
-  call dein#add('williamboman/mason.nvim')
-  call dein#add('williamboman/mason-lspconfig.nvim')
+  call dein#add('mason-org/mason.nvim')
+  call dein#add('mason-org/mason-lspconfig.nvim')
   call dein#add('neovim/nvim-lspconfig')
 
   " JSON
@@ -75,7 +75,6 @@ if dein#load_state(pluginBaseDir)
 
   " golang
   call dein#add('fatih/vim-go')
-  call dein#add('dgryski/vim-godef')
 
   " ruby
   call dein#add('vim-ruby/vim-ruby')

@@ -13,11 +13,6 @@ let g:NERDTreeDirArrows = 1
 " 自動クローズ機能を無効化してエラーを回避
 let g:NERDTreeChDirMode = 0
 
-" vim-nerdtree-tabsとの競合回避
-let g:nerdtree_tabs_open_on_console_startup = 0
-let g:nerdtree_tabs_focus_on_files = 1
-let g:nerdtree_tabs_smart_startup_focus = 1
-
 " 削除済み: minibufexpl設定
 
 " WinEnterイベントでのエラーハンドリング強化
@@ -37,16 +32,17 @@ noremap <C-L> <C-W>l
 
 
 " ----------------------------------------
-" vim-indent-line
+" indent-blankline.nvim
 " ----------------------------------------
-" Enable by default
-let g:indentLine_enabled = 1
-" Tabs support
+" インデントガイドを仮想テキストで表示し、既存の listchars 設定を維持する。
+" パーサー未導入でもガイドを使えるよう、Tree-sitter に依存する scope は無効にする。
 set list lcs=tab:\|\ " (here is a space)
-" Change character color for Vim
-let g:indentLine_color_term = 239
-let g:indentLine_color_tty_light = 7 " (default: 4)
-let g:indentLine_color_dark = 1 " (default: 2)
+lua << EOF
+require('ibl').setup({
+  indent = { char = '│' },
+  scope = { enabled = false },
+})
+EOF
 
 " ----------------------------------------
 " yanktmp
