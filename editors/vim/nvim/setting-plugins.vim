@@ -286,8 +286,9 @@ let g:vim_tags_directories = [".git", ".hg", ".svn", ".bzr", "_darcs", "CVS"]
 " Deno実行ファイルのパスを明示的に指定
 let g:denops#deno = '/opt/homebrew/bin/deno'
 
-" Denoサーバーの引数設定（セキュリティ重視・最小権限の原則）
-let g:denops#server#deno_args = ['-q', '--no-lock', '--allow-env', '--allow-read', '--allow-net']
+" 変換キャッシュを生成できるよう、保存先と書き込み許可の範囲を同じ専用ディレクトリに揃える。
+let g:denops#deno_dir = stdpath('cache') . '/denops/deno'
+let g:denops#server#deno_args = ['-q', '--no-lock', '--allow-env', '--allow-read', '--allow-net', '--allow-write=' . g:denops#deno_dir]
 
 " バージョンチェック無効化（互換性問題回避）
 let g:denops_disable_version_check = 1

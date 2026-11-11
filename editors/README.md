@@ -213,6 +213,12 @@ editors/
 
 #### denopsエラー
 
+denops の Deno キャッシュは `stdpath('cache') . '/denops/deno'` に保存し、
+そのディレクトリに限定して書き込みを許可しています。
+`Failed to transform` / `Requires write access` が出る場合は、設定を反映するため
+Neovim を再起動してください。初回は専用キャッシュへの依存取得が発生します。
+
+
 ```vim
 :DenopsCheck
 :DenopsRestart
