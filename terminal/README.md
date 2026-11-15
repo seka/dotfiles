@@ -239,3 +239,45 @@ autoload -Uz compinit && compinit
 # Zinit補完の再構築
 zinit creinstall %HOME/dotfiles/terminal
 ```
+
+## tmux
+
+macOSでは`~/.tmux.conf`から`terminal/tmux.conf`を読み込みます。prefixキーは`Ctrl+t`です。
+
+### 作業環境の保存・復元
+
+`scripts/macos/setup-tmux`がtmux設定を配置し、[TPM](https://github.com/tmux-plugins/tpm)を取得します。TPMは`terminal/tmux.conf`の`@plugin`一覧から次のプラグインを`~/.tmux/plugins/`へ導入します。再実行時は既存のGit checkoutを保持します。`install.sh`からも実行されます。Windowsセットアップでは導入しません。
+
+- [tmux-resurrect](https://github.com/tmux-plugins/tmux-resurrect): セッション、ウィンドウ、ペイン配置、作業ディレクトリを保存・復元
+- [tmux-continuum](https://github.com/tmux-plugins/tmux-continuum): 15分ごとの自動保存とtmuxサーバー起動時の自動復元
+
+既存環境へセットアップする場合:
+
+```bash
+bash scripts/macos/setup-tmux
+```
+
+起動中のtmuxへ設定を反映する場合:
+
+```bash
+tmux source-file ~/.tmux.conf
+```
+
+| 操作 | キー |
+| --- | --- |
+| 今すぐ保存 | `Ctrl+t` → `Ctrl+s` |
+| 最後の保存状態を復元 | `Ctrl+t` → `Ctrl+r` |
+
+再起動前に最新状態を残したい場合は、手動で保存してください。保存先は既存の`~/.tmux/resurrect/`があればそのディレクトリ、それ以外は`${XDG_DATA_HOME:-~/.local/share}/tmux/resurrect/`です。自動復元はtmuxサーバーの起動時だけ実行され、設定の再読み込みや既存サーバーへの接続では実行されません。
+
+Continuumは複数のtmuxサーバーがある場合、保存データの競合を防ぐため自動保存・復元を抑制することがあります。通常の単一サーバー内で複数セッションを使う構成を想定しています。
+
+Continuumの定期保存にはステータスバーが必要です。`status-right`に処理を追加するため、テーマなどを追加する場合もContinuumを最後に読み込みます。
+
+復元はプロセスの内部状態の再開ではありません。一部のプログラムはResurrectの既定設定に従って再起動されますが、AIの会話や実行途中の処理、開発サーバーの状態は復元しません。Neovimの編集セッション復元とペインの表示内容の保存は、追加設定が必要で、この構成では有効にしていません。
+
+### プラグイン管理
+
+プラグインは`terminal/tmux.conf`の`@plugin`一覧で管理し、セットアップ時に不足分を導入します。Continuumを一覧の最後に置き、TPM初期化後に追加・更新のショートカットを解除します。
+
+セットアップスクリプトは既存プラグインを自動更新しません。TPMによる更新の自動検知・通知もありません。

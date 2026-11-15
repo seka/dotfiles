@@ -31,6 +31,7 @@ run_if_exists scripts/macos/macos-defaults
 
 DOTFILES_OS=macos bash "$DOTFILES_ROOT/scripts/common/setup-pip"
 DOTFILES_OS=macos DOTFILES_ROOT="$DOTFILES_ROOT" bash "$DOTFILES_ROOT/scripts/common/setup-shell-config"
+run_if_exists scripts/macos/setup-tmux
 DOTFILES_OS=macos DOTFILES_ROOT="$DOTFILES_ROOT" bash "$DOTFILES_ROOT/scripts/common/setup-editor-config"
 DOTFILES_OS=macos DOTFILES_ROOT="$DOTFILES_ROOT" bash "$DOTFILES_ROOT/scripts/common/setup-agent-config"
 DOTFILES_OS=macos bash "$DOTFILES_ROOT/scripts/common/setup-ai-agents" || echo "AI agent setup failed. Local dotfiles are already installed."

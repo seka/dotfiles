@@ -35,6 +35,8 @@ zshをログインシェルとして使用し、Zinit、Starship、fzf、tmux、
 
 direnvでディレクトリごとの環境変数を管理します。zsh hookは設定済みで、プロジェクトごとに`.envrc`を作成して読み込みを許可すると利用できます。手順は[ターミナル設定](../terminal/README.md#direnv)を参照してください。
 
+tmuxにはResurrectとContinuumを導入し、作業環境を15分ごとに保存して、tmuxサーバー起動時に復元します。セットアップ・操作・復元範囲は[tmuxの手順](../terminal/README.md#tmux)を参照してください。
+
 ### macOS固有
 
 - Xcode管理: xcodes

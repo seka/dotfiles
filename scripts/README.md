@@ -22,9 +22,12 @@ macOS-specific scripts:
 ```text
 scripts/macos/setup-brew
 scripts/macos/setup-login-shell
+scripts/macos/setup-tmux
 scripts/macos/macos-defaults
 scripts/macos/Brewfile
 ```
+
+`setup-tmux` places the tmux configuration, bootstraps TPM, and installs the plugins declared in `terminal/tmux.conf`. Existing plugin checkouts are reused.
 
 ## Windows
 

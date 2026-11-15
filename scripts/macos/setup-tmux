@@ -1,0 +1,22 @@
+#!/usr/bin/env bash
+
+set -o errexit -o nounset -o pipefail
+
+DOTFILES_ROOT="${DOTFILES_ROOT:-$(cd "$(dirname "$0")/../.." && pwd)}"
+
+echo "==> Installing tmux configuration"
+ln -sf "$DOTFILES_ROOT/terminal/tmux.conf" "$HOME/.tmux.conf"
+
+# 設定を正本としてプラグインを管理するため、TPM本体だけを取得し、導入一覧の解決はTPMに任せる。
+# 再実行時は既存checkoutを保持し、更新はTPMの更新操作で明示的に行う。
+tpm_dir="$HOME/.tmux/plugins/tpm"
+if [[ ! -d "$tpm_dir/.git" ]]; then
+  mkdir -p "$(dirname "$tpm_dir")"
+  git clone https://github.com/tmux-plugins/tpm.git "$tpm_dir"
+fi
+
+# 稼働中のサーバーにもTPMの環境変数を登録してから導入し、新規プラグインを再読み込みする。
+tmux start-server \; source-file "$HOME/.tmux.conf"
+"$tpm_dir/bin/install_plugins"
+tmux start-server \; source-file "$HOME/.tmux.conf"
+echo "--> tmux configuration and plugins ready"

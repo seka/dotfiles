@@ -33,7 +33,7 @@ for F in $(find "$DOTFILES_ROOT"/git "$DOTFILES_ROOT"/terminal -type f -not -nam
     "terminal/zshenv") [[ "$DOTFILES_OS" != "windows" ]] && copy_or_link_file "$F" "$HOME/.zshenv" ;;
     "terminal/zshrc") [[ "$DOTFILES_OS" != "windows" ]] && copy_or_link_file "$F" "$HOME/.config/zsh/.zshrc" ;;
     "terminal/tigrc") copy_or_link_file "$F" "$HOME/.tigrc" ;;
-    "terminal/tmux.conf") [[ "$DOTFILES_OS" != "windows" ]] && copy_or_link_file "$F" "$HOME/.tmux.conf" ;;
+    "terminal/tmux.conf") ;; # tmux設定はmacOSのsetup-tmuxで配置する。
     "terminal/"*) [[ "$DOTFILES_OS" != "windows" ]] && copy_or_link_file "$F" "$HOME/.config/zsh/$filename" ;;
 
     "git/config") copy_or_link_file "$F" "$HOME/.config/git/config" ;;
