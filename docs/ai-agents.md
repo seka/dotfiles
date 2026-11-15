@@ -91,6 +91,21 @@ Geminiアプリでは、書き出された各 `名前/SKILL.md` または各ス�
 | `standup` | デイリースタンドアップ用サマリー生成 |
 | `worktree` | git worktree を使った機能ブランチ管理 |
 
+### 公式agent-browserスキル
+
+[vercel-labs/agent-browser](https://github.com/vercel-labs/agent-browser)の公式スキルを`scripts/common/setup-ai-agents`から導入します。Claude Code / Codex / Gemini CLI / Copilotを対象にし、Antigravity CLIには既存の配布スクリプトで配置します。
+
+既存環境へ個別に導入する場合:
+
+```bash
+npx skills add vercel-labs/agent-browser --skill agent-browser --global --agent claude-code codex gemini-cli github-copilot --yes
+bash scripts/common/distribute-skills --source ~/.agents/skills --skill agent-browser --target antigravity
+```
+
+公式スキルは`agent-browser skills get core`でCLIのバージョンに対応した操作ガイドを読み込みます。探索的QAには`agent-browser skills get dogfood`で専用の手順を参照できます。ブラウザ操作の範囲と認証情報の扱いは[共通ガイド](../ai-agents/AGENTS.md#ブラウザでのローカルサービス確認)に従います。
+
+利用例: 「agent-browserスキルで、http://localhost:3000 のフォームの必須入力と送信後の画面遷移を確認して」。通常のUI変更だけでは実行を必須にしません。CLIとブラウザの導入は[CLIツール](tools-cli.md#ai向けブラウザ操作)を参照してください。
+
 ### [awesome-copilot](https://github.com/github/awesome-copilot) スキル
 
 | スキル | 説明 |

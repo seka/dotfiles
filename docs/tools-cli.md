@@ -37,6 +37,21 @@ direnvでディレクトリごとの環境変数を管理します。zsh hookは
 
 tmuxにはResurrectとContinuumを導入し、作業環境を15分ごとに保存して、tmuxサーバー起動時に復元します。セットアップ・操作・復元範囲は[tmuxの手順](../terminal/README.md#tmux)を参照してください。
 
+### AI向けブラウザ操作
+
+`agent-browser`をHomebrewで導入します。`scripts/macos/setup-brew`はCLI導入後に`agent-browser install`を実行し、専用のChrome for Testingも取得します。Chrome拡張、agent-browser用のアカウント、APIキー、MCPの登録は不要です。
+
+既存のMacへ個別に導入する場合:
+
+```bash
+brew install agent-browser
+agent-browser install
+```
+
+普段のChromeへ接続せずに利用でき、既存のログイン状態は共有しません。アクセス先を制限する許可リストは既定では設定していません。専用ブラウザでも別サイトへのアクセス自体は可能です。
+
+動作確認には[公式agent-browserスキル](ai-agents.md#公式agent-browserスキル)を使います。導入方法は[公式資料](https://agent-browser.dev/installation)を参照してください。Windowsではスキルの配布に対応しますが、本体とブラウザの自動導入はこのセットアップの対象外です。
+
 ### macOS固有
 
 - Xcode管理: xcodes
