@@ -9,7 +9,7 @@
 - **Neovim** 0.12+
 - **tree-sitter CLI** 0.26.1+（macOS: `brew install tree-sitter-cli`。npm版は使用しない）
 - **Cコンパイラー**、**tar**、**curl**（パーサーのビルド・取得用）
-- **Deno** (denops.vim用)
+- **Deno** 2.3.0+ (denops.vim / dpp.vim用)
 - **Node.js** (一部LSPサーバー用)
 - **Git**
 - **ripgrep** (telescope検索用)
@@ -17,7 +17,7 @@
 #### 2. 初期化
 
 ```bash
-# Neovim起動（初回はプラグインインストールが実行される）
+# Neovim起動（初回は dpp の状態生成とプラグイン取得が実行される）
 nvim
 
 # LSPサーバー管理画面
@@ -27,11 +27,14 @@ nvim
 :checkhealth
 ```
 
+初回は取得完了のメッセージを待って Neovim を再起動してください。
+状態を読み込める次回起動から、LSP・補完・各プラグイン設定が有効になります。
+
 ### プラグイン追加
 
-1. `install-plugins.vim` にプラグインを追加
+1. `dpp.ts` の `repositories` にプラグインを追加
 2. `setting-plugins.vim` に設定を追加
-3. `:call dein#install()` で インストール
+3. `:DppInstall` で状態を再生成して不足プラグインを取得し、完了後に再起動
 
 #### LSPサーバーインストール
 
@@ -41,38 +44,30 @@ nvim
 :Mason
 ```
 
-### Tree-sitter
+### プラグイン構成
 
-nvim-treesitter は旧 `master` から現行 `main` へ移行し、コミット
-`19bdfc04f40ed2ccb3340591d125f759b0406875` に固定しています。
-現行版には正式リリースタグがないための例外で、CLI は正式リリース版を利用します。
-旧版向けの `treesitter_compat.lua` は不要です。
-
-既存環境では Neovim 内で対象プラグインを更新し、キャッシュを再構築して再起動します。
-
-```vim
-:call dein#update(['nvim-treesitter'])
-" 更新完了後に実行
-:call dein#recache_runtimepath()
+```
+editors/
+└── vim/
+    ├── nvim/
+    │   ├── init.vim              # メイン設定ファイル
+    │   ├── install-plugins.vim   # dpp の初回構築・状態読み込み
+    │   ├── dpp.ts                # プラグイン一覧・固定リビジョン
+    │   ├── setting-plugins.vim   # プラグイン設定
+    │   ├── commands.vim          # カスタムコマンド
+    │   └── lua/
+    │       └── lsp_config.lua    # LSP・モダンプラグイン設定
+    ├── plugins/
+    │   ├── repos/github.com/     # プラグインの取得先（所有者／リポジトリ名）
+    │   └── nvim/                 # dpp の状態ファイル・生成した runtimepath
+    ├── swaps/                    # スワップファイル保存先
+    └── backups/                  # バックアップファイル保存先
 ```
 
-プラグインの固定コミットを今後更新した場合は、再起動後に `:TSUpdate` で
-導入済みパーサーも更新してください。
-現状はパーサーの自動インストールやハイライトの自動有効化は設定していません。
-必要な言語を `:TSInstall lua` などで導入し、ハイライトは
-`vim.treesitter.start()` で有効にします。
-
-### 保守終了プラグインの整理
-
-- `indentLine` は `indent-blankline.nvim` v3.10.1 に移行。インデントガイドは維持し、Tree-sitter が必要な scope 表示は無効。
-- `vim-multiple-cursors` は `vim-visual-multi` v0.5.8 に移行。`Ctrl-N` で単語・次の一致を選択し、`Tab` でカーソル／領域モードを切り替えます。詳細は `:help visual-multi`。
-- `vim-godef` は登録解除。Go の定義移動は既存の gopls / LSP の `gd` を使用。
-- `vim-nerdtree-tabs` は登録解除。NERDTree 本体は維持しますが、タブ間のツリー同期は提供しません。
-- Mason、NERDTree、NERDCommenter、Tagbar は移管後のリポジトリ名に更新。
-- `plenary.nvim` は保守終了の案内がありますが、Telescope の必須依存なので維持。
-- プラグインマネージャーは引き続き dein を使用。
-
-登録解除したプラグインの取得済みディレクトリは、復元用に残しています。
+`init.vim` が `install-plugins.vim` を読み込み、dpp の状態からプラグインの
+runtimepath を設定します。`dpp.ts` は取得先と固定リビジョンを定義します。
+プラグインを読み込める状態では、`setting-plugins.vim` と `lua/lsp_config.lua` で
+各プラグインと LSP を設定します。
 
 ### Markdown プレビュー
 
@@ -103,38 +98,69 @@ Markdown ファイルを保存してから、次のコマンドを実行しま�
 nvim --headless -c "messages" -c "qa!"
 ```
 
-### ディレクトリ構成
-
-```
-editors/
-└── vim/
-    ├── nvim/
-    │   ├── init.vim              # メイン設定ファイル
-    │   ├── install-plugins.vim   # プラグイン定義
-    │   ├── setting-plugins.vim   # プラグイン設定
-    │   ├── commands.vim          # カスタムコマンド
-    │   └── lua/
-    │       └── lsp_config.lua    # LSP・モダンプラグイン設定
-    ├── plugins/                  # プラグインファイル（dein.vim管理）
-    ├── swaps/                    # スワップファイル保存先
-    └── backups/                  # バックアップファイル保存先
-```
-
 ### プラグイン一覧
 
-- **mason.nvim**: LSPサーバー自動管理
-- **nvim-lspconfig**: LSP設定
-- **ddc.vim**: 補完エンジン（ddc-source-lspでLSP統合）
-- **telescope.nvim**: ファジーファインダー・検索
-- **toggleterm.nvim**: ターミナル統合
-- **bufferline.nvim**: バッファ管理
-- **lualine.nvim**: ステータスライン
-- **nvim-lint**: リンティング
-- **conform.nvim**: フォーマッティング
-- **NERDTree**: ファイルエクスプローラー
-- **vim-fugitive**: Git統合
-- **vim-surround**: テキストオブジェクト操作
-- **easymotion**: 高速移動
+#### dpp.vim
+
+プラグインマネージャーです。`dpp-ext-installer` と `dpp-protocol-git` を組み合わせ、
+Git リポジトリからプラグインを取得・更新します。
+
+`DppInstall` は不足分の取得、`DppUpdate [プラグイン名 ...]` は更新、`DppCache` は状態だけの再生成です。
+一覧・固定リビジョンを変更した場合は `DppInstall`、取得を伴わない状態再生成には `DppCache` を使い、完了後に再起動してください。
+
+#### denops.vim
+
+Deno で動く dpp・ddc と Neovim を接続する共通基盤です。
+
+通常は denops の個別サーバーを使い、共有サーバーへの接続は必須にしません。
+設定はプラグイン読み込み前に `install-plugins.vim` で行います。
+dpp のヘルプ結合はシンボリックリンクを作るため、Deno の書き込み権限はパスで制限できません。
+外部コマンド実行は Git と Deno に限定しています。
+
+#### 補完・検索
+
+- **ddc.vim**: 補完エンジン。`ddc-source-lsp` で LSP の候補、`ddc-source-around` で周辺テキストの候補を取得し、pum のポップアップに表示します。
+- **neosnippet**: スニペットの展開とプレースホルダー間の移動。定義は `neosnippet-snippets` を使用します。
+- **telescope.nvim**: ファイル・文字列・バッファなどの検索。`plenary.nvim` を必須依存として使用します。
+
+#### LSP・診断・整形
+
+- **mason.nvim / mason-lspconfig.nvim**: `ensure_installed` で言語サーバーを取得します。
+- **nvim-lspconfig**: 言語サーバーの定義を提供します。`vim.lsp.config()` で設定し、`vim.lsp.enable()` で有効化します。Go の定義移動は gopls / LSP の `gd` を使用します。
+- **Neovim 標準診断**: 移動は `vim.diagnostic.jump()`、サインは `vim.diagnostic.config()` で設定します。
+- **nvim-lint**: ファイル保存後に言語別のリンターを実行します。
+- **conform.nvim**: 保存時の整形。`lsp_format = "fallback"` で、外部フォーマッターを利用できない場合に LSP を使用します。
+
+#### 表示・編集支援
+
+- **toggleterm.nvim**: フローティングターミナル。
+- **bufferline.nvim**: バッファ一覧の表示と切り替え。
+- **lualine.nvim**: ステータスライン。
+- **NERDTree**: ファイルツリー。タブ間のツリー同期は提供しません。
+- **indent-blankline.nvim**: v3.10.1 を使用してインデントガイドを表示します。scope 表示は無効です。
+- **vim-visual-multi**: v0.5.8 を使用した複数カーソル編集。`Ctrl-N` で単語・次の一致を選択し、`Tab` でカーソル／領域モードを切り替えます。詳細は `:help visual-multi`。
+- **vim-fugitive**: Git 操作。
+- **vim-surround**: 囲み文字の追加・変更・削除。
+- **easymotion**: 画面内の高速移動。
+
+#### nvim-treesitter
+
+nvim-treesitter は `main` ブランチのコミット
+`19bdfc04f40ed2ccb3340591d125f759b0406875` に固定しています。
+現行版には正式リリースタグがないための例外で、CLI は正式リリース版を利用します。
+
+既存環境では Neovim 内で対象プラグインを更新し、キャッシュを再構築して再起動します。
+
+```vim
+:DppUpdate nvim-treesitter
+" 更新後の状態再生成は自動。完了メッセージを待って再起動
+```
+
+プラグインの固定コミットを今後更新した場合は、再起動後に `:TSUpdate` で
+導入済みパーサーも更新してください。
+現状はパーサーの自動インストールやハイライトの自動有効化は設定していません。
+必要な言語を `:TSInstall lua` などで導入し、ハイライトは
+`vim.treesitter.start()` で有効にします。
 
 ### 主要ショートカット一覧
 
@@ -213,8 +239,7 @@ editors/
 
 #### denopsエラー
 
-denops の Deno キャッシュは `stdpath('cache') . '/denops/deno'` に保存し、
-そのディレクトリに限定して書き込みを許可しています。
+denops の Deno キャッシュは `stdpath('cache') . '/denops/deno'` に保存します。
 `Failed to transform` / `Requires write access` が出る場合は、設定を反映するため
 Neovim を再起動してください。初回は専用キャッシュへの依存取得が発生します。
 
@@ -227,8 +252,9 @@ Neovim を再起動してください。初回は専用キャッシュへの依�
 #### プラグインインストールエラー
 
 ```vim
-:call dein#update()
-:call dein#recache_runtimepath()
+:DppInstall
+" 状態だけ再生成する場合
+:DppCache
 ```
 
 #### 補完が効かない
@@ -297,7 +323,7 @@ editors/
 
 #### インフラ・ツール
 
-- **ms-azuretools.vscode-docker**: Docker サポート
+- **ms-azuretools.vscode-containers**: Container Tools（Docker / Podman サポート）
 - **ms-vscode-remote.remote-containers**: Dev Containers
 - **ms-vscode.makefile-tools**: Makefile サポート
 - **bradlc.vscode-tailwindcss**: Tailwind CSS サポート

@@ -40,14 +40,13 @@ set backupdir=~/dotfiles/editors/vim/backups
 runtime! ./install-plugins.vim
 
 " ----------------------------------------
-" Plugin settings
+" Plugin settings / LSP（初回取得後の再起動から読み込む）
 " ----------------------------------------
-runtime! setting-plugins.vim
+if get(g:, 'dotfiles_plugins_ready', 0)
+  runtime! setting-plugins.vim
 
-" ----------------------------------------
-" LSP and Plugin configuration
-" ----------------------------------------
-lua require('lsp_config')
+  lua require('lsp_config')
+endif
 
 " ----------------------------------------
 " Git Mergetool Enhancement

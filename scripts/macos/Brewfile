@@ -40,7 +40,6 @@ brew "pipx"
 # ------------------------------
 brew "zsh"
 brew "zsh-completions"
-brew "zplug"
 brew "fzf"               # Command-line fuzzy finder
 brew "tig"               # Text-mode interface for git
 brew "tmux"              # Terminal multiplexer

@@ -283,16 +283,6 @@ let g:vim_tags_directories = [".git", ".hg", ".svn", ".bzr", "_darcs", "CVS"]
 " ----------------------------------------
 " denops.vim
 " ----------------------------------------
-" Deno実行ファイルのパスを明示的に指定
-let g:denops#deno = '/opt/homebrew/bin/deno'
-
-" 変換キャッシュを生成できるよう、保存先と書き込み許可の範囲を同じ専用ディレクトリに揃える。
-let g:denops#deno_dir = stdpath('cache') . '/denops/deno'
-let g:denops#server#deno_args = ['-q', '--no-lock', '--allow-env', '--allow-read', '--allow-net', '--allow-write=' . g:denops#deno_dir]
-
-" バージョンチェック無効化（互換性問題回避）
-let g:denops_disable_version_check = 1
-
 " denopsのデバッグモード（必要時のみ有効化）
 let g:denops#debug = 0
 
@@ -312,20 +302,20 @@ command! DenopsFixCache call denops#cache#update(#{reload: v:true})
 " ----------------------------------------
 " 使用方法：
 " 1. 最初に :DenopsSharedServer を実行して共有サーバーを起動
-" 2. Vimを再起動するとdenopsが共有サーバーに接続
+" 2. g:denops_server_addr を設定して再起動すると共有サーバーに接続
 " 3. 問題があれば以下のコマンドで状況確認:
 "    :DenopsCheck  - サーバープロセス確認
 "    :DenopsStatus - denops接続状況確認
 "    :DenopsLog    - サーバーログ確認
 "    :DenopsRestart - denops再起動
 "
-" 共有サーバーアドレスの設定（個別サーバー起動問題を回避）
-let g:denops_server_addr = '127.0.0.1:32123'
+" 通常は個別サーバーを使用し、共有サーバーを選ぶ場合だけ接続先を指定する。
+" let g:denops_server_addr = '127.0.0.1:32123'
 
 " 共有サーバー起動コマンド（改善版 - より確実な起動）
 function! s:start_denops_shared_server() abort
-  let l:denops_dir = expand('~/dotfiles/editors/vim/plugins/repos/github.com/vim-denops/denops.vim')
-  let l:deno_path = '/opt/homebrew/bin/deno'
+  let l:denops_dir = g:dotfiles_plugin_base . '/repos/github.com/vim-denops/denops.vim'
+  let l:deno_path = g:denops#deno
   let l:script_path = l:denops_dir . '/denops/@denops-private/cli.ts'
 
   " サーバーが既に起動しているかチェック

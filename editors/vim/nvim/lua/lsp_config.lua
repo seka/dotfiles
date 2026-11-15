@@ -30,7 +30,8 @@ require("mason-lspconfig").setup({
     "bashls",           -- Shell script
     "autotools_ls",     -- Makefile
   },
-  automatic_installation = true,
+  -- 各サーバーの設定後に有効化し、Mason による設定前の自動起動を避ける。
+  automatic_enable = false,
 })
 
 -- ----------------------------------------
@@ -54,8 +55,12 @@ local on_attach = function(client, bufnr)
 
   -- Diagnostics
   vim.keymap.set('n', '<space>e', vim.diagnostic.open_float, opts)
-  vim.keymap.set('n', '[d', vim.diagnostic.goto_prev, opts)
-  vim.keymap.set('n', ']d', vim.diagnostic.goto_next, opts)
+  vim.keymap.set('n', '[d', function()
+    vim.diagnostic.jump({ count = -1, float = true })
+  end, opts)
+  vim.keymap.set('n', ']d', function()
+    vim.diagnostic.jump({ count = 1, float = true })
+  end, opts)
   vim.keymap.set('n', '<space>q', vim.diagnostic.setloclist, opts)
 end
 
@@ -168,18 +173,25 @@ configure("clangd", {
 -- ----------------------------------------
 vim.diagnostic.config({
   virtual_text = true,
-  signs = true,
+  -- 以前の空白サインと行番号の色を維持し、診断専用 API で重要度ごとに指定する。
+  signs = {
+    text = {
+      [vim.diagnostic.severity.ERROR] = " ",
+      [vim.diagnostic.severity.WARN] = " ",
+      [vim.diagnostic.severity.INFO] = " ",
+      [vim.diagnostic.severity.HINT] = " ",
+    },
+    numhl = {
+      [vim.diagnostic.severity.ERROR] = "DiagnosticSignError",
+      [vim.diagnostic.severity.WARN] = "DiagnosticSignWarn",
+      [vim.diagnostic.severity.INFO] = "DiagnosticSignInfo",
+      [vim.diagnostic.severity.HINT] = "DiagnosticSignHint",
+    },
+  },
   underline = true,
   update_in_insert = false,
   severity_sort = false,
 })
-
--- Diagnostic signs
-local signs = { Error = " ", Warn = " ", Hint = " ", Info = " " }
-for type, icon in pairs(signs) do
-  local hl = "DiagnosticSign" .. type
-  vim.fn.sign_define(hl, { text = icon, texthl = hl, numhl = hl })
-end
 
 -- ----------------------------------------
 -- Telescope configuration
@@ -337,6 +349,6 @@ require('conform').setup({
   },
   format_on_save = {
     timeout_ms = 500,
-    lsp_fallback = true,
+    lsp_format = "fallback",
   },
 })

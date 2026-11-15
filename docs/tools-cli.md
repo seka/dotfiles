@@ -31,7 +31,7 @@ macOSではHomebrew、Windowsではwingetを使い、可能な範囲で同じCLI
 
 ### シェル
 
-zshをログインシェルとして使用し、zplug、Starship、fzf、tmux、tigを導入します。設定は`terminal/`からシンボリックリンクされます。
+zshをログインシェルとして使用し、Zinit、Starship、fzf、tmux、tigを導入します。設定は`terminal/`からシンボリックリンクされます。
 
 ### macOS固有
 
