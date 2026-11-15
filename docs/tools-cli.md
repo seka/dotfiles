@@ -33,6 +33,8 @@ macOSではHomebrew、Windowsではwingetを使い、可能な範囲で同じCLI
 
 zshをログインシェルとして使用し、Zinit、Starship、fzf、tmux、tigを導入します。設定は`terminal/`からシンボリックリンクされます。
 
+direnvでディレクトリごとの環境変数を管理します。zsh hookは設定済みで、プロジェクトごとに`.envrc`を作成して読み込みを許可すると利用できます。手順は[ターミナル設定](../terminal/README.md#direnv)を参照してください。
+
 ### macOS固有
 
 - Xcode管理: xcodes

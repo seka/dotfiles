@@ -9,6 +9,7 @@
 - **zsh** 5.8+
 - **fzf** (ファジーファインダー)
 - **starship** (プロンプト)
+- **direnv** (ディレクトリごとの環境変数管理)
 - **1Password CLI** (シークレット管理)
 - **ghq** (リポジトリ管理)
 - **tig** (Git UI)
@@ -22,6 +23,28 @@ exec zsh
 # 1Password CLIの認証確認
 check-1password-auth
 ```
+
+### direnv
+
+macOSではHomebrewでdirenvを導入し、`terminal/zshrc`の末尾でzsh hookを有効にします。設定の反映にはターミナルを開き直すか、`exec zsh`を実行します。
+
+direnvはプロジェクトの`.envrc`を読み込み、ディレクトリを離れると環境変数を元に戻します。`.env`は標準では自動読み込みしません。既存の`.env`をシェルからも使う場合は、プロジェクトのルートに次の内容の`.envrc`を作成します。
+
+```bash
+dotenv .env
+```
+
+内容を確認したうえで、そのディレクトリで読み込みを許可します。`.envrc`を変更した場合も再度許可が必要です。
+
+```bash
+direnv allow .
+```
+
+`.envrc`はシェルコードとして実行されるため、信頼できる内容だけを許可します。秘密情報は`.envrc`に直接記載せず、`.env`に置いてGitの追跡対象から除外してください。キャッシュなどを保存する`.direnv/`も各プロジェクトの`.gitignore`に追加します。
+
+Next.jsなどがすでに設定を読み込んでいる場合、direnvの利用は任意です。複数の仕組みで同じ変数を設定すると値の優先順位に影響するため、シェルで共有したい変数に絞って使います。
+
+公式資料: [zsh連携](https://direnv.net/docs/hook.html)、[使い方](https://direnv.net/)。
 
 ### ディレクトリ構成
 
