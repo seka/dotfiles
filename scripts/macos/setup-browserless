@@ -10,46 +10,92 @@ if ! docker info >/dev/null 2>&1; then
   exit 0
 fi
 
-# 認証トークンをリポジトリやプロセス引数に出さないため、端末固有の権限制限付きファイルに保存する。
-# 既存トークンを再利用し、他のCDP接続設定がある場合は上書きせず停止する。
-python3 - <<'PYTHON'
-import json
-import os
-from pathlib import Path
-import secrets
+for dependency in jq openssl; do
+  if ! command -v "$dependency" >/dev/null 2>&1; then
+    echo "Required command is missing: $dependency" >&2
+    exit 1
+  fi
+done
 
-config_dir = Path((os.environ.get("XDG_CONFIG_HOME") or str(Path.home() / ".config"))) / "browserless"
-config_dir.mkdir(parents=True, exist_ok=True)
-config_dir.chmod(0o700)
-env_path = config_dir / "browserless.env"
-if env_path.exists():
-    lines = env_path.read_text().splitlines()
-    token = next((line.removeprefix("TOKEN=") for line in lines if line.startswith("TOKEN=")), "")
-    if not token or not all(c in "0123456789abcdef" for c in token):
-        raise SystemExit("Existing Browserless token file is invalid; it was not overwritten.")
-else:
-    token = secrets.token_hex(32)
-    descriptor = os.open(env_path, os.O_WRONLY | os.O_CREAT | os.O_EXCL, 0o600)
-    with os.fdopen(descriptor, "w") as stream:
-        stream.write("TOKEN=" + token + "\n")
-env_path.chmod(0o600)
+# ブラウザの遠隔操作を認証するため、Composeが読むbrowserless.envに接続時の照合用トークンを設定する。
+# 既存トークンは再利用し、新規作成時だけ生成する。接続設定へ渡せるよう、標準出力にはトークンだけを返す。
+configure_browserless_auth() {
+  # 認証情報が作成時から他ユーザーに読まれないよう、ディレクトリとファイルの権限を制限する。
+  umask 077
+  local config_dir="${XDG_CONFIG_HOME:-$HOME/.config}/browserless"
+  mkdir -p "$config_dir" || return
+  chmod 700 "$config_dir" || return
+  local env_path="$config_dir/browserless.env"
+  local line
+  local browserless_token=""
+  if [[ -e "$env_path" ]]; then
+    # ファイルをsourceせず最初のTOKEN行だけを読み、設定ファイル内のコマンド実行を防ぐ。
+    while IFS= read -r line || [[ -n "$line" ]]; do
+      if [[ "$line" == TOKEN=* ]]; then
+        browserless_token="${line#TOKEN=}"
+        break
+      fi
+    done < "$env_path"
+    if [[ ! "$browserless_token" =~ ^[0-9a-f]+$ ]]; then
+      echo "Existing Browserless token file is invalid; it was not overwritten." >&2
+      exit 1
+    fi
+  else
+    browserless_token="$(openssl rand -hex 32)" || return
+    # 同時実行時に別のセットアップが作ったトークンを上書きしない。
+    (set -o noclobber; printf 'TOKEN=%s\n' "$browserless_token" > "$env_path") || return
+  fi
+  chmod 600 "$env_path" || return
+  printf '%s\n' "$browserless_token"
+}
 
-agent_config = Path.home() / ".agent-browser" / "config.json"
-agent_config.parent.mkdir(parents=True, exist_ok=True)
-settings = json.loads(agent_config.read_text()) if agent_config.exists() else {}
-endpoint = "ws://127.0.0.1:3333/chromium?token=" + token
-if settings.get("cdp") not in (None, endpoint):
-    raise SystemExit("Existing agent-browser CDP setting differs; it was not overwritten.")
-settings["cdp"] = endpoint
-settings["autoConnect"] = False
-# 保存前に権限を制限し、既存のその他の設定は保持する。
-descriptor = os.open(agent_config, os.O_WRONLY | os.O_CREAT, 0o600)
-os.fchmod(descriptor, 0o600)
-os.ftruncate(descriptor, 0)
-with os.fdopen(descriptor, "w") as stream:
-    stream.write(json.dumps(settings, ensure_ascii=False, indent=2) + "\n")
-print("Browserless credentials and agent-browser connection configured (values hidden).")
-PYTHON
+# agent-browserがDocker内のBrowserlessへ接続できるよう、config.jsonにCDPのURLと認証トークンを設定する。
+# 引数で受け取ったトークンを使い、他の設定は保持する。既存の別接続は上書きせず停止する。
+configure_agent_browser_connection() {
+  local browserless_token="$1"
+  local agent_config="$HOME/.agent-browser/config.json"
+  mkdir -p "$(dirname "$agent_config")"
+  local settings_path=/dev/null
+  if [[ -e "$agent_config" ]]; then
+    # 単一のJSONオブジェクトだけを受け付け、不正な既存設定は置き換えない。
+    if ! jq -e -s 'length == 1 and (.[0] | type == "object")' "$agent_config" >/dev/null 2>&1; then
+      echo "Existing agent-browser config is invalid; it was not overwritten." >&2
+      exit 1
+    fi
+    settings_path="$agent_config"
+  fi
 
-docker compose -f "$DOTFILES_ROOT/ai-agents/browserless/compose.yaml" up -d --wait
-echo "Browserless is ready on 127.0.0.1:3333."
+  # トークンをプロセス引数へ渡さず標準入力からjqに送り、他の設定を保ったままCDP接続を設定する。
+  # 別のCDP接続が設定されていれば停止し、成功時だけ権限600の一時ファイルで置き換える。
+  local temporary_config
+  temporary_config="$(mktemp "$agent_config.XXXXXX")"
+  trap 'rm -f "$temporary_config"' EXIT
+  printf 'ws://127.0.0.1:3333/chromium?token=%s' "$browserless_token" |
+    jq -R -s --slurpfile settings "$settings_path" '
+      . as $endpoint |
+      ($settings[0] // {}) |
+      if .cdp == null or .cdp == $endpoint then
+        .cdp = $endpoint | .autoConnect = false
+      else
+        error("Existing agent-browser CDP setting differs; it was not overwritten.")
+      end
+    ' > "$temporary_config"
+  chmod 600 "$temporary_config"
+  mv -f "$temporary_config" "$agent_config"
+  trap - EXIT
+}
+
+main() {
+  # トークンはこの処理内だけで保持し、認証設定の戻り値を接続設定の引数として明示的に渡す。
+  # コマンド置換内のumaskは親へ反映されないため、接続設定の作成にも権限制限を適用する。
+  umask 077
+  local browserless_token
+  browserless_token="$(configure_browserless_auth)"
+  configure_agent_browser_connection "$browserless_token"
+  echo "Browserless credentials and agent-browser connection configured (values hidden)."
+
+  docker compose -f "$DOTFILES_ROOT/ai-agents/browserless/compose.yaml" up -d --wait
+  echo "Browserless is ready on 127.0.0.1:3333."
+}
+
+main
