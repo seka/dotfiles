@@ -98,6 +98,7 @@ brew "shellcheck"           # Static analysis tool for shell scripts
 brew "highlight"            # Converts sourcecode to HTML, RTF, LaTeX, etc
 brew "httpie"               # Command line HTTP client
 brew "agent-browser"        # Browser automation CLI for AI agents
+brew "ffmpeg"               # Browser recording and GIF conversion
 brew "fontforge"            # Font editor
 brew "mkcert"               # Simple tool for making locally-trusted development certificates
 brew "jq"                   # JSON processor

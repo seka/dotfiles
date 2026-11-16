@@ -1,0 +1,55 @@
+#!/usr/bin/env bash
+
+set -o errexit -o nounset -o pipefail
+
+DOTFILES_ROOT="${DOTFILES_ROOT:-$(cd "$(dirname "$0")/../.." && pwd)}"
+
+# 初回セットアップではDocker Desktopが未起動の場合があるため、他のセットアップは継続できるようにする。
+if ! docker info >/dev/null 2>&1; then
+  echo "Docker is not running. Start Docker Desktop, then run bash scripts/macos/setup-browserless."
+  exit 0
+fi
+
+# 認証トークンをリポジトリやプロセス引数に出さないため、端末固有の権限制限付きファイルに保存する。
+# 既存トークンを再利用し、他のCDP接続設定がある場合は上書きせず停止する。
+python3 - <<'PYTHON'
+import json
+import os
+from pathlib import Path
+import secrets
+
+config_dir = Path((os.environ.get("XDG_CONFIG_HOME") or str(Path.home() / ".config"))) / "browserless"
+config_dir.mkdir(parents=True, exist_ok=True)
+config_dir.chmod(0o700)
+env_path = config_dir / "browserless.env"
+if env_path.exists():
+    lines = env_path.read_text().splitlines()
+    token = next((line.removeprefix("TOKEN=") for line in lines if line.startswith("TOKEN=")), "")
+    if not token or not all(c in "0123456789abcdef" for c in token):
+        raise SystemExit("Existing Browserless token file is invalid; it was not overwritten.")
+else:
+    token = secrets.token_hex(32)
+    descriptor = os.open(env_path, os.O_WRONLY | os.O_CREAT | os.O_EXCL, 0o600)
+    with os.fdopen(descriptor, "w") as stream:
+        stream.write("TOKEN=" + token + "\n")
+env_path.chmod(0o600)
+
+agent_config = Path.home() / ".agent-browser" / "config.json"
+agent_config.parent.mkdir(parents=True, exist_ok=True)
+settings = json.loads(agent_config.read_text()) if agent_config.exists() else {}
+endpoint = "ws://127.0.0.1:3333/chromium?token=" + token
+if settings.get("cdp") not in (None, endpoint):
+    raise SystemExit("Existing agent-browser CDP setting differs; it was not overwritten.")
+settings["cdp"] = endpoint
+settings["autoConnect"] = False
+# 保存前に権限を制限し、既存のその他の設定は保持する。
+descriptor = os.open(agent_config, os.O_WRONLY | os.O_CREAT, 0o600)
+os.fchmod(descriptor, 0o600)
+os.ftruncate(descriptor, 0)
+with os.fdopen(descriptor, "w") as stream:
+    stream.write(json.dumps(settings, ensure_ascii=False, indent=2) + "\n")
+print("Browserless credentials and agent-browser connection configured (values hidden).")
+PYTHON
+
+docker compose -f "$DOTFILES_ROOT/ai-agents/browserless/compose.yaml" up -d --wait
+echo "Browserless is ready on 127.0.0.1:3333."

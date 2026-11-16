@@ -42,14 +42,6 @@ else
 fi
 
 # ------------------------------
-# AI browser runtime
-# ------------------------------
-# CLIだけでは画面確認できないため、導入できた場合に専用Chromeも取得する。
-if command -v agent-browser >/dev/null 2>&1; then
-    agent-browser install
-fi
-
-# ------------------------------
 # Java setup (if openjdk was installed)
 # ------------------------------
 if brew list --formula | grep -q "^openjdk$"; then
