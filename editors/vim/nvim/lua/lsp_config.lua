@@ -83,7 +83,6 @@ end
 local servers = {
   "ts_ls",
   "gopls",
-  "pyright",
   "rust_analyzer",
   "html",
   "cssls",
@@ -100,6 +99,29 @@ local servers = {
 for _, server in ipairs(servers) do
   configure(server)
 end
+
+configure("pyright", {
+  before_init = function(_, config)
+    if not config.root_dir then
+      return
+    end
+
+    -- uv syncで作成した依存を解析するため、プロジェクト直下の.venvをPython実行環境に指定する。
+    -- .venv未作成時は上書きせず、Pyright標準の環境検出に任せる。
+    local python_relative_path = vim.fn.has("win32") == 1 and ".venv/Scripts/python.exe" or ".venv/bin/python"
+    local python_path = vim.fs.joinpath(config.root_dir, python_relative_path)
+    if vim.fn.executable(python_path) == 1 then
+      config.settings.python.pythonPath = python_path
+    end
+  end,
+  settings = {
+    python = {
+      analysis = {
+        typeCheckingMode = "basic",
+      },
+    },
+  },
+})
 
 -- Special configuration for lua_ls
 configure("lua_ls", {
@@ -321,7 +343,7 @@ require('lint').linters_by_ft = {
   javascript = {'eslint'},
   typescript = {'eslint'},
   go = {'golangcilint'},
-  python = {'pylint'},
+  python = {'ruff'},
   css = {'stylelint'},
   html = {'htmlhint'}
 }
@@ -339,7 +361,7 @@ vim.api.nvim_create_autocmd({ "BufWritePost" }, {
 require('conform').setup({
   formatters_by_ft = {
     lua = { "stylua" },
-    python = { "isort", "black" },
+    python = { "ruff_organize_imports", "ruff_format" },
     javascript = { "prettierd", "prettier" },
     typescript = { "prettierd", "prettier" },
     go = { "goimports", "gofmt" },

@@ -66,3 +66,7 @@ scripts/common/setup-agent-config
 ```
 
 `setup-pip` and `setup-ai-agents` are shared. OS-specific package installation stays in `scripts/macos` or `scripts/windows`.
+
+On macOS, `setup-pip` also installs the latest stable Python with `uv python install --default`.
+The `python` and `python3` links are placed in `~/.local/bin`, which the zsh configuration puts before Homebrew on `PATH`.
+Existing executables owned by other tools are not forcibly replaced. See [Python setup and usage](../docs/tools-cli.md#python開発).

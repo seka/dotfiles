@@ -1,5 +1,32 @@
 # エディタ設定
 
+## Python開発
+
+Python本体・プロジェクト作成・依存管理は[CLIのPython開発手順](../docs/tools-cli.md#python開発)を参照してください。
+エディターで開く前にプロジェクトのルートで`uv sync`を実行し、`.venv`を作成します。
+
+### Neovim
+
+- PyrightをMasonで導入し、補完・定義移動・基本的な型診断を有効にします。
+- 起動時にプロジェクト直下の`.venv`があれば、そのPythonをPyrightに指定します。
+- Ruffを`nvim-lint`で保存後に実行し、`conform.nvim`で保存時にimport整理と整形を行います。
+- RuffはmacOSではHomebrew、Windowsでは`setup-python-tools.ps1`のpipxで導入します。
+
+`.venv`を後から作成・再作成した場合はNeovimを再起動してください。
+`:LspInfo`でPyrightの接続、`:ConformInfo`でRuffの検出状態を確認できます。
+Pyrightが未導入なら`:MasonInstall pyright`で導入します。
+
+### VS Code
+
+- Python・Pylance・Python Debugger・Ruff拡張を`extensions.txt`から導入します。
+- 新しいワークスペースでは`.venv`を既定のPython環境として使用します。
+- Pylanceで補完・定義移動・基本的な型診断、Python Debuggerでデバッグを行います。
+- 明示的な保存時にRuffでimportを整理し、保存時に整形します。
+
+既にPython環境を選択済みのワークスペースでは、`Python: Select Interpreter`から
+`.venv/bin/python`（Windowsは`.venv/Scripts/python.exe`）を選択してください。
+Ruffのルールはプロジェクトの`pyproject.toml`または`ruff.toml`で指定します。
+
 ## Vim
 
 ### セットアップ
@@ -270,16 +297,15 @@ Neovim を再起動してください。初回は専用キャッシュへの依�
 
 #### 1. 依存関係
 
-- **VS Code** 1.70+
+- **VS Code** 1.107+（Python向けPylance拡張の要件）
 - **Node.js** (一部拡張機能用)
 - **Git**
 
 #### 2. 初期化
 
 ```bash
-# VS Code設定をシンボリックリンクでセットアップ
-cd editors/vscode
-bash setup.sh
+# リポジトリのルートで設定を配置し、extensions.txtの拡張を導入
+DOTFILES_OS=macos bash scripts/common/setup-editor-config
 ```
 
 ### ディレクトリ構成
@@ -289,8 +315,7 @@ editors/
 └── vscode/
     ├── settings.json       # VS Code設定ファイル
     ├── keybindings.json   # キーバインド設定
-    ├── extensions.txt     # インストール拡張機能リスト
-    └── setup.sh          # セットアップスクリプト
+    └── extensions.txt     # インストール拡張機能リスト
 ```
 
 ### 拡張機能
@@ -309,6 +334,10 @@ editors/
 
 #### 言語サポート
 
+- **ms-python.python**: Pythonの実行・環境選択
+- **ms-python.vscode-pylance**: Pythonの補完・定義移動・型診断
+- **ms-python.debugpy**: Pythonデバッガー
+- **charliermarsh.ruff**: Pythonの診断・整形・import整理
 - **shopify.ruby-lsp**: Ruby 言語サーバー
 - **shopify.ruby-extensions-pack**: Ruby 開発パック
 - **sorbet.sorbet-vscode-extension**: Sorbet 型チェッカー

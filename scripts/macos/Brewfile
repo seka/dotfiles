@@ -33,6 +33,8 @@ brew "xcodesorg/made/xcodes"
 brew "gcc"
 
 # python
+brew "uv"
+brew "ruff"
 brew "pipx"
 
 # ------------------------------

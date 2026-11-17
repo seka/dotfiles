@@ -4,6 +4,18 @@ set -o errexit -o nounset -o pipefail
 
 DOTFILES_OS="${DOTFILES_OS:-macos}"
 
+if [[ "$DOTFILES_OS" == "macos" ]]; then
+  if ! command -v uv >/dev/null 2>&1; then
+    echo "uv not found. Installing uv via Homebrew..."
+    brew install uv
+  fi
+
+  # Python本体をuvで管理するため、安定版を導入しpython・python3の実行リンクも作成する。
+  # 既存のリンクが別ツールの管理下なら上書きせず、uvのエラーで停止する。
+  uv python install --default
+  export PATH="$HOME/.local/bin:$PATH"
+fi
+
 if ! command -v pipx >/dev/null 2>&1; then
   case "$DOTFILES_OS" in
     macos)

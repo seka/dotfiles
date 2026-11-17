@@ -29,7 +29,7 @@ if ($LASTEXITCODE -ne 0) {
     exit 0
 }
 
-$Tools = @("pynvim", "codespell")
+$Tools = @("pynvim", "codespell", "ruff")
 foreach ($Tool in $Tools) {
     & $PythonExecutable -m pipx install $Tool
     if ($LASTEXITCODE -ne 0) {

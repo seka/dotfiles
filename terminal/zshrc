@@ -31,6 +31,8 @@ source $ZDOTDIR/keybinds
 # development
 # ----------------------------------------
 eval "$(/opt/homebrew/bin/brew shellenv)"
+# Homebrew版よりuv管理のPythonを優先するため、実行リンクの配置先をbrew初期化後に先頭へ追加する。
+export PATH="$HOME/.local/bin:$PATH"
 eval "$(starship init zsh)"
 eval "$(nodenv init - zsh)"
 eval "$(rbenv init -)"

@@ -5,6 +5,10 @@ eamodio.gitlens
 esbenp.prettier-vscode
 github.github-vscode-theme
 mathiasfrohlich.kotlin
+ms-python.python
+ms-python.vscode-pylance
+ms-python.debugpy
+charliermarsh.ruff
 ms-azuretools.vscode-containers
 ms-vscode-remote.remote-containers
 ms-vscode.makefile-tools
