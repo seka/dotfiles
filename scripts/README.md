@@ -70,6 +70,6 @@ scripts/common/setup-agent-config
 Both Python tool scripts install pynvim, codespell, and Ruff with `uv tool install --managed-python`, using isolated environments backed by uv-managed Python.
 They also install the latest stable Python with the experimental `uv python install --default` option.
 uv itself is installed from the macOS Brewfile or the Windows winget manifest; the Python tool scripts require it to be available.
-The zsh and PowerShell configurations put `~/.local/bin` first on `PATH` to expose uv-managed Python and tools.
+The zsh and PowerShell configurations put `~/.local/bin` first on `PATH` to prioritize user-installed commands.
 On Windows, `uv tool update-shell` also registers the executable directory in the user PATH; open a new terminal after setup.
 Existing executables owned by other tools are not forcibly replaced. Before migrating existing pipx installations, uninstall the matching packages with `pipx uninstall <package>` and rerun setup. Remove unused pipx and duplicate Homebrew tools after confirming the uv installations work.

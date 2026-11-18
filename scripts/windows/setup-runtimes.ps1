@@ -56,10 +56,10 @@ if (Test-Path $vfoxExecutable) {
         }
     }
 }
-# uv管理のPythonとCLIを利用するため、vfox初期化後に実行ファイルの配置先を優先する。
-$uvBin = Join-Path $HOME ".local\bin"
-if (Test-Path $uvBin) {
-    $env:PATH = "$uvBin;$env:PATH"
+# ユーザー単位で導入したコマンドを優先するため、vfox初期化後に~/.local/binをPATHの先頭へ追加する。
+$userBin = Join-Path $HOME ".local\bin"
+if (Test-Path $userBin) {
+    $env:PATH = "$userBin;$env:PATH"
 }
 # dotfiles: end windows environment
 '@

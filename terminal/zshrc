@@ -32,7 +32,7 @@ source $ZDOTDIR/keybinds
 # ----------------------------------------
 eval "$(/opt/homebrew/bin/brew shellenv)"
 
-# uv管理のPythonとCLIを利用するため、実行ファイルの配置先をbrew初期化後にPATHの先頭へ追加する。
+# ユーザー単位で導入したコマンドを優先するため、brew初期化後に~/.local/binをPATHの先頭へ追加する。
 export PATH="$HOME/.local/bin:$PATH"
 
 eval "$(starship init zsh)"
