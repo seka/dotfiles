@@ -1,46 +1,45 @@
 # ------------------------------
-# alias
+# エディター
 # ------------------------------
-# Editor
 alias vim="nvim"
 
-# Miscellaneous
-alias speedtest="networkQuality"
-
-# git archive
-alias gitzip="git archive HEAD -o "
-
-# show my ip address
-alias ip="dig +short myip.opendns.com @resolver1.opendns.com"
-
-# utility command colors
+# ------------------------------
+# ファイル操作
+# ------------------------------
 export LSCOLORS=gxfxcxdxbxegedabagacag
 alias ls="ls -G"
 alias grep='grep -G'
-
-# port
-alias ports="lsof -i -P -n | grep LISTEN"
-
-# file operations
 alias ll="ls -la"
 alias la="ls -A"
 
-# macOS specific
-alias flushdns="sudo dscacheutil -flushcache && sudo killall -HUP mDNSResponder"
+# Finder の隠しファイル表示
 alias showfiles="defaults write com.apple.finder AppleShowAllFiles -bool true && killall Finder"
 alias hidefiles="defaults write com.apple.finder AppleShowAllFiles -bool false && killall Finder"
 
-# dotfiles management
+# ------------------------------
+# ネットワーク
+# ------------------------------
+alias speedtest="networkQuality"
+alias ip="dig +short myip.opendns.com @resolver1.opendns.com"
+alias ports="lsof -i -P -n | grep LISTEN"
+alias flushdns="sudo dscacheutil -flushcache && sudo killall -HUP mDNSResponder"
+
+# ------------------------------
+# シェル設定
+# ------------------------------
 alias dotfiles="cd ~/dotfiles"
 alias reload="source ~/.zshenv && source ~/.config/zsh/.zshrc"
 
-# Git shortcuts
+# ------------------------------
+# Git
+# ------------------------------
 alias gits="git status"
 alias gitc="git commit"
 alias gitb="git branch"
 alias gitbm="git branch -M"
+alias gitzip="git archive HEAD -o "
 
-# Git worktree shortcuts (gtr)
+# Worktree (gtr)
 alias gtrl="git gtr list"
 alias gtrn="git gtr new"
 alias gtrr="git gtr rm"
@@ -48,7 +47,9 @@ alias gtrc="git gtr clean"
 alias gtrcm="git gtr clean --merged"
 alias gtrg="git-gtr-cd"
 
-# tmux shortcuts
+# ------------------------------
+# tmux
+# ------------------------------
 # 既存の tmux セッションに接続し、切り替え先を選べるよう一覧を開く。
 alias tmuxa='tmux attach-session \; choose-tree -s'
 alias tmuxl="tmux list-sessions"
