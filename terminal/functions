@@ -51,46 +51,6 @@ alias-value() {
 # ------------------------------
 # version control
 # ------------------------------
-# Outputs current branch info in prompt format
-git-prompt-info() {
-  if [[ "$(git config --get oh-my-zsh.hide-status 2>/dev/null)" == "1" ]]; then
-    return 0
-  fi
-  ref=$(git symbolic-ref HEAD 2> /dev/null) || \
-  ref=$(git rev-parse --short HEAD 2> /dev/null) || return 0
-  echo "$ZSH_THEME_GIT_PROMPT_PREFIX${ref#refs/heads/}$(parse-git-dirty)$ZSH_THEME_GIT_PROMPT_SUFFIX"
-}
-
-# Checks if working tree is dirty
-parse-git-dirty() {
-  local FLAGS='--porcelain --ignore-submodules=dirty'
-  if [[ "$(git config --get oh-my-zsh.hide-dirty)" == "1" ]]; then
-    return 0
-  fi
-  if [[ "$DISABLE_UNTRACKED_FILES_DIRTY" == "true" ]]; then
-    FLAGS+='--untracked-files=no'
-  fi
-  local STATUS=$(git status ${FLAGS} 2> /dev/null | tail -n1)
-  if [[ -n $STATUS ]]; then
-    echo "$ZSH_THEME_GIT_PROMPT_DIRTY"
-  else
-    echo "$ZSH_THEME_GIT_PROMPT_CLEAN"
-  fi
-}
-
-hg-prompt-info() {
-    if [ -d '.hg' ]; then
-        echo -n "${YS_VCS_PROMPT_PREFIX1}hg${YS_VCS_PROMPT_PREFIX2}"
-        echo -n $(hg branch 2>/dev/null)
-        if [ -n "$(hg status 2>/dev/null)" ]; then
-            echo -n "$YS_VCS_PROMPT_DIRTY"
-        else
-            echo -n "$YS_VCS_PROMPT_CLEAN"
-        fi
-        echo -n "$YS_VCS_PROMPT_SUFFIX"
-    fi
-}
-
 remove-unnecessary-branches()
 {
     git branch --merged | grep -vE "^\*|master$|develop$" | xargs -I % git branch -d %
