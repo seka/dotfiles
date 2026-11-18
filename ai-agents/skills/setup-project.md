@@ -53,22 +53,23 @@ git init
 
 ### 5. エージェント設定ファイルの生成
 
-以下のファイルが存在しない場合に生成する:
+エージェント向けの指示書は `AGENTS.md` の 1 ファイルだけにする。存在しない場合に生成する。
 
-#### `CLAUDE.md`
+#### `AGENTS.md`
 
-プロジェクト固有の Claude 向け指示書。最低限以下を含める:
+Claude Code・Codex・GitHub Copilot などで共通に使うプロジェクト固有の指示書。最低限以下を含める:
 - プロジェクト概要（1-3文）
-- 使用技術スタック
+- 使用技術スタックとディレクトリ構成（モノレポの場合は各ディレクトリの役割）
 - よく使うコマンド（build, test, lint）
+- 開発ルール（パッケージマネージャー、秘匿情報の扱いなど、プロジェクト固有のもの）
 
-#### `.github/copilot-instructions.md`
+#### 生成しないファイル
 
-GitHub Copilot 向け指示書。`CLAUDE.md` と同等の内容を Copilot 形式で記述する。
+`CLAUDE.md` と `.github/copilot-instructions.md` は生成しない（`@AGENTS.md` を読み込むだけの `CLAUDE.md` も作らない）。
 
-#### `AGENTS.md`（任意）
-
-複数エージェントで使う共通ルールがある場合に生成する。
+- Claude Code は 2.1.277 以降、`CLAUDE.md` がない場合に `AGENTS.md` を読み込む。
+- GitHub Copilot は CLI・クラウドエージェント・github.com のコードレビュー・VS Code Chat で `AGENTS.md` を読み込む。github.com の Chat と JetBrains などの IDE では読まれないため、それらを使う予定があるとユーザーが答えた場合だけ `.github/copilot-instructions.md` の追加を提案する。
+- 既に `CLAUDE.md` や `.github/copilot-instructions.md` が存在する場合は削除せず、`AGENTS.md` への一本化を提案してユーザーの判断を仰ぐ。
 
 ### 6. GitHub テンプレートの生成
 
