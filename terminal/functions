@@ -209,10 +209,6 @@ tmux() {
 # ------------------------------
 # fzf
 # ------------------------------
-p() {
-    fzf | while read LINE; do $@ $LINE; done
-}
-
 fzf-ghq() {
     local selected_dir=$(ghq list -p | fzf --prompt "REPOSITORY > " --query "$LBUFFER")
     if [ -n "$selected_dir" ]; then
