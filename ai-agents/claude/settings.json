@@ -36,5 +36,6 @@
   "agentPushNotifEnabled": true,
   "feedbackSurveyState": {
     "lastShownTime": 1754015090951
-  }
+  },
+  "feedbackDrafts": "off"
 }
