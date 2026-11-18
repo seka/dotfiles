@@ -194,6 +194,19 @@ git-remove-orig-files()
 }
 
 # ------------------------------
+# tmux
+# ------------------------------
+tmux() {
+    # セッションを一覧で見分けられるよう、引数なしの場合はディレクトリの末尾名で作成または再接続する。
+    if (( $# == 0 )); then
+        local session_name=${PWD:t}
+        command tmux new-session -A -s "${session_name:-root}"
+    else
+        command tmux "$@"
+    fi
+}
+
+# ------------------------------
 # fzf
 # ------------------------------
 p() {
