@@ -38,11 +38,22 @@ alias dotfiles="cd ~/dotfiles"
 alias reload="source ~/.zshenv && source ~/.config/zsh/.zshrc"
 
 # Git shortcuts
-alias gts="git status"
-alias gtc="git commit"
-alias gtbm="git branch -M"
+alias gits="git status"
+alias gitc="git commit"
+alias gitb="git branch"
+alias gitbm="git branch -M"
+
+# Git worktree shortcuts (gtr)
 alias gtrl="git gtr list"
 alias gtrn="git gtr new"
 alias gtrr="git gtr rm"
 alias gtrc="git gtr clean"
+alias gtrcm="git gtr clean --merged"
 alias gtrg="git-gtr-cd"
+
+# tmux shortcuts
+# 既存の tmux セッションに接続し、切り替え先を選べるよう一覧を開く。
+alias tmuxa='tmux attach-session \; choose-tree -s'
+alias tmuxl="tmux list-sessions"
+# 手動保存もキー操作と同じ tmux-resurrect のスクリプトを使う。
+alias tmuxs='tmux run-shell "exec #{q:@resurrect-save-script-path}"'
