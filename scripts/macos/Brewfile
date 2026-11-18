@@ -34,8 +34,6 @@ brew "gcc"
 
 # python
 brew "uv"
-brew "ruff"
-brew "pipx"
 
 # ------------------------------
 # shell and terminal tools
@@ -62,7 +60,6 @@ brew "curl"
 brew "tree"
 brew "wget"
 brew "ripgrep"
-brew "codespell"
 brew "bat"                  # Cat with syntax highlighting
 brew "leaf-markdown-viewer" # Terminal Markdown previewer
 brew "eza"                  # Modern ls replacement

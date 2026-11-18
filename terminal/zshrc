@@ -31,13 +31,14 @@ source $ZDOTDIR/keybinds
 # development
 # ----------------------------------------
 eval "$(/opt/homebrew/bin/brew shellenv)"
-# Homebrew版よりuv管理のPythonを優先するため、実行リンクの配置先をbrew初期化後に先頭へ追加する。
+
+# uv管理のPythonとCLIを利用するため、実行ファイルの配置先をbrew初期化後にPATHの先頭へ追加する。
 export PATH="$HOME/.local/bin:$PATH"
+
 eval "$(starship init zsh)"
 eval "$(nodenv init - zsh)"
 eval "$(rbenv init -)"
 
-# プロジェクトごとの環境変数を切り替えるため、承認済み.envrcをディレクトリ移動時に読み込み・解除する。
 eval "$(direnv hook zsh)"
 
 # ----------------------------------------

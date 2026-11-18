@@ -1,40 +1,29 @@
 $ErrorActionPreference = "Stop"
 
-if (-not (Get-Command vfox -ErrorAction SilentlyContinue)) {
-    Write-Host "vfox was not found. Skipping Python tool setup."
-    exit 0
+if (-not (Get-Command uv -ErrorAction SilentlyContinue)) {
+    throw "uv was not found. Install uv with winget and rerun setup-python-tools.ps1."
 }
 
 Write-Host "==> Installing Python tools"
-$CurrentPython = (& vfox current python | Out-String)
-$PythonVersionMatch = [regex]::Match($CurrentPython, '\d+\.\d+\.\d+')
-if (-not $PythonVersionMatch.Success) {
-    Write-Host "No active vfox Python version was found. Skipping Python tools."
-    exit 0
-}
-
-$PythonSdk = "python@$($PythonVersionMatch.Value)"
-$PythonRoot = (& vfox info --format "{{.Path}}" $PythonSdk | Out-String).Trim()
-$PythonExecutable = Get-ChildItem -Path $PythonRoot -Recurse -Filter python.exe -ErrorAction SilentlyContinue |
-    Select-Object -First 1 -ExpandProperty FullName
-
-if (-not $PythonExecutable) {
-    Write-Host "The vfox Python executable was not found. Skipping Python tools."
-    exit 0
-}
-
-& $PythonExecutable -m pip install --user pipx
+# Pythonの導入元をuvに統一するため、安定版と既定の実行リンクを作成する。
+& uv python install --default
 if ($LASTEXITCODE -ne 0) {
-    Write-Host "pipx installation failed. Skipping Python tools."
-    exit 0
+    throw "Python installation failed."
 }
 
+# 各ツールの実行環境を独立して管理するため、専用の仮想環境にuv管理のPythonで導入する。
 $Tools = @("pynvim", "codespell", "ruff")
 foreach ($Tool in $Tools) {
-    & $PythonExecutable -m pipx install $Tool
+    & uv tool install --managed-python $Tool
     if ($LASTEXITCODE -ne 0) {
-        Write-Host "$Tool installation failed. Continuing."
+        throw "$Tool installation failed."
     }
+}
+
+# Neovimなどから実行ファイルを検出できるよう、uvの配置先をユーザーPATHに登録する。
+& uv tool update-shell
+if ($LASTEXITCODE -ne 0) {
+    throw "Could not add uv tools to PATH."
 }
 
 Write-Host "--> Python tools installed"

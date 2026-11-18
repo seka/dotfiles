@@ -43,8 +43,6 @@ if (Test-Path $vfoxExecutable) {
         (Join-Path $vfoxHome "sdks\java\bin")
         (Join-Path $vfoxHome "sdks\golang\bin")
         (Join-Path $vfoxHome "sdks\golang\packages\bin")
-        (Join-Path $vfoxHome "sdks\python")
-        (Join-Path $vfoxHome "sdks\python\Scripts")
         (Join-Path $vfoxHome "sdks\ruby\bin")
         (Join-Path $vfoxHome "sdks\ruby\share\gems\bin")
     ) | Where-Object { Test-Path $_ }
@@ -57,6 +55,11 @@ if (Test-Path $vfoxExecutable) {
             Set-Item -Path "Env:$name" -Value $userValue
         }
     }
+}
+# uv管理のPythonとCLIを利用するため、vfox初期化後に実行ファイルの配置先を優先する。
+$uvBin = Join-Path $HOME ".local\bin"
+if (Test-Path $uvBin) {
+    $env:PATH = "$uvBin;$env:PATH"
 }
 # dotfiles: end windows environment
 '@
@@ -107,31 +110,6 @@ foreach ($Runtime in $Runtimes) {
     if ($LASTEXITCODE -ne 0) {
         $FailedRuntimes += $Runtime
     }
-}
-
-Write-Host "Installing python..."
-$PythonVersions = & vfox search python |
-    Select-String -Pattern '\b\d+\.\d+\.\d+\b' -AllMatches |
-    ForEach-Object { $_.Matches.Value } |
-    Select-Object -Unique
-
-$PythonInstalled = $false
-foreach ($PythonVersion in $PythonVersions) {
-    & vfox install --yes "python@$PythonVersion"
-    if ($LASTEXITCODE -ne 0) {
-        continue
-    }
-
-    & vfox use --global "python@$PythonVersion"
-    if ($LASTEXITCODE -eq 0) {
-        Write-Host "--> python $PythonVersion"
-        $PythonInstalled = $true
-        break
-    }
-}
-
-if (-not $PythonInstalled) {
-    $FailedRuntimes += "python"
 }
 
 if ($FailedRuntimes.Count -gt 0) {

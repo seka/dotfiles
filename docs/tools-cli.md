@@ -30,38 +30,6 @@ macOSではHomebrew、Windowsではwingetを使い、可能な範囲で同じCLI
 | uv | Pythonのバージョン・仮想環境・依存管理 |
 | Homebrew | Go、OpenJDK、Denoなどの導入 |
 
-### Python開発
-
-uvとRuffはHomebrewで導入します。`scripts/common/setup-pip`はuvで最新安定版のPythonを導入し、
-`~/.local/bin`に`python`・`python3`の実行リンクを作成します。zshではこの配置先をHomebrewより優先します。
-実行リンクの作成にはuvの実験的な`--default`オプションを使用します。
-既存のpipxはpynvim・codespellの導入に使用します。
-
-Python関連だけをセットアップする場合は、リポジトリのルートで実行します。
-
-```bash
-brew install uv ruff
-DOTFILES_OS=macos bash scripts/common/setup-pip
-```
-
-設定反映後は新しいターミナルを開いてください。プロジェクトではPythonのバージョンを固定し、
-uvがプロジェクト直下に作成する`.venv`を使います。
-
-```bash
-uv init my-project
-cd my-project
-uv python pin 3.14
-uv add requests
-uv run python main.py
-```
-
-`3.14`は指定例です。パッチバージョンまで固定する場合は`3.14.0`のように指定します。
-`.python-version`・`pyproject.toml`・`uv.lock`をGitで管理し、別の環境では`uv sync --locked`で依存を復元します。
-`.venv`はGitに追加しません。ディレクトリ移動だけではシェルのPythonは切り替わらないため、
-`uv run python`または`uv run python3`で実行します。
-
-Neovim・VS Codeの補完・型診断・整形は[Pythonのエディター設定](../editors/README.md#python開発)を参照してください。
-
 ### シェル
 
 zshをログインシェルとして使用し、Zinit、Starship、fzf、tmux、tigを導入します。設定は`terminal/`からシンボリックリンクされます。
@@ -96,12 +64,13 @@ tmuxにはResurrectとContinuumを導入し、作業環境を15分ごとに保�
 | プラグイン | ランタイム |
 | --- | --- |
 | `nodejs` | Node.js |
-| `python` | Python |
 | `java` | Java |
 | `golang` | Go |
 | `ruby` | Ruby |
 
 初期セットアップでは、それぞれ`latest`をインストールしてグローバル既定値に設定します。プロジェクトでは`.vfox.toml`に正確なバージョンを指定することを推奨します。
+
+Pythonはuvで本体・バージョン・仮想環境・依存を管理します。
 
 PowerShellプロファイルには次の初期化が自動追加されます。
 
@@ -127,7 +96,7 @@ WindowsではMSYS2、zsh、tmux、Unix版asdf/rbenv/nodenvを使用しません�
 
 | 経路 | ツール |
 | --- | --- |
-| pipx | pynvim、codespell、Ruff |
+| uv tool install --managed-python | pynvim、codespell、Ruff |
 | winget | Antigravity CLI、uv |
 
 Claude CodeとCodex CLIはwingetからWindowsネイティブ版を導入します。

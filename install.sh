@@ -29,7 +29,7 @@ run_if_exists scripts/macos/setup-brew
 run_if_exists scripts/macos/setup-login-shell
 run_if_exists scripts/macos/macos-defaults
 
-DOTFILES_OS=macos bash "$DOTFILES_ROOT/scripts/common/setup-pip"
+DOTFILES_OS=macos bash "$DOTFILES_ROOT/scripts/common/setup-python-tools"
 DOTFILES_OS=macos DOTFILES_ROOT="$DOTFILES_ROOT" bash "$DOTFILES_ROOT/scripts/common/setup-shell-config"
 run_if_exists scripts/macos/setup-tmux
 run_if_exists scripts/macos/setup-browserless
