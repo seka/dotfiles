@@ -21,7 +21,7 @@
 exec zsh
 
 # 1Password CLIの認証確認
-check-1password-auth
+1password-check-auth
 ```
 
 ### direnv
@@ -143,7 +143,7 @@ terminal/
 
 | 関数 | 引数 | 説明 |
 |------|------|------|
-| `check-1password-auth()` | なし | 1Password CLI認証状態確認 |
+| `1password-check-auth()` | なし | 1Password CLI認証状態確認 |
 
 ## キーバインド一覧
 
@@ -210,7 +210,7 @@ zinit cclear
 
 ```bash
 # 認証状態確認
-check-1password-auth
+1password-check-auth
 
 # 再認証
 op signin

@@ -311,7 +311,10 @@ fzf-git-worktrees() {
     zle clear-screen
 }
 
-check-1password-auth() {
+# ------------------------------
+# 1password
+# ------------------------------
+1password-check-auth() {
     if command -v op >/dev/null 2>&1; then
         if op account list >/dev/null 2>&1; then
             echo "✓ 1Password CLI is authenticated"
