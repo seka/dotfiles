@@ -9,6 +9,9 @@ export XDG_STATE_HOME="${XDG_STATE_HOME:-${HOME}/.local/state}"
 # Set ZDOTDIR for XDG compliant zsh configuration
 export ZDOTDIR="${XDG_CONFIG_HOME}/zsh"
 
+# セットアップが ZDOTDIR に配置する設定を読み込めるよう、Starship にパスを指定する。
+export STARSHIP_CONFIG="$ZDOTDIR/starship.toml"
+
 # ----------------------------------------
 # basic environment variables
 # ----------------------------------------

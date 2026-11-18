@@ -2,30 +2,16 @@
 # https://starship.rs/config/
 
 format = """
-$username\
-$hostname\
 $directory\
 $git_branch\
+$git_status\
 $time\
 $line_break\
 $character"""
 
-[username]
-style_user = "fg:#89b4fa"
-style_root = "fg:#f38ba8"
-format = '[$user]($style) '
-disabled = false
-show_always = true
-
-[hostname]
-ssh_only = false
-style = "fg:#89b4fa"
-format = '[@$hostname]($style) '
-disabled = false
-
 [directory]
 style = "fg:#f9e2af"
-format = "in [$path]($style) "
+format = "[$path]($style) "
 truncation_length = 5
 truncation_symbol = "…/"
 truncate_to_repo = false
@@ -37,7 +23,11 @@ format = 'on [$symbol$branch]($style) '
 
 [git_status]
 style = "fg:#f38ba8"
-format = '[$all_status$ahead_behind]($style) '
+format = '([\[$stashed\]]($style) )([\[$conflicted$deleted$renamed$modified$typechanged$staged$untracked$ahead_behind\]]($style) )'
+stashed = 'stash $count'
+ahead = '↑$count'
+behind = '↓$count'
+diverged = '↑$ahead_count ↓$behind_count'
 
 [time]
 disabled = false
