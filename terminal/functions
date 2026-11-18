@@ -49,14 +49,146 @@ alias-value() {
 }
 
 # ------------------------------
-# version control
+# Git
 # ------------------------------
-remove-unnecessary-branches()
-{
-    git branch --merged | grep -vE "^\*|master$|develop$" | xargs -I % git branch -d %
+git-delete-merged-branches-and-worktrees() {
+    emulate -L zsh
+    (( $# == 0 )) || return 2
+
+    local active_worktree head default_branch records refs
+    active_worktree=$(git rev-parse --show-toplevel) || return 1
+    head=$(git rev-parse --verify HEAD) || return 1
+    default_branch=$(git config --get git-extras.default-branch)
+    if [[ -z "$default_branch" ]]; then
+        default_branch=$(git config --get init.defaultBranch)
+    fi
+    default_branch=${default_branch:-main}
+
+    # ローカルブランチ単体と worktree の両方で、基幹ブランチを保護する。
+    local protected_branches='(main|master|develop|release|release/*|release-*|release_*)'
+    local -a branches branch_tips worktree_checks merged_names
+    local -A worktree_paths worktree_tips
+    local field branch worktree tip changes
+    local is_main=1 unavailable=0
+    records=$(git worktree list --porcelain -z) || return 1
+    while IFS= read -r -d '' field; do
+        case "$field" in
+            'worktree '*) worktree=${field#worktree } ;;
+            'HEAD '*) tip=${field#HEAD } ;;
+            'branch refs/heads/'*) branch=${field#branch refs/heads/} ;;
+            locked*|prunable*) unavailable=1 ;;
+            '')
+                if (( !is_main && !unavailable )) &&
+                   [[ -n "$branch" && "$branch" != ${~protected_branches} &&
+                      "$branch" != "$default_branch" && -d "$worktree" &&
+                      "${worktree:A}" != "${active_worktree:A}" ]]; then
+                    changes=$(git --no-optional-locks -C "$worktree" status --porcelain --untracked-files=normal) || return 1
+                    if [[ -z "$changes" ]]; then
+                        worktree_checks+=("$branch" "$tip")
+                        worktree_paths[$branch]=$worktree
+                        worktree_tips[$branch]=$tip
+                    fi
+                fi
+                is_main=0 unavailable=0
+                branch= worktree= tip=
+                ;;
+        esac
+    done <<< "$records"
+
+    if (( ${#worktree_checks} )); then
+        # Bash は git-gtr の PR/MR 判定にだけ使う。clean の prune や空ディレクトリ削除は呼ばない。
+        local merged
+        merged=$(bash -c '
+            set -e
+            gtr_dir=${GTR_DIR:-/opt/homebrew/opt/git-gtr}
+            for library in ui config provider; do
+                source "$gtr_dir/lib/$library.sh"
+            done
+            provider=$(detect_provider) || {
+                printf "%s\n" "GitHub/GitLab を判定できませんでした。" >&2
+                exit 1
+            }
+            ensure_provider_cli "$provider"
+            while (( $# )); do
+                if check_branch_merged "$provider" "$1" "" "$2"; then
+                    printf "%s\n" "$1"
+                fi
+                shift 2
+            done
+        ' git-gtr-merged "${worktree_checks[@]}") || return 1
+        if [[ -n "$merged" ]]; then
+            merged_names=("${(@f)merged}")
+        fi
+    fi
+
+    # git-extras と同様、現在の HEAD にマージ済みのブランチから、
+    # checkout 中のブランチと既定ブランチ名・svn を含む名前を除く。
+    refs=$(git for-each-ref --merged="$head" \
+        --format='%(if)%(worktreepath)%(then)checked-out%(else)%(objectname) %(refname:lstrip=2)%(end)' refs/heads/) || return 1
+    while read -r tip branch; do
+        [[ -n "$branch" && "$branch" != ${~protected_branches} &&
+           "$branch" != *"$default_branch"* && "$branch" != *svn* ]] || continue
+        branches+=("$branch")
+        branch_tips+=("$tip")
+    done <<< "$refs"
+
+    if (( ${#branches} + ${#merged_names} == 0 )); then
+        printf '%s\n' '削除候補はありません。'
+        return 0
+    fi
+
+    printf '%s\n' '削除候補の worktree（対応するローカルブランチも削除）'
+    for branch in "${merged_names[@]}"; do
+        printf '  %s  %q\n' "$branch" "${worktree_paths[$branch]}"
+    done
+    printf '%s\n' '削除候補のローカルブランチ'
+    for branch in "${branches[@]}"; do
+        printf '  %s\n' "$branch"
+    done
+    local answer
+    printf '%s' '表示した候補を削除しますか？ [y/N] '
+    if ! IFS= read -r answer </dev/tty || [[ "$answer" != [yY] ]]; then
+        printf '%s\n' '中止しました。'
+        return 0
+    fi
+
+    # 確認後は候補を追加せず、先端コミットや worktree の対応が
+    # 表示時から変わった項目をスキップする。
+    local index resolved_worktree failed=0
+    for branch in "${merged_names[@]}"; do
+        worktree=${worktree_paths[$branch]}
+        resolved_worktree=$(git gtr go "$branch" 2>/dev/null) || resolved_worktree=
+        if [[ -z "$resolved_worktree" || "${resolved_worktree:A}" != "${worktree:A}" ||
+              "$(git -C "$worktree" symbolic-ref -q HEAD)" != "refs/heads/$branch" ||
+              "$(git rev-parse --verify "refs/heads/$branch")" != "${worktree_tips[$branch]}" ]]; then
+            printf '候補の状態が変わったためスキップしました: %s\n' "$branch" >&2
+            failed=1
+            continue
+        fi
+        if ! changes=$(git --no-optional-locks -C "$worktree" status --porcelain --untracked-files=normal) ||
+           [[ -n "$changes" ]]; then
+            printf '作業ツリーを確認できないか未保存の変更があるためスキップしました: %s\n' "$branch" >&2
+            failed=1
+            continue
+        fi
+        if ! git gtr rm "$branch" --delete-branch --yes ||
+           git show-ref --verify --quiet "refs/heads/$branch"; then
+            failed=1
+        fi
+    done
+    for (( index=1; index <= ${#branches}; index++ )); do
+        branch=${branches[index]}
+        if [[ "$(git rev-parse --verify "refs/heads/$branch")" != "${branch_tips[index]}" ]]; then
+            printf '候補の状態が変わったためスキップしました: %s\n' "$branch" >&2
+            failed=1
+            continue
+        fi
+        git branch -d -- "$branch" || failed=1
+    done
+    return "$failed"
 }
 
-remove-orig-files()
+git-remove-orig-files()
 {
     find . -name "*.orig" -type f | xargs rm
 }

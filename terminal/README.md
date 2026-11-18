@@ -135,8 +135,9 @@ terminal/
 
 | 関数 | 引数 | 説明 |
 |------|------|------|
-| `remove-unnecessary-branches()` | なし | マージ済みブランチの削除 |
-| `remove-orig-files()` | なし | .origファイルの一括削除 |
+| `git-delete-merged-branches-and-worktrees` | なし | マージ済みブランチと worktree の削除候補を一覧表示し、確認後に削除 |
+| `git-gtr-cd` | ブランチ名（省略可） | worktree に移動。省略時は fzf で選択 |
+| `git-remove-orig-files` | なし | カレントディレクトリ以下の `*.orig` ファイルを一括削除 |
 
 ### fzf統合
 
@@ -170,6 +171,7 @@ terminal/
 | `Ctrl+X, R` | `fzf-select-history` | コマンド履歴選択 |
 | `Ctrl+X, G` | `fzf-ghq` | Gitリポジトリ選択 |
 | `Ctrl+X, B` | `fzf-git-branches` | Gitブランチ選択 |
+| `Ctrl+X, W` | `fzf-git-worktrees` | Git worktree 選択 |
 
 ## Readline設定（inputrc）
 
