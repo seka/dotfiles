@@ -188,10 +188,11 @@ macOSは `brew upgrade --cask antigravity-cli`、Windowsは `winget upgrade --ex
 
 開発用エージェントです。Gemini CLIを含む各エージェントのWeb検索は、共通ガイドに従ってAntigravity CLIへ委譲します。
 
-設定ファイル: `ai-agents/gemini/settings.json`
+セットアップ時に `ai-agents/gemini/settings.json` を `~/.gemini/settings.json` に配置し、共通ガイドを `~/.gemini/AGENTS.md` に配置します。
 
 | 項目 | 値 | 説明 |
 | --- | --- | --- |
+| `context.fileName` | `["AGENTS.md", "GEMINI.md"]` | 両方のファイル名を指示書として読み込む |
 | `theme` | `GitHub` | カラーテーマ |
 | `autoAccept` | `false` | 操作の自動承認を無効化 |
 | `sandbox` | `docker` | Docker サンドボックスで実行 |
