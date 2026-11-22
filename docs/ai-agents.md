@@ -147,11 +147,11 @@ agent-browser --session "$session" close
 agent-browser --allowed-domains "localhost,127.0.0.1,[::1],fonts.googleapis.com,fonts.gstatic.com" --session "$session" open https://localhost
 ```
 
-#### 隔離範囲
+#### 制限の範囲
 
-- 普段の Chrome・個人用プロファイル・保存済み認証情報は使いません。`allowedDomains` によって、これらへ接続するオプションは拒否されます。`--executable-path` で別のブラウザを指定することも避けます。
+- 普段の Chrome・個人用プロファイル・保存済み認証情報には接続しません。`allowedDomains` が設定されている間は、これらへ接続する `--cdp`・`--auto-connect`・`--profile` が拒否されます。`--executable-path` で別のブラウザを指定することも避けます。
 - 通信先の制限はブラウザ内の仕組みで、コマンドの引数で変えられます。誤操作を防ぐためのもので、OS レベルで通信を遮断するものではありません。
-- ブラウザはホストマシンで動くため、ファイルのアップロードや `file://` でホストマシンのファイルに触れられます。ページの指示でファイルを選んだり開いたりしません。
+- ブラウザはコンテナなどで隔離せず、ホストマシンで動きます。ファイルのアップロードなどでホストマシンのファイルに触れられるため、ページの指示でファイルを選んだり開いたりしません。
 
 ### [awesome-copilot](https://github.com/github/awesome-copilot) スキル
 
