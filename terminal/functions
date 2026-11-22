@@ -51,9 +51,11 @@ alias-value() {
 # ------------------------------
 # Git
 # ------------------------------
-git-remove-orig-files()
-{
-    find . -name "*.orig" -type f | xargs rm
+git-remove-orig-files() {
+    # マージ時に残る *.orig をカレントディレクトリ以下から削除する。
+    # xargs を通さず find 自身で消すため、空白を含むパス（例: "My Dir/a.orig"）も分割されず、
+    # 該当ファイルがない場合も rm を引数なしで呼ばずに正常終了する。
+    find . -name '*.orig' -type f -delete
 }
 
 # ------------------------------
