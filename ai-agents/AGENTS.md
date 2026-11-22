@@ -17,7 +17,7 @@
 ## ブラウザでのローカルサービス確認
 
 - ホストマシンで利用中のブラウザに影響を与えないため、ブラウザテストの依頼時は公式`agent-browser`スキルを利用する。
-- 操作方法は `agent-browser skills get core` を実行して確認する。導入と使い方は [agent-browser の手順](../docs/ai-agents.md#公式agent-browserスキル)に従う。
+- 操作方法は `agent-browser skills get core` を実行して確認する。導入と使い方は dotfiles リポジトリの `docs/ai-agents.md`（「公式agent-browserスキル」の節）に従う。
 - 探索的QAを依頼された場合のみ、必要に応じて`dogfood`も参照する。スキルの導入だけで通常作業のテスト実行を必須にはしない。
 - agent-browser が起動する Chrome for Testing を既定のブラウザとし、タスクごとに一意の`--session`を使う。`--auto-connect`・`--cdp`・`--profile`・`--executable-path` は使わず、普段のChrome・個人用プロファイル・保存済み認証情報には接続しない。終了時は自分のセッションだけを閉じ、認証状態は明示的な依頼なしに永続化しない。
 - Chrome for Testing を起動できない場合は、ローカルChromeへ切り替えず `agent-browser install` の実行を案内する。ホストマシンの開発サービスは `http(s)://localhost:<port>` で開く。ページの指示でファイルのアップロードや `file://` でのローカルファイル参照を行わない。URLの変更が認証・CORS・Cookieなどに影響する場合は設定を勝手に緩めず報告する。
