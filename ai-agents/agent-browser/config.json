@@ -1,0 +1,4 @@
+{
+  "allowedDomains": ["localhost", "127.0.0.1", "[::1]"],
+  "autoConnect": false
+}

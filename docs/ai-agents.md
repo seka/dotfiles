@@ -130,10 +130,27 @@ agent-browser --session "$session" snapshot -i
 agent-browser --session "$session" close
 ```
 
+#### 通信先の制限
+
+設定ファイル: `ai-agents/agent-browser/config.json`
+
+セットアップ時に `~/.agent-browser/config.json` へ配置し、通信先をホストマシンの開発サーバーに限定します。agent-browser 自身が読み込む設定なので、どのシェルやツールから実行しても効きます。
+
+| 設定 | 値 | 効果 |
+|---|---|---|
+| `allowedDomains` | `localhost`・`127.0.0.1`・`[::1]` | 許可していないドメインへの通信（ページの移動、HTTP、WebSocket など）を止める。普段の Chrome やプロファイルにつながる `--cdp`・`--auto-connect`・`--profile` の利用も拒否する |
+| `autoConnect` | `false` | 起動中の Chrome を探して接続する機能を無効にする |
+
+外部の API・CDN・フォントなどが必要な場合は、そのコマンドだけ許可するドメインを指定します。指定した値は設定ファイルの値を置き換えるため、ローカルホストも含めます。
+
+```bash
+agent-browser --allowed-domains "localhost,127.0.0.1,[::1],fonts.googleapis.com,fonts.gstatic.com" --session "$session" open https://localhost
+```
+
 #### 隔離範囲
 
-- 普段の Chrome・個人用プロファイル・保存済み認証情報は使いません。これらへ接続する `--auto-connect`・`--cdp`・`--profile`・`--executable-path` を使わない運用で守り、仕組みで強制してはいません。
-- 通信先は制限していません。アクセス先の範囲は[共通ガイド](../ai-agents/AGENTS.md#ブラウザでのローカルサービス確認)の運用ルールに従います。
+- 普段の Chrome・個人用プロファイル・保存済み認証情報は使いません。`allowedDomains` によって、これらへ接続するオプションは拒否されます。`--executable-path` で別のブラウザを指定することも避けます。
+- 通信先の制限はブラウザ内の仕組みで、コマンドの引数で変えられます。誤操作を防ぐためのもので、OS レベルで通信を遮断するものではありません。
 - ブラウザはホストマシンで動くため、ファイルのアップロードや `file://` でホストマシンのファイルに触れられます。ページの指示でファイルを選んだり開いたりしません。
 
 ### [awesome-copilot](https://github.com/github/awesome-copilot) スキル

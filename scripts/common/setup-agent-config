@@ -121,6 +121,12 @@ render_template "$DOTFILES_ROOT/ai-agents/codex/config.toml.template" "$HOME/.co
 
 echo "--> Codex settings installed"
 
+# AI エージェントのブラウザ操作をホストマシンの開発サーバーに限定するため、agent-browser のユーザー設定を配置する。
+# 環境変数と違い、どのシェルやツールから実行しても agent-browser 自身が読み込む。
+echo "==> Installing agent-browser settings"
+copy_or_link_file "$DOTFILES_ROOT/ai-agents/agent-browser/config.json" "$HOME/.agent-browser/config.json"
+echo "--> agent-browser settings installed"
+
 if [[ "$DOTFILES_OS" == "windows" ]]; then
   bash "$DOTFILES_ROOT/scripts/common/distribute-skills" --copy
 else

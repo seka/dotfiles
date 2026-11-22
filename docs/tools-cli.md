@@ -42,7 +42,7 @@ tmuxにはResurrectとContinuumを導入し、作業環境を15分ごとに保�
 
 `agent-browser`をHomebrewで導入し、`agent-browser install`でダウンロードしたChrome for Testingを操作します。普段のChromeとは別のブラウザを使い、Chrome拡張やクラウドサービスのアカウントは不要です。
 
-導入・ローカルサービス接続・隔離範囲は[公式agent-browserスキル](ai-agents.md#公式agent-browserスキル)を参照し、[共通ガイド](../ai-agents/AGENTS.md#ブラウザでのローカルサービス確認)に従います。Windowsでは公式スキルの配布に対応しますが、本体の自動導入は対象外です。
+導入・ローカルサービス接続・通信先の制限は[公式agent-browserスキル](ai-agents.md#公式agent-browserスキル)を参照し、[共通ガイド](../ai-agents/AGENTS.md#ブラウザでのローカルサービス確認)に従います。Windowsでは公式スキルの配布に対応しますが、本体の自動導入は対象外です。
 
 ### macOS固有
 
