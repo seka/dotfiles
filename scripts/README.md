@@ -23,14 +23,11 @@ macOS-specific scripts:
 scripts/macos/setup-brew
 scripts/macos/setup-login-shell
 scripts/macos/setup-tmux
-scripts/macos/setup-browserless
 scripts/macos/macos-defaults
 scripts/macos/Brewfile
 ```
 
 `setup-tmux` places the tmux configuration, bootstraps TPM, and installs the plugins declared in `terminal/tmux.conf`. Existing plugin checkouts are reused.
-
-`setup-browserless` configures machine-local credentials and the agent-browser connection, then starts the Browserless Compose service. If Docker is not running, it prints the manual setup command and skips startup.
 
 ## Windows
 

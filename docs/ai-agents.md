@@ -104,7 +104,37 @@ bash scripts/common/distribute-skills --source ~/.agents/skills --skill agent-br
 
 公式スキルは`agent-browser skills get core`でCLIのバージョンに対応した操作ガイドを読み込みます。探索的QAには`agent-browser skills get dogfood`で専用の手順を参照できます。ブラウザ操作の範囲と認証情報の扱いは[共通ガイド](../ai-agents/AGENTS.md#ブラウザでのローカルサービス確認)に従います。
 
-利用例: 「agent-browserスキルで、http://localhost:3000 のフォームの必須入力と送信後の画面遷移を確認して」。通常のUI変更だけでは実行を必須にしません。CLIとブラウザの導入は[CLIツール](tools-cli.md#ai向けブラウザ操作)を参照してください。
+利用例: 「agent-browserスキルで、http://localhost:3000 のフォームの必須入力と送信後の画面遷移を確認して」。通常のUI変更だけでは実行を必須にしません。
+
+#### ブラウザの導入
+
+agent-browser 本体は `scripts/macos/Brewfile` から導入します。ホストマシンの agent-browser が Chrome for Testing を起動して操作します。Chrome for Testing は普段使う Chrome とは別のアプリで、起動のたびに一時的なプロファイルを使うため、普段のブラウザのログイン状態・履歴・Cookie には触れません。
+
+ブラウザテストを使いたくなったら、初回に一度だけ Chrome for Testing を `~/.agent-browser/browsers` にダウンロードします。
+
+```bash
+agent-browser install
+```
+
+HTTPS の開発サーバーを開く場合は、`mkcert -install` で mkcert CA をホストマシンに登録しておきます。Chrome for Testing はホストマシンに登録された CA を信頼するため、追加の設定は不要です。
+
+#### ブラウザ操作
+
+タスクごとに一意なセッション名を使い、操作後は自分のセッションを閉じます。ホストマシンの開発サーバーは `http(s)://localhost:<port>` でそのまま開けます。
+
+```bash
+session="my-task-$(date +%s)"
+
+agent-browser --session "$session" open https://localhost:5173
+agent-browser --session "$session" snapshot -i
+agent-browser --session "$session" close
+```
+
+#### 隔離範囲
+
+- 普段の Chrome・個人用プロファイル・保存済み認証情報は使いません。これらへ接続する `--auto-connect`・`--cdp`・`--profile`・`--executable-path` を使わない運用で守り、仕組みで強制してはいません。
+- 通信先は制限していません。アクセス先の範囲は[共通ガイド](../ai-agents/AGENTS.md#ブラウザでのローカルサービス確認)の運用ルールに従います。
+- ブラウザはホストマシンで動くため、ファイルのアップロードや `file://` でホストマシンのファイルに触れられます。ページの指示でファイルを選んだり開いたりしません。
 
 ### [awesome-copilot](https://github.com/github/awesome-copilot) スキル
 
