@@ -135,7 +135,6 @@ terminal/
 
 | 関数 | 引数 | 説明 |
 |------|------|------|
-| `git-delete-merged-branches-and-worktrees` | なし | マージ済みブランチと worktree の削除候補を一覧表示し、確認後に削除 |
 | `git-gtr-cd` | ブランチ名（省略可） | worktree に移動。省略時は fzf で選択 |
 | `git-remove-orig-files` | なし | カレントディレクトリ以下の `*.orig` ファイルを一括削除 |
 
