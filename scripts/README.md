@@ -1,31 +1,12 @@
-# scripts
+# Setup scripts
 
-Setup scripts are split by responsibility:
-
-```text
-scripts/
-  common/   # Shared setup used by macOS and Windows after bootstrap
-  macos/    # macOS-only bootstrap scripts and Brewfile
-  windows/  # Windows-only bootstrap scripts and winget manifest
-```
+- `scripts/macos/` contains the macOS Bash scripts and Brewfile.
+- `scripts/windows/` contains the Windows PowerShell scripts and winget manifest.
+- `scripts/resources/` contains data files used by both installers, including the GitHub skill list in `agent-skills.tsv`.
 
 ## macOS
 
-Run from the repository root:
-
-```bash
-./install.sh
-```
-
-macOS-specific scripts:
-
-```text
-scripts/macos/setup-brew
-scripts/macos/setup-login-shell
-scripts/macos/setup-tmux
-scripts/macos/macos-defaults
-scripts/macos/Brewfile
-```
+Run `./install.sh` from the repository root. The installer uses Homebrew for packages, installs shell and editor settings as symbolic links, and generates the Codex configuration from its templates.
 
 `setup-tmux` places the tmux configuration, bootstraps TPM, and installs the plugins declared in `terminal/tmux.conf`. Existing plugin checkouts are reused.
 
@@ -37,32 +18,9 @@ Run from the repository root:
 powershell -ExecutionPolicy Bypass -File .\install.ps1
 ```
 
-Windows-specific files:
+Setup uses PowerShell and winget. It copies Git, tig, editor, and AI agent settings into the user's configuration directories. Neovim settings go under `%LOCALAPPDATA%\nvim` by default, honoring `XDG_CONFIG_HOME` and `NVIM_APPNAME` when set. Re-running setup updates the repository's files in place and keeps other files in the Neovim directory. If you previously customized `~/.config/nvim`, check that directory for settings you want to carry over.
 
-```text
-scripts/windows/winget.json
-scripts/windows/setup-wsl2.ps1
-scripts/windows/setup-runtimes.ps1
-scripts/windows/setup-python-tools.ps1
-scripts/windows/setup-ai-cli.ps1
-scripts/windows/setup-ai-workspace.ps1
-scripts/windows/setup-explorer.ps1
-scripts/windows/setup-startup.ps1
-```
-
-## Common
-
-These scripts are called by both entry points where possible:
-
-```text
-scripts/common/setup-python-tools
-scripts/common/setup-ai-agents
-scripts/common/setup-shell-config
-scripts/common/setup-editor-config
-scripts/common/setup-agent-config
-```
-
-`setup-ai-agents` is shared. Python tools use `common/setup-python-tools` on macOS and the native `windows/setup-python-tools.ps1` on Windows.
+## Python tools
 
 Both Python tool scripts install pynvim, codespell, and Ruff with `uv tool install --managed-python`, using isolated environments backed by uv-managed Python.
 They also install the latest stable Python with the experimental `uv python install --default` option.

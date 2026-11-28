@@ -1,0 +1,48 @@
+#!/usr/bin/env bash
+
+set -o errexit -o nounset -o pipefail
+
+DOTFILES_ROOT="${DOTFILES_ROOT:-$(cd "$(dirname "$0")/../.." && pwd)}"
+
+link_file() {
+  local source="$1"
+  local target="$2"
+
+  mkdir -p "$(dirname "$target")"
+
+  ln -sf "$source" "$target"
+}
+
+echo "==> Ensuring shell/git directories exist"
+mkdir -p "$HOME/.config/git"
+mkdir -p "$HOME/.config/zsh" "$HOME/.local/state/zsh"
+echo "--> Shell/git directories ready"
+
+echo "==> Installing shell/git configuration"
+while IFS= read -r -d '' F; do
+  filename=$(basename "$F")
+  rel="${F#$DOTFILES_ROOT/}"
+  case "$rel" in
+    "terminal/zshenv") link_file "$F" "$HOME/.zshenv" ;;
+    "terminal/zshrc") link_file "$F" "$HOME/.config/zsh/.zshrc" ;;
+    "terminal/tigrc") link_file "$F" "$HOME/.tigrc" ;;
+    "terminal/tmux.conf") ;; # tmux設定はmacOSのsetup-tmuxで配置する。
+    "terminal/ghostty.conf")
+      ghostty_config="$HOME/Library/Application Support/com.mitchellh.ghostty/config"
+      if [[ -L "$ghostty_config" && "$(readlink "$ghostty_config")" == "$F" ]]; then
+        continue
+      fi
+      if [[ ! -L "$ghostty_config" ]] &&
+        { [[ ! -e "$ghostty_config" ]] || { [[ -f "$ghostty_config" ]] && cmp -s "$F" "$ghostty_config"; }; }; then
+        link_file "$F" "$ghostty_config"
+      else
+        echo "==> Preserving existing Ghostty configuration at $ghostty_config"
+      fi
+      ;;
+    "terminal/"*) link_file "$F" "$HOME/.config/zsh/$filename" ;;
+
+    "git/config") link_file "$F" "$HOME/.config/git/config" ;;
+    "git/ignore") link_file "$F" "$HOME/.config/git/ignore" ;;
+  esac
+done < <(find "$DOTFILES_ROOT"/git "$DOTFILES_ROOT"/terminal -type f -not -name '.*' -print0)
+echo "--> Shell/git configuration installed"

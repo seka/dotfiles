@@ -14,45 +14,13 @@ AGENTS=(
   "gemini-cli"
 )
 
-AWESOME_COPILOT_SKILLS=(
-  "lsp-setup"
-  "acquire-codebase-knowledge"
-  "context-map"
-  "refactor-plan"
-  "prd"
-  "breakdown-test"
-  "web-design-reviewer"
-)
-
-echo "Installing awesome-copilot skills..."
-for skill in "${AWESOME_COPILOT_SKILLS[@]}"; do
+echo "Installing GitHub skills..."
+while IFS=$'\t' read -r repository skill; do
   for agent in "${AGENTS[@]}"; do
-    gh skill install github/awesome-copilot "$skill" --agent "$agent" --scope user --force
+    gh skill install "$repository" "$skill" --agent "$agent" --scope user --force
   done
-done
-echo "awesome-copilot skills installed."
-
-PM_SKILLS=(
-  "skills/foundation-stakeholder-update"
-  "skills/foundation-meeting-agenda"
-  "skills/foundation-meeting-brief"
-  "skills/foundation-meeting-recap"
-  "skills/foundation-meeting-synthesize"
-  "skills/foundation-stakeholder-briefings"
-  "skills/discover-interview-synthesis"
-  "skills/discover-stakeholder-summary"
-  "skills/define-problem-statement"
-  "skills/define-hypothesis"
-  "skills/develop-adr"
-)
-
-echo "Installing pm-skills skills..."
-for skill in "${PM_SKILLS[@]}"; do
-  for agent in "${AGENTS[@]}"; do
-    gh skill install product-on-purpose/pm-skills "$skill" --agent "$agent" --scope user --force
-  done
-done
-echo "pm-skills skills installed."
+done < "$(dirname "$0")/../resources/agent-skills.tsv"
+echo "GitHub skills installed."
 
 echo "Installing official agent-browser skill..."
 npx --yes skills add vercel-labs/agent-browser --skill agent-browser --global --agent "${AGENTS[@]}" --yes

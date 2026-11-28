@@ -29,11 +29,11 @@ run_if_exists scripts/macos/setup-brew
 run_if_exists scripts/macos/setup-login-shell
 run_if_exists scripts/macos/macos-defaults
 
-DOTFILES_OS=macos bash "$DOTFILES_ROOT/scripts/common/setup-python-tools"
-DOTFILES_OS=macos DOTFILES_ROOT="$DOTFILES_ROOT" bash "$DOTFILES_ROOT/scripts/common/setup-shell-config"
+bash "$DOTFILES_ROOT/scripts/macos/setup-python-tools"
+bash "$DOTFILES_ROOT/scripts/macos/setup-shell-config"
 run_if_exists scripts/macos/setup-tmux
-DOTFILES_OS=macos DOTFILES_ROOT="$DOTFILES_ROOT" bash "$DOTFILES_ROOT/scripts/common/setup-editor-config"
-DOTFILES_OS=macos DOTFILES_ROOT="$DOTFILES_ROOT" bash "$DOTFILES_ROOT/scripts/common/setup-agent-config"
-DOTFILES_OS=macos bash "$DOTFILES_ROOT/scripts/common/setup-ai-agents" || echo "AI agent setup failed. Local dotfiles are already installed."
+bash "$DOTFILES_ROOT/scripts/macos/setup-editor-config"
+bash "$DOTFILES_ROOT/scripts/macos/setup-agent-config"
+bash "$DOTFILES_ROOT/scripts/macos/setup-ai-agents" || echo "AI agent setup failed. Local dotfiles are already installed."
 
 echo "==> dotfiles setup completed"

@@ -90,7 +90,7 @@ Invoke-Expression "$(vfox activate pwsh)"
 - Docker Desktop
 - Herdr Windows preview
 
-WindowsではMSYS2、zsh、tmux、Unix版asdf/rbenv/nodenvを使用しません。設定スクリプトの内部処理に限り、Git for Windows付属のbashを使用します。
+WindowsではMSYS2、zsh、tmux、Unix版asdf/rbenv/nodenvを使用しません。セットアップと設定の配置はPowerShellで実行します。
 
 ### PythonとNode.jsのグローバルツール
 

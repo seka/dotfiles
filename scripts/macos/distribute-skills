@@ -21,12 +21,12 @@ fail() {
 
 usage() {
   cat <<'EOF'
-Usage: bash scripts/common/distribute-skills [options]
+Usage: bash scripts/macos/distribute-skills [options]
   --source DIR    配布元（複数指定可、省略時 ai-agents/skills）
   --target NAME   claude / codex / gemini / antigravity / copilot（複数指定可、省略時すべて）
   --skill NAME    スキル名で絞り込み（複数指定可）
   --export DIR    CLIへ配置せず、アップロード用フォルダーへコピー
-  --copy          リンクの代わりにコピー（Windowsは常にコピー）
+  --copy          リンクの代わりにコピー
   --dry-run       変更せず配布予定を表示
   --help          このヘルプを表示
 EOF
@@ -75,9 +75,6 @@ while [[ $# -gt 0 ]]; do
 done
 
 [[ -z "$export_dir" || ${#targets[@]} -eq 0 ]] || fail "--export と --target は同時指定できません"
-if [[ "${DOTFILES_OS:-}" == windows || "${OS:-}" == Windows_NT ]]; then
-  copy=true
-fi
 [[ ${#sources[@]} -gt 0 ]] || sources=("$DOTFILES_ROOT/ai-agents/skills")
 shopt -s nullglob dotglob
 

@@ -4,10 +4,6 @@ approval_policy = "untrusted"
 sandbox_mode = "workspace-write"
 personality = "pragmatic"
 
-# @if macos
-notify = ["{{HOME}}/.codex/computer-use/Codex Computer Use.app/Contents/SharedSupport/SkyComputerUseClient.app/Contents/MacOS/SkyComputerUseClient", "turn-ended"]
-# @endif
-
 [agents]
 max_threads = 5
 max_depth = 2
@@ -63,21 +59,6 @@ plugin_hooks = true
 [desktop]
 followUpQueueMode = "queue"
 
-[desktop.open-in-target-preferences]
-# @if macos
-global = "ghostty"
-# @endif
-# @if windows
-global = "windows-terminal"
-# @endif
-# @if linux
-global = "default"
-# @endif
-
-# @if macos
-[desktop.open-in-target-preferences.perPath]
-# @endif
-
 [marketplaces.openai-bundled]
 last_updated = "2026-06-26T15:26:49Z"
 source_type = "local"
@@ -90,29 +71,14 @@ source = "{{HOME}}/.cache/codex-runtimes/codex-primary-runtime/plugins/openai-pr
 
 [mcp_servers.node_repl]
 args = []
-# @if macos
-command = "{{CODEX_APP_RESOURCES}}/cua_node/bin/node_repl"
-# @endif
-# @if windows
-command = "node_repl.cmd"
-# @endif
-# @if linux
-command = "node_repl"
-# @endif
+command = "{{NODE_REPL_COMMAND}}"
 startup_timeout_sec = 120
 
 [mcp_servers.node_repl.env]
 NODE_REPL_NATIVE_PIPE_CONNECT_TIMEOUT_MS = "1000"
-# @if macos
-NODE_REPL_NODE_MODULE_DIRS = "{{CODEX_APP_RESOURCES}}/cua_node/lib/node_modules"
-NODE_REPL_NODE_PATH = "{{CODEX_APP_RESOURCES}}/cua_node/bin/node"
+NODE_REPL_NODE_MODULE_DIRS = "{{NODE_REPL_MODULES}}"
+NODE_REPL_NODE_PATH = "{{NODE_REPL_NODE}}"
 CODEX_CLI_PATH = "{{CODEX_CLI_PATH}}"
-# @endif
-# @if windows
-NODE_REPL_NODE_MODULE_DIRS = "{{LOCALAPPDATA}}/Programs/Codex/resources/cua_node/lib/node_modules"
-NODE_REPL_NODE_PATH = "{{LOCALAPPDATA}}/Programs/Codex/resources/cua_node/bin/node.exe"
-CODEX_CLI_PATH = "{{LOCALAPPDATA}}/Programs/Codex/resources/codex.exe"
-# @endif
 NODE_REPL_TRUSTED_CODE_PATHS = "{{HOME}}/.codex"
 NODE_REPL_TRUSTED_BROWSER_CLIENT_SHA256S = "d1a8040310e3ed270b3d17f6f3d41f4cdbad9096fa1a4f7c425fbb37afe949d3"
 BROWSER_USE_AVAILABLE_BACKENDS = "chrome,iab"

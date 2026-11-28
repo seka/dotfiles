@@ -43,38 +43,47 @@ Claude Code、Codex CLI、Antigravity CLIはwingetから導入します。Antigr
 
 ## スキル
 
-スキルは `gh skill install` でユーザースコープにインストールされ、全エージェント（Claude Code / GitHub Copilot / Codex / Gemini CLI）で共有されます。インストールスクリプトは `scripts/common/setup-ai-agents` を参照。
+スキルは `gh skill install` でユーザースコープにインストールされ、全エージェント（Claude Code / GitHub Copilot / Codex / Gemini CLI）で共有されます。インストール処理は macOS の `scripts/macos/setup-ai-agents` と Windows の `scripts/windows/setup-ai-agents.ps1` にあり、GitHub から導入するスキルの一覧は `scripts/resources/agent-skills.tsv` で共有します。
 
 Gemini CLIにも外部スキルを配置します。Web検索の委譲先であるAntigravity CLIへは次のように配布できます。
 
 ```bash
-bash scripts/common/distribute-skills --source ~/.agents/skills --target antigravity
+bash scripts/macos/distribute-skills --source ~/.agents/skills --target antigravity
 ```
 
 ### カスタムスキル (`ai-agents/skills/`)
 
-`scripts/common/distribute-skills` で配布します。Bashと標準的なUnixコマンドを使用し、設定セットアップからも呼び出します。既存のClaudeコマンドも互換性のため維持します。
+macOS では `scripts/macos/distribute-skills` を使います。以下は macOS の実行例です。既存のClaudeコマンドも互換性のため維持します。
 
 ```bash
 # 変更予定だけ確認
-bash scripts/common/distribute-skills --dry-run
+bash scripts/macos/distribute-skills --dry-run
 
 # Claude Code / Codex / Gemini CLI / Copilotに配布
-bash scripts/common/distribute-skills
+bash scripts/macos/distribute-skills
 
 # 配布先・スキルを選択（どちらも複数指定可）
-bash scripts/common/distribute-skills --target gemini --skill review
+bash scripts/macos/distribute-skills --target gemini --skill review
 
 # Geminiアプリへ手動アップロードするフォルダーを書き出す
-bash scripts/common/distribute-skills --export /tmp/gemini-skills
+bash scripts/macos/distribute-skills --export /tmp/gemini-skills
 
 # 外部スキルも明示的に指定して配布（この例では外部スキルだけが対象）
-bash scripts/common/distribute-skills --source ~/.agents/skills --target gemini
+bash scripts/macos/distribute-skills --source ~/.agents/skills --target gemini
 ```
 
 配布元はデフォルトで `ai-agents/skills/`。`名前.md` と `名前/SKILL.md` の両形式を扱い、後者では参照資料も配布します。`--source` の複数指定で自作・外部スキルをまとめられます。同名スキルが重複する場合は停止するため、配布元を分けて実行してください。
 
-CLIの配置先は `~/.claude/skills/`、`~/.codex/skills/`、`~/.gemini/skills/`、`~/.gemini/antigravity-cli/skills/`、`~/.copilot/skills/` です。通常はファイル単位のシンボリックリンクで原本の変更を反映し、Windowsまたは `--copy` ではコピーします。既存ファイルは同じ原本へのリンクまたは同一内容ならスキップし、内容が異なる場合は書き込み前に停止します。コピーの更新時は既存の配布先を別名で退避して再実行してください。削除済みスキルの自動削除は行いません。
+CLIの配置先は `~/.claude/skills/`、`~/.codex/skills/`、`~/.gemini/skills/`、`~/.gemini/antigravity-cli/skills/`、`~/.copilot/skills/` です。macOS ではファイル単位のシンボリックリンクで原本の変更を反映し、`--copy` を指定するとコピーします。Windows では常にコピーします。既存ファイルは同じ原本へのリンクまたは同一内容ならスキップし、内容が異なる場合は書き込み前に停止します。コピーの更新時は既存の配布先を別名で退避して再実行してください。削除済みスキルの自動削除は行いません。
+
+Windows では次の PowerShell コマンドで配布します。`-Source`、`-Target`、`-Skill` には配列を渡せます。`-Target` を省略すると全 CLI が対象になります。
+
+```powershell
+.\scripts\windows\distribute-skills.ps1
+.\scripts\windows\distribute-skills.ps1 -Source "$HOME/.agents/skills" -Target antigravity
+.\scripts\windows\distribute-skills.ps1 -Target gemini -Skill review -DryRun
+.\scripts\windows\distribute-skills.ps1 -Export "$env:TEMP/gemini-skills"
+```
 
 Geminiアプリでは、書き出された各 `名前/SKILL.md` または各スキルのフォルダーを「スキル」のアップロード画面から取り込みます。更新時も再アップロードが必要です。CLI向けツールや外部操作を前提とした指示はアプリでそのまま実行できるとは限りません。外部スキルの書き出し前には、参照資料の内容と再配布条件を確認してください。
 
@@ -93,13 +102,13 @@ Geminiアプリでは、書き出された各 `名前/SKILL.md` または各ス�
 
 ### 公式agent-browserスキル
 
-[vercel-labs/agent-browser](https://github.com/vercel-labs/agent-browser)の公式スキルを`scripts/common/setup-ai-agents`から導入します。Claude Code / Codex / Gemini CLI / Copilotを対象にし、Antigravity CLIには既存の配布スクリプトで配置します。
+[vercel-labs/agent-browser](https://github.com/vercel-labs/agent-browser)の公式スキルを各 OS の AI エージェントセットアップから導入します。Claude Code / Codex / Gemini CLI / Copilotを対象にし、Antigravity CLIには既存の配布スクリプトで配置します。
 
 既存環境へ個別に導入する場合:
 
 ```bash
 npx skills add vercel-labs/agent-browser --skill agent-browser --global --agent claude-code codex gemini-cli github-copilot --yes
-bash scripts/common/distribute-skills --source ~/.agents/skills --skill agent-browser --target antigravity
+bash scripts/macos/distribute-skills --source ~/.agents/skills --skill agent-browser --target antigravity
 ```
 
 公式スキルは`agent-browser skills get core`でCLIのバージョンに対応した操作ガイドを読み込みます。探索的QAには`agent-browser skills get dogfood`で専用の手順を参照できます。ブラウザ操作の範囲と認証情報の扱いは[共通ガイド](../ai-agents/AGENTS.md#ブラウザでのローカルサービス確認)に従います。
@@ -199,9 +208,7 @@ Claude Codeでは `/anatomy` を使います。`interactive` を付けると操�
 
 ## Codex
 
-設定テンプレート: `ai-agents/codex/config.toml.template`
-
-セットアップ時にOS別の設定を選び、ホームディレクトリなどのプレースホルダーを実際のパスへ置換して `~/.codex/config.toml` に生成します。macOSではインストール済みの `Codex.app` または `ChatGPT.app` の実行ファイルを参照します。MCPへ渡すパスは、受け取り側の `~` や環境変数の展開に依存しない絶対パスになります。`CODEX_HOME` はMCP設定から上書きせず、既定値または起動元の環境変数を使います。
+セットアップでは `ai-agents/codex/config.toml.template` と、各 OS の `config.macos.toml.template` または `config.windows.toml.template` を結合します。ホームディレクトリなどのプレースホルダーを実際のパスへ置換して `~/.codex/config.toml` に生成します。macOSではインストール済みの `Codex.app` または `ChatGPT.app` の実行ファイルを参照します。MCPへ渡すパスは、受け取り側の `~` や環境変数の展開に依存しない絶対パスになります。`CODEX_HOME` はMCP設定から上書きせず、既定値または起動元の環境変数を使います。
 
 `ai-agents/codex/config.toml` はPC固有設定としてGit管理から除外しています。既存の `~/.codex/config.toml` がこのファイルへのシンボリックリンクでも、そのまま利用できます。リンク先に追加されたプロジェクトの信頼設定などはコミットされません。共有する変更はテンプレートに記載してください。セットアップを再実行すると、リンクがある場合はリンク先もテンプレートの内容で上書きされるため、残したいローカル設定は事前に退避してください。
 

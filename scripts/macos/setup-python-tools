@@ -2,8 +2,6 @@
 
 set -o errexit -o nounset -o pipefail
 
-DOTFILES_OS="${DOTFILES_OS:-macos}"
-
 if ! command -v uv >/dev/null 2>&1; then
   echo "uv is required. Run scripts/macos/setup-brew to install the Brewfile packages first." >&2
   exit 1
@@ -11,9 +9,7 @@ fi
 
 # Python本体をuvで管理するため、安定版を導入しpython・python3の実行リンクも作成する。
 # 既存のリンクが別ツールの管理下なら上書きせず、uvのエラーで停止する。
-if [[ "$DOTFILES_OS" == "macos" ]]; then
-  uv python install --default
-fi
+uv python install --default
 export PATH="$HOME/.local/bin:$PATH"
 
 # 各ツールの実行環境を独立して管理するため、専用の仮想環境にuv管理のPythonで導入する。

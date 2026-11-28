@@ -282,7 +282,7 @@ Neovim を再起動してください。初回は専用キャッシュへの依�
 
 ```bash
 # リポジトリのルートで設定を配置し、extensions.txtの拡張を導入
-DOTFILES_OS=macos bash scripts/common/setup-editor-config
+bash scripts/macos/setup-editor-config
 ```
 
 PythonにはPython・Pylance・Python Debugger・Ruff拡張を導入し、`.venv`の利用と保存時の整形・import整理を設定します。

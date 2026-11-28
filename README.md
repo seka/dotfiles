@@ -83,7 +83,7 @@ powershell -ExecutionPolicy Bypass -File .\install.ps1
 13. エディタ設定とVS Code拡張をセットアップ
 14. AIエージェント設定とスキルをセットアップ
 
-WindowsではPowerShellとWindowsネイティブツールに統一しています。MSYS2、zsh、tmuxはWindowsセットアップの対象外です。Git Bashは共通設定スクリプトを内部実行するために使いますが、通常の開発シェルとして意識する必要はありません。
+WindowsではPowerShellとWindowsネイティブツールに統一しています。MSYS2、zsh、tmuxはWindowsセットアップの対象外です。設定の配置とスキルの配布もPowerShellで実行します。
 HerdrはWindows previewのため、通常のパッケージ導入とは分けてセットアップします。
 Explorerでは隠しファイルと拡張子を表示するように設定します。
 Docker Desktopの実行にはWSL2 backendの基盤が必要なため、WindowsのWSL機能とVirtual Machine Platformを有効化します。Ubuntuなどのユーザー向けLinux distroは自動インストールしません。

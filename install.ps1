@@ -18,29 +18,6 @@ $WinGetFile = Join-Path $DotfilesRoot "scripts\windows\winget.json"
 $LogDir = Join-Path $DotfilesRoot ".logs"
 $WinGetLog = Join-Path $LogDir "winget-import.log"
 
-function Find-Bash {
-    $candidates = @(
-        "C:\Program Files\Git\bin\bash.exe",
-        "C:\Program Files\Git\usr\bin\bash.exe",
-        "$env:LOCALAPPDATA\Programs\Git\bin\bash.exe",
-        "$env:LOCALAPPDATA\Programs\Git\usr\bin\bash.exe",
-        "C:\msys64\usr\bin\bash.exe"
-    )
-
-    foreach ($candidate in $candidates) {
-        if (Test-Path $candidate) {
-            return $candidate
-        }
-    }
-
-    $command = Get-Command bash.exe -ErrorAction SilentlyContinue
-    if ($command) {
-        return $command.Source
-    }
-
-    return $null
-}
-
 if (-not (Get-Command winget -ErrorAction SilentlyContinue)) {
     throw "winget was not found. Install App Installer from Microsoft Store, then rerun .\install.ps1."
 }
@@ -140,39 +117,20 @@ Write-Host "==> Configuring Explorer preferences"
 Write-Host "==> Configuring startup apps"
 & $PowerShellHost -NoProfile -ExecutionPolicy Bypass -File "$DotfilesRoot\scripts\windows\setup-startup.ps1"
 
-$Bash = Find-Bash
-if (-not $Bash) {
-    Write-Host "bash.exe was not found after Windows bootstrap."
-    Write-Host "Open a new PowerShell window and rerun:"
-    Write-Host "  cd $DotfilesRoot"
-    Write-Host "  powershell -ExecutionPolicy Bypass -File .\install.ps1"
-    exit 0
+Write-Host "==> Installing shell and Git configuration"
+& "$DotfilesRoot\scripts\windows\setup-shell-config.ps1"
+
+Write-Host "==> Installing editor configuration"
+& "$DotfilesRoot\scripts\windows\setup-editor-config.ps1"
+
+Write-Host "==> Installing AI agent configuration"
+& "$DotfilesRoot\scripts\windows\setup-agent-config.ps1"
+
+try {
+    & "$DotfilesRoot\scripts\windows\setup-ai-agents.ps1"
+} catch {
+    Write-Host "AI agent setup failed. Local dotfiles are already installed."
+    Write-Host $_.Exception.Message
 }
-
-$UnixDotfilesRoot = $DotfilesRoot -replace '\\', '/'
-if ($UnixDotfilesRoot -match '^([A-Za-z]):/(.*)$') {
-    $drive = $Matches[1].ToLowerInvariant()
-    $rest = $Matches[2]
-    $UnixDotfilesRoot = "/$drive/$rest"
-}
-
-Write-Host "==> Running common setup scripts with $Bash"
-$CommonSetupCommand = @"
-set -o errexit -o nounset -o pipefail
-
-export DOTFILES_OS=windows
-export DOTFILES_ROOT='$UnixDotfilesRoot'
-
-'$UnixDotfilesRoot/scripts/common/setup-shell-config'
-'$UnixDotfilesRoot/scripts/common/setup-editor-config'
-'$UnixDotfilesRoot/scripts/common/setup-agent-config'
-
-if ! '$UnixDotfilesRoot/scripts/common/setup-ai-agents'; then
-    echo 'AI agent setup failed. Local dotfiles are already installed.'
-fi
-"@
-
-& $Bash -lc $CommonSetupCommand
-Write-Host "--> Common setup scripts completed"
 
 Write-Host "==> Windows dotfiles setup completed"

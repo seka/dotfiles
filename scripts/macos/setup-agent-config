@@ -1,0 +1,102 @@
+#!/usr/bin/env bash
+
+set -o errexit -o nounset -o pipefail
+
+DOTFILES_ROOT="${DOTFILES_ROOT:-$(cd "$(dirname "$0")/../.." && pwd)}"
+
+link_file() {
+  local source="$1"
+  local target="$2"
+
+  mkdir -p "$(dirname "$target")"
+
+  ln -sf "$source" "$target"
+}
+
+render_template() {
+  local template="$1"
+  local target="$2"
+  local codex_resources="/Applications/Codex.app/Contents/Resources"
+  local codex_cli
+  if [[ ! -x "$codex_resources/cua_node/bin/node_repl" && -x /Applications/ChatGPT.app/Contents/Resources/cua_node/bin/node_repl ]]; then
+    codex_resources="/Applications/ChatGPT.app/Contents/Resources"
+  fi
+  codex_cli="$codex_resources/codex"
+  if [[ -x "$codex_resources/codex-cli/CodexCLI.app/Contents/MacOS/codex" ]]; then
+    codex_cli="$codex_resources/codex-cli/CodexCLI.app/Contents/MacOS/codex"
+  fi
+
+  mkdir -p "$(dirname "$target")"
+
+  # 環境変数はawkの-vによるバックスラッシュ解釈を避けて渡し、挿入時にTOML文字列としてエスケープする。
+  DOTFILES_TEMPLATE_HOME="$HOME" \
+    DOTFILES_TEMPLATE_NODE_REPL_COMMAND="$codex_resources/cua_node/bin/node_repl" \
+    DOTFILES_TEMPLATE_NODE_REPL_MODULES="$codex_resources/cua_node/lib/node_modules" \
+    DOTFILES_TEMPLATE_NODE_REPL_NODE="$codex_resources/cua_node/bin/node" \
+    DOTFILES_TEMPLATE_CODEX_CLI_PATH="$codex_cli" \
+    awk '
+    function toml_escape(value, result, i, c) {
+      result = ""
+      for (i = 1; i <= length(value); i++) {
+        c = substr(value, i, 1)
+        if (c == "\\") result = result "\\\\"
+        else if (c == "\"") result = result "\\\""
+        else if (c == "\n") result = result "\\n"
+        else if (c == "\r") result = result "\\r"
+        else if (c == "\t") result = result "\\t"
+        else result = result c
+      }
+      return result
+    }
+    FNR == 1 && NR > 1 { print "" }
+    # 元の文字列だけを走査し、& やバックスラッシュを置換規則として扱わない。
+    {
+      line = $0
+      rendered = ""
+      while (match(line, /[{][{][A-Z_]+[}][}]/)) {
+        key = substr(line, RSTART + 2, RLENGTH - 4)
+        rendered = rendered substr(line, 1, RSTART - 1) toml_escape(ENVIRON["DOTFILES_TEMPLATE_" key])
+        line = substr(line, RSTART + RLENGTH)
+      }
+      print rendered line
+    }
+  ' "$DOTFILES_ROOT/ai-agents/codex/config.macos.toml.template" "$template" > "$target"
+}
+
+echo "==> Installing Claude settings"
+mkdir -p "$HOME/.claude"
+link_file "$DOTFILES_ROOT/ai-agents/AGENTS.md" "$HOME/.claude/CLAUDE.md"
+link_file "$DOTFILES_ROOT/ai-agents/claude/settings.json" "$HOME/.claude/settings.json"
+
+mkdir -p "$HOME/.claude/commands"
+for F in "$DOTFILES_ROOT"/ai-agents/skills/*.md; do
+  link_file "$F" "$HOME/.claude/commands/$(basename "$F")"
+done
+echo "--> Claude settings installed"
+
+echo "==> Installing Gemini settings"
+mkdir -p "$HOME/.gemini"
+link_file "$DOTFILES_ROOT/ai-agents/AGENTS.md" "$HOME/.gemini/AGENTS.md"
+link_file "$DOTFILES_ROOT/ai-agents/gemini/settings.json" "$HOME/.gemini/settings.json"
+echo "--> Gemini settings installed"
+
+if [[ ! -e "$HOME/.gemini/GEMINI.md" && ! -L "$HOME/.gemini/GEMINI.md" ]]; then
+  link_file "$DOTFILES_ROOT/ai-agents/AGENTS.md" "$HOME/.gemini/GEMINI.md"
+else
+  echo "Existing ~/.gemini/GEMINI.md preserved; review Web search instructions there manually."
+fi
+
+echo "==> Installing Codex settings"
+mkdir -p "$HOME/.codex"
+link_file "$DOTFILES_ROOT/ai-agents/AGENTS.md" "$HOME/.codex/AGENTS.md"
+render_template "$DOTFILES_ROOT/ai-agents/codex/config.toml.template" "$HOME/.codex/config.toml"
+
+echo "--> Codex settings installed"
+
+# AI エージェントのブラウザ操作をホストマシンの開発サーバーに限定するため、agent-browser のユーザー設定を配置する。
+# 環境変数と違い、どのシェルやツールから実行しても agent-browser 自身が読み込む。
+echo "==> Installing agent-browser settings"
+link_file "$DOTFILES_ROOT/ai-agents/agent-browser/config.json" "$HOME/.agent-browser/config.json"
+echo "--> agent-browser settings installed"
+
+bash "$DOTFILES_ROOT/scripts/macos/distribute-skills"
