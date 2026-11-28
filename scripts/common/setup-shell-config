@@ -34,6 +34,20 @@ for F in $(find "$DOTFILES_ROOT"/git "$DOTFILES_ROOT"/terminal -type f -not -nam
     "terminal/zshrc") [[ "$DOTFILES_OS" != "windows" ]] && copy_or_link_file "$F" "$HOME/.config/zsh/.zshrc" ;;
     "terminal/tigrc") copy_or_link_file "$F" "$HOME/.tigrc" ;;
     "terminal/tmux.conf") ;; # tmux設定はmacOSのsetup-tmuxで配置する。
+    "terminal/ghostty.conf")
+      if [[ "$DOTFILES_OS" == "macos" ]]; then
+        ghostty_config="$HOME/Library/Application Support/com.mitchellh.ghostty/config"
+        if [[ -L "$ghostty_config" && "$(readlink "$ghostty_config")" == "$F" ]]; then
+          continue
+        fi
+        if [[ ! -L "$ghostty_config" ]] &&
+          { [[ ! -e "$ghostty_config" ]] || { [[ -f "$ghostty_config" ]] && cmp -s "$F" "$ghostty_config"; }; }; then
+          copy_or_link_file "$F" "$ghostty_config"
+        else
+          echo "==> Preserving existing Ghostty configuration at $ghostty_config"
+        fi
+      fi
+      ;;
     "terminal/"*) [[ "$DOTFILES_OS" != "windows" ]] && copy_or_link_file "$F" "$HOME/.config/zsh/$filename" ;;
 
     "git/config") copy_or_link_file "$F" "$HOME/.config/git/config" ;;

@@ -34,6 +34,14 @@ zle-line-finish() {
     printf "%s" "${terminfo[rmkx]}"
 }
 
+ghostty_tab_title() {
+    local directory
+    directory=$(command git rev-parse --show-toplevel 2>/dev/null) || directory="$PWD"
+    local directory_name="${directory:t}"
+    directory_name="${directory_name//[[:cntrl:]]/}"
+    printf '\e]2;%s\a' "${directory_name:-/}"
+}
+
 # alias ps aux | grep hoge
 # http://qiita.com/takc923/items/fb0e35165affb03356a7
 psgrep() {

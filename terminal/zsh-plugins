@@ -51,6 +51,10 @@ autoload -Uz compinit && compinit
 # ------------------------------
 add-zsh-hook chpwd chpwd_recent_dirs
 
+if [[ -n ${GHOSTTY_RESOURCES_DIR:-} && -z ${TMUX:-} ]]; then
+  add-zsh-hook precmd ghostty_tab_title
+fi
+
 # ------------------------------
 # zstyle
 # ------------------------------

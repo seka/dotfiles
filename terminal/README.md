@@ -1,5 +1,11 @@
 # ターミナル設定
 
+## Ghostty
+
+macOS の Ghostty 設定は [ghostty.conf](ghostty.conf) で管理します。`install.sh` が `~/Library/Application Support/com.mitchellh.ghostty/config` にシンボリックリンクを作成します。配置先に別の内容の設定ファイルや別のリンクがある場合は、その設定を保持して配置をスキップします。
+
+Ghostty で直接開いた zsh では、プロンプト表示時に Git の作業ツリーのルートディレクトリ名をタブ名に使います。たとえば `~/projects/example/src` でも `example` と表示します。Git リポジトリ外では現在のディレクトリ名を使います。
+
 ## zsh
 
 ### セットアップ
@@ -53,6 +59,7 @@ terminal/
 ├── README.md         # このファイル
 ├── aliases           # エイリアス定義
 ├── functions         # カスタム関数
+├── ghostty.conf      # Ghostty設定
 ├── keybinds          # キーバインド設定
 ├── zsh-plugins       # Zshプラグイン管理（Zinit）
 ├── zshenv            # 環境変数設定

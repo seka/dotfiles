@@ -22,8 +22,8 @@ export INPUTRC="$ZDOTDIR/inputrc"
 # ----------------------------------------
 # expansions
 # ----------------------------------------
-source $ZDOTDIR/zsh-plugins
 source $ZDOTDIR/functions
+source $ZDOTDIR/zsh-plugins
 source $ZDOTDIR/aliases
 source $ZDOTDIR/keybinds
 
